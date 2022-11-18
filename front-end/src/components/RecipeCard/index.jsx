@@ -13,13 +13,12 @@ function RecipeCard({
   return (
     <div>
       <p>{`Dish: ${dishName}`}</p>
-      <p>{`${labels}`}</p>
-      <p>{`${desc}`}</p>
+      <p>{`Labels: ${labels}`}</p>
+      <p>{`Description: ${desc}`}</p>
       <p>{`${totalTime}`}</p>
       <p>{`${ingredients}`}</p>
       <p>{`${steps}`}</p>
       <p>{`${notes}`}</p>
-      <p>testing 2</p>
     </div>
   );
 }

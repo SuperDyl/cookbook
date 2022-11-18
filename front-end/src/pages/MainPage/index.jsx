@@ -18,8 +18,10 @@ function MainPage() {
 
   const fetchAllRecipes = async () => {
     try {
+      console.log("Tried to fetch!!");
       const response = await axios.get("/api/recipes");
-      setAllRecipes(response.data);
+      setAllRecipes(response.data.recipes);
+      console.log(response.data.recipes);
     } catch (error) {
       setError("error retrieving tasks: " + error);
     }
@@ -35,7 +37,7 @@ function MainPage() {
       <LabelBar>LabelBar</LabelBar>
       <MainContent>
         <ReadingPane>
-          {allRecipes.map(recipeData => <RecipeCard recipeData />)}
+          {allRecipes.map(recipeData => <RecipeCard {...recipeData} />)}
         </ReadingPane>
       </MainContent>
       <Footer>Footer </Footer>
