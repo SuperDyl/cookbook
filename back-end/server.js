@@ -1,16 +1,18 @@
-const express = require('express');
+const express = require("express");
 const bodyParser = require("body-parser");
 
 const app = express();
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: false
-}));
+app.use(
+  bodyParser.urlencoded({
+    extended: false
+  })
+);
 
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 // connect to the database
-mongoose.connect('mongodb://localhost:27017/test', {
+mongoose.connect("mongodb://localhost:27017/test", {
   useUnifiedTopology: true,
   useNewUrlParser: true
 });
@@ -25,20 +27,19 @@ const recipeSchema = new mongoose.Schema({
 });
 
 // create a virtual paramter that turns the default _id field into id
-recipeSchema.virtual('id')
-  .get(function() {
-    return this._id.toHexString();
-  });
+recipeSchema.virtual("id").get(function() {
+  return this._id.toHexString();
+});
 
 // Ensure virtual fields are serialised when we turn this into a JSON object
-recipeSchema.set('toJSON', {
+recipeSchema.set("toJSON", {
   virtuals: true
 });
 
 // create a model for tickets
-const Recipe = mongoose.model('Recipe', recipeSchema);
+const Recipe = mongoose.model("Recipe", recipeSchema);
 
-app.get('/api/recipe', async (req, res) => {
+app.get("/api/recipes", async (req, res) => {
   try {
     let recipes = await Recipe.find();
     res.send({
@@ -50,7 +51,7 @@ app.get('/api/recipe', async (req, res) => {
   }
 });
 
-app.post('/api/recipes', async (req, res) => {
+app.post("/api/recipes", async (req, res) => {
   console.log("in post");
   const recipe = new Recipe({
     dishName: req.body.dishName,
@@ -71,7 +72,7 @@ app.post('/api/recipes', async (req, res) => {
   }
 });
 
-app.delete('/api/recipes/:id', async (req, res) => {
+app.delete("/api/recipes/:id", async (req, res) => {
   try {
     await Recipe.deleteOne({
       _id: req.params.id
@@ -83,4 +84,4 @@ app.delete('/api/recipes/:id', async (req, res) => {
   }
 });
 
-app.listen(3000, () => console.log('Server listening on port 3000!'));
+app.listen(3000, () => console.log("Server listening on port 3000!"));

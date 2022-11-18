@@ -1,5 +1,5 @@
 import React from "react";
-import { memo, useState } from "react";
+import { memo, useState, useLayoutEffect } from "react";
 import {
   FullWindow,
   Header,
@@ -10,6 +10,7 @@ import {
   LabelBar
 } from "./styles";
 import RecipeCard from "../../components/RecipeCard";
+import axios from "axios";
 
 function MainPage() {
   const [allRecipes, setAllRecipes] = useState([]);
@@ -24,13 +25,17 @@ function MainPage() {
     }
   };
 
+  useLayoutEffect(() => {
+    fetchAllRecipes();
+  }, []);
+
   return (
     <FullWindow>
       <Header>Header</Header>
       <LabelBar>LabelBar</LabelBar>
       <MainContent>
         <ReadingPane>
-          <RecipeCard />
+          {allRecipes.map(recipeData => <RecipeCard recipeData />)}
         </ReadingPane>
       </MainContent>
       <Footer>Footer </Footer>
