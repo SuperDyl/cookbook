@@ -51,6 +51,7 @@ app.get('/api/recipe', async (req, res) => {
 });
 
 app.post('/api/recipes', async (req, res) => {
+  console.log("in post");
   const recipe = new Recipe({
     dishName: req.body.dishName,
     lables: req.body.labels,
