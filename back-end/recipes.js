@@ -14,13 +14,13 @@ const recipes = [
       "Drop dough onto a prepared baking sheet.",
       "Bake until the edges are golden brown for ten minutes.",
     ],
-    notes: "",
+    notes: "Don't forget the sugar!",
   },
  {
     dishName: "waffles",
     labels: ["breakfast", "dinner"],
     desc: "An airy, delicate, and crisp meal that is fabulous. Eat with Syrup and fruit.",
-    totalTime: "",
+    totalTime: "35 minutes",
     ingredients: ["6 tblsp butter", "2 c flour", "1 tblsp sugar", 
       "1 tsp baking powder", "1 tsp sea salt", "1/2 tsp baking soda",
       "1 c milk", "4 eggs"
@@ -30,7 +30,7 @@ const recipes = [
       "In a large bowl, whisk together flour, sugar, baking powder, salt, and baking soda. In a separate bowl, whisk together yogurt, milk, melted butter, and eggs. Fold wet ingredients into dry ingredients.",
       "Preheat a waffle iron and, using a pastry brush or paper towel, lightly coat with butter. Cook waffles (using about ½ cup batter per waffle) until golden and crisp. Butter the iron in between batches as needed. Serve waffles immediately as they are ready, or keep them warm in a 200 degree oven until ready to serve."
     ],
-    notes: "",
+    notes: "This isn't considered a dessert",
   },
 ];
 
