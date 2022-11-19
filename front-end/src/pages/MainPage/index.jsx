@@ -32,13 +32,16 @@ function MainPage() {
 
   return (
     <FullWindow>
-      <Header>Header</Header>{" "}
+      <Header>Recipes Database</Header>{" "}
       <MainContent>
         <ReadingPane>
           {allRecipes.map(recipeData => <RecipeCard {...recipeData} />)}
         </ReadingPane>
       </MainContent>
-      <Footer>Footer </Footer>
+      <Footer>
+        By the Fabulous Ryan Harper and his sidekick Dylan Jones{" | "}
+        <a href="https://github.com/SuperDyl/cookbook">GitHub</a>
+      </Footer>
     </FullWindow>
   );
 }

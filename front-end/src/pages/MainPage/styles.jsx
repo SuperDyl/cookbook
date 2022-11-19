@@ -9,17 +9,22 @@ export const FullWindow = styled.div`
 `;
 
 export const Header = styled.div`
-  ont-size: 40px;
+  font-size: 40px;
   background-color: unset;
   border-bottom: red double thick;
 `;
 
 export const LabelBar = styled.div`background-color: pink;`;
 
-export const Footer = styled.div`background-color: yellow;`;
+export const Footer = styled.div`
+  background-color: red;
+  padding: 12px;
+  text-align: right;
+  color: white;
+`;
 
 export const MainContent = styled.div`
-  background-color: orange;
+  background-color: red;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -30,7 +35,7 @@ export const MainContent = styled.div`
 `;
 
 export const ReadingPane = styled.div`
-  background-color: green;
+  background-color: white;
   flex-grow: 1;
 
   @media (min-width: 900px) {
