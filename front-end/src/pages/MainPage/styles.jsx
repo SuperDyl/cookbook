@@ -8,7 +8,11 @@ export const FullWindow = styled.div`
   flex-direction: column;
 `;
 
-export const Header = styled.div`background-color: aqua;`;
+export const Header = styled.div`
+  ont-size: 40px;
+  background-color: unset;
+  border-bottom: red double thick;
+`;
 
 export const LabelBar = styled.div`background-color: pink;`;
 

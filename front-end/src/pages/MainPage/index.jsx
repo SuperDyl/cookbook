@@ -6,8 +6,7 @@ import {
   Footer,
   MainContent,
   Text,
-  ReadingPane,
-  LabelBar
+  ReadingPane
 } from "./styles";
 import RecipeCard from "../../components/RecipeCard";
 import axios from "axios";
@@ -21,7 +20,7 @@ function MainPage() {
       console.log("Tried to fetch!!");
       const response = await axios.get("/api/recipes");
       setAllRecipes(response.data.recipes);
-      console.log(response.data.recipes);
+      console.log("allRecipes: ", response.data.recipes);
     } catch (error) {
       setError("error retrieving tasks: " + error);
     }
@@ -33,8 +32,7 @@ function MainPage() {
 
   return (
     <FullWindow>
-      <Header>Header</Header>
-      <LabelBar>LabelBar</LabelBar>
+      <Header>Header</Header>{" "}
       <MainContent>
         <ReadingPane>
           {allRecipes.map(recipeData => <RecipeCard {...recipeData} />)}

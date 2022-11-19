@@ -32,6 +32,7 @@ const recipeSchema = new mongoose.Schema({
   labels: [String],
   desc: String,
   totalTime: String,
+  ingredients: [String],
   steps: [String],
   notes: String
 });
@@ -65,9 +66,10 @@ app.post("/api/recipes", async (req, res) => {
   console.log("in post");
   const recipe = new Recipe({
     dishName: req.body.dishName,
-    lables: req.body.labels,
+    labels: req.body.labels,
     desc: req.body.desc,
     totalTime: req.body.totalTime,
+    ingredients: req.body.ingredients,
     steps: req.body.steps,
     notes: req.body.notes
   });

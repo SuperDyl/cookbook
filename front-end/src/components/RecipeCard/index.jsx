@@ -1,5 +1,6 @@
 import React from "react";
 import { memo } from "react";
+import { CardBody, DishTitle } from "./styles";
 
 function RecipeCard({
   dishName = "",
@@ -8,18 +9,25 @@ function RecipeCard({
   totalTime,
   ingredients = [],
   steps = [],
-  notes = ""
+  notes = "",
+  ...rest
 }) {
+  console.log("Labels: ", labels);
+  console.log("REST: ", rest);
+
   return (
-    <div>
-      <p>{`Dish: ${dishName}`}</p>
-      <p>{`Labels: ${labels}`}</p>
+    <CardBody>
+      <DishTitle>{`Dish: ${dishName}`}</DishTitle>
+      <p>{`Labels: ${labels.reduce(
+        (curr, prev) => curr + ", " + prev,
+        ""
+      )}`}</p>
       <p>{`Description: ${desc}`}</p>
       <p>{`${totalTime}`}</p>
       <p>{`${ingredients}`}</p>
       <p>{`${steps}`}</p>
       <p>{`${notes}`}</p>
-    </div>
+    </CardBody>
   );
 }
 
