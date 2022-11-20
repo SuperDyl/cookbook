@@ -1,6 +1,13 @@
 import React from "react";
 import { memo } from "react";
-import { CardBody, DishTitle } from "./styles";
+import {
+  CardBody,
+  DishTitle,
+  IngredientList,
+  IngredientItem,
+  StepsList,
+  NotesText
+} from "./styles";
 
 function RecipeCard({
   dishName = "",
@@ -30,23 +37,23 @@ function RecipeCard({
       <p>
         {totalTime}
       </p>
-      <ul>
+      <IngredientList>
         {ingredients.map(ingredient =>
-          <li key={`ingredient-${ingredient}`}>
+          <IngredientItem key={`ingredient-${ingredient}`}>
             {ingredient}
-          </li>
+          </IngredientItem>
         )}
-      </ul>
-      <ol>
+      </IngredientList>
+      <StepsList>
         {steps.map(step =>
           <li key={`step-${step}`}>
             {step}
           </li>
         )}
-      </ol>
-      <p>
-        <b>{`${notes}`}</b>
-      </p>
+      </StepsList>
+      <NotesText>
+        {`${notes}`}
+      </NotesText>
     </CardBody>
   );
 }
