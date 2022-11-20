@@ -1,71 +1,18 @@
 import React from "react";
-import { memo } from "react";
-import {
-  CardBody,
-  DishTitle,
-  IngredientList,
-  IngredientItem,
-  StepsList,
-  NotesText,
-  TitleBox,
-  EditButton
-} from "./styles";
-import PencilIcon from "./pencil-icon.svg";
+import { memo, useState } from "react";
+import DisplayRecipeCard from "../DisplayRecipeCard";
+import EditRecipeCard from "../EditRecipeCard";
 
-function RecipeCard({
-  dishName = "",
-  labels = [],
-  desc = "",
-  totalTime,
-  ingredients = [],
-  steps = [],
-  notes = "",
-  ...rest
-}) {
-  console.log("Labels: ", labels);
-  console.log("REST: ", rest);
+function RecipeCard(params) {
+  const [editMode, setEditMode] = useState(false);
 
-  return (
-    <CardBody>
-      <TitleBox>
-        <DishTitle>
-          {dishName}
-        </DishTitle>
-        {
-          <EditButton>
-            <img src={PencilIcon} width="20px" height="20px" />
-          </EditButton>
-        }
-      </TitleBox>
-      {/* <p>{`Labels: ${labels.reduce(
-        (curr, prev) => curr + ", " + prev,
-        ""
-      )}`}</p> */}
-      <p>
-        {desc}
-      </p>
-      <p>
-        {totalTime}
-      </p>
-      <IngredientList>
-        {ingredients.map(ingredient =>
-          <IngredientItem key={`ingredient-${ingredient}`}>
-            {ingredient}
-          </IngredientItem>
-        )}
-      </IngredientList>
-      <StepsList>
-        {steps.map(step =>
-          <li key={`step-${step}`}>
-            {step}
-          </li>
-        )}
-      </StepsList>
-      <NotesText>
-        {`${notes}`}
-      </NotesText>
-    </CardBody>
-  );
+  const toggleEdit = () => {
+    setEditMode(curr => !curr);
+  };
+
+  return editMode
+    ? <EditRecipeCard {...params} />
+    : <DisplayRecipeCard toggleEdit={toggleEdit} {...params} />;
 }
 
 export default memo(RecipeCard);
