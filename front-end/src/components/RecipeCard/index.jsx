@@ -17,16 +17,36 @@ function RecipeCard({
 
   return (
     <CardBody>
-      <DishTitle>{`Dish: ${dishName}`}</DishTitle>
-      <p>{`Labels: ${labels.reduce(
+      <DishTitle>
+        {dishName}
+      </DishTitle>
+      {/* <p>{`Labels: ${labels.reduce(
         (curr, prev) => curr + ", " + prev,
         ""
-      )}`}</p>
-      <p>{`Description: ${desc}`}</p>
-      <p>{`${totalTime}`}</p>
-      <p>{`${ingredients}`}</p>
-      <p>{`${steps}`}</p>
-      <p>{`${notes}`}</p>
+      )}`}</p> */}
+      <p>
+        {desc}
+      </p>
+      <p>
+        {totalTime}
+      </p>
+      <ul>
+        {ingredients.map(ingredient =>
+          <li key={`ingredient-${ingredient}`}>
+            {ingredient}
+          </li>
+        )}
+      </ul>
+      <ol>
+        {steps.map(step =>
+          <li key={`step-${step}`}>
+            {step}
+          </li>
+        )}
+      </ol>
+      <p>
+        <b>{`${notes}`}</b>
+      </p>
     </CardBody>
   );
 }

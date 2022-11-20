@@ -35,7 +35,9 @@ function MainPage() {
       <Header>Recipes Database</Header>{" "}
       <MainContent>
         <ReadingPane>
-          {allRecipes.map(recipeData => <RecipeCard {...recipeData} />)}
+          {allRecipes.map(recipeData =>
+            <RecipeCard {...recipeData} key={`card-${recipeData.dishName}`} />
+          )}
         </ReadingPane>
       </MainContent>
       <Footer>
