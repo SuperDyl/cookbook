@@ -8,9 +8,14 @@ export const CardBody = styled.div`
   border: red thick dotted;
 `;
 
+export const TitleBox = styled.span`
+  display: flex;
+  justify-content: space-between;
+`;
+
 export const DishTitle = styled.h2`
-  text-align: center;
   margin: 0;
+  display: inline;
 `;
 
 export const IngredientList = styled.ul`
@@ -27,3 +32,17 @@ export const StepsList = styled.ol`
 `;
 
 export const NotesText = styled.p`font-weight: bold;`;
+
+export const EditButton = styled.button`
+  padding: 0;
+  border: none;
+  background: none;
+
+  :hover {
+    border: black thin solid;
+  }
+
+  :active {
+    background-color: white;
+  }
+`;

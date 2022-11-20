@@ -6,8 +6,11 @@ import {
   IngredientList,
   IngredientItem,
   StepsList,
-  NotesText
+  NotesText,
+  TitleBox,
+  EditButton
 } from "./styles";
+import PencilIcon from "./pencil-icon.svg";
 
 function RecipeCard({
   dishName = "",
@@ -24,9 +27,16 @@ function RecipeCard({
 
   return (
     <CardBody>
-      <DishTitle>
-        {dishName}
-      </DishTitle>
+      <TitleBox>
+        <DishTitle>
+          {dishName}
+        </DishTitle>
+        {false
+          ? <EditButton>
+              <img src={PencilIcon} width="20px" height="20px" />
+            </EditButton>
+          : <span />}
+      </TitleBox>
       {/* <p>{`Labels: ${labels.reduce(
         (curr, prev) => curr + ", " + prev,
         ""
