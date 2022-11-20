@@ -1,52 +1,97 @@
 const recipes = [
   {
-    dishName: "Chocolate Chip Cookies",
+    dishName: "Toll House Chocolate Chip Cookies",
     labels: ["dessert"],
-    desc: "The best chacolate chip cookie recipe.",
+    desc: "The original and best chacolate chip cookie recipe.",
     totalTime: "30 minutes",
     ingredients: [
-      "1 c butter",
-      "2 eggs",
-      "2 tsp vanilla",
+      "2 1/4 c all-purpose flour",
       "1 tsp baking soda",
-      "2 tsp water",
-      "salt",
-      "3 c flour",
-      "2 c chocolate chips",
-      "1 c white sugar",
-      "1 c brown sugar"
+      "1 tsp salt",
+      "1 c (2 sticks) butter, softened",
+      "3/4 c granulated sugar",
+      "3/4 c packed brown sugar",
+      "1 tsp vanilla extract",
+      "2 large eggs",
+      "2 c (or 12-oz. pkg.) Semi-Sweet Chocolate Chips"
     ],
     steps: [
-      "Beat the butter and sugars, then beat in the eggs and vanilla.",
-      "Dissolve the baking soda in hot water and add to the mixture.",
-      "Stir in the flour, chocolate chips, and walnuts.",
-      "Drop dough onto a prepared baking sheet.",
-      "Bake until the edges are golden brown for ten minutes."
+      "Preheat oven to 375° F",
+      "Combine flour, baking soda and salt in small bowl",
+      "Beat butter, granulated sugar, brown sugar and vanilla extract in large mixer bowl until creamy",
+      "Add eggs, one at a time, beating well after each addition",
+      "Gradually beat in flour mixture",
+      "Stir in morsels and nuts",
+      "Drop by rounded tablespoon onto ungreased baking sheets",
+      "Bake for 9 to 11 minutes or until golden brown",
+      "Cool on baking sheets for 2 minutes",
+      "Remove to wire racks to cool completely"
     ],
-    notes: "Don't forget the sugar!"
+    notes: "You can also add 1 cup chopped nuts"
   },
   {
-    dishName: "waffles",
-    labels: ["breakfast", "dinner"],
-    desc:
-      "An airy, delicate, and crisp meal that is fabulous. Eat with Syrup and fruit.",
-    totalTime: "35 minutes",
+    dishName: "Charlene's Rolls",
+    labels: ["bread"],
+    desc: "My aunt's rolls",
     ingredients: [
-      "6 tblsp butter",
-      "2 c flour",
-      "1 tblsp sugar",
-      "1 tsp baking powder",
-      "1 tsp sea salt",
-      "1/2 tsp baking soda",
-      "1 c milk",
-      "4 eggs"
+      "2 c milk",
+      "1 c shortening",
+      "2 tsp salt",
+      "1/2 c sugar",
+      "3 pkg yeast",
+      "1 1/2 c warm water",
+      "2 well-beaten large eggs",
+      "8 cups flour"
     ],
     steps: [
-      "Melt butter either on the stove or in the microwave. Set aside.",
-      "In a large bowl, whisk together flour, sugar, baking powder, salt, and baking soda. In a separate bowl, whisk together yogurt, milk, melted butter, and eggs. Fold wet ingredients into dry ingredients.",
-      "Preheat a waffle iron and, using a pastry brush or paper towel, lightly coat with butter. Cook waffles (using about ½ cup batter per waffle) until golden and crisp. Butter the iron in between batches as needed. Serve waffles immediately as they are ready, or keep them warm in a 200 degree oven until ready to serve."
+      "Scald the milk, shortening, salt, and sugar on the stove",
+      "Dissolve the yeast in the water",
+      "Add the milk mixture and eggs to the yeast",
+      "Stir in up to 8 cups of flour",
+      "Let rise 1 hour",
+      "Knead in remaining flour and shape",
+      "Let rise another hour",
+      "Bake at 375 for 12 minutes"
     ],
-    notes: "This isn't considered a dessert"
+    notes: "You may need to use more or less flour"
+  },
+  {
+    dishName: "Honey Currey Chicken",
+    labels: ["dinner"],
+    desc: "A simple, sweet chicken currey",
+    ingredients: [
+      "1/2 c honey",
+      "4 Tbsp melted butter",
+      "1/4 c prepared mustard",
+      "1 Tbsp curry powder",
+      "salt and pepper",
+      "3 lbs chicken"
+    ],
+    steps: [
+      "Preheat oven to 375 F",
+      "Combine all but the chicken in a 9x13 pan",
+      "Coat chicken and layer in same pan",
+      "Bake 30-40 minutes"
+    ],
+    notes: "Ensure the chicken is cooked thouroughly"
+  },
+  {
+    dishName: "Pumpkin Chocolate Chip Cookies",
+    labels: ["dessert"],
+    desc: "These cake cookies are very soft and moist",
+    ingredients: [
+      "15 oz can of pumpkin",
+      "1 box spice cake mix",
+      "1 large egg",
+      "1 bag semi-sweet chocolate chips"
+    ],
+    steps: [
+      "Preheat oven to 375 F",
+      "Combine all but the chicken in a 9x13 pan",
+      "Coat chicken and layer in same pan",
+      "Bake 30-40 minutes"
+    ],
+    notes: "Makes 20 large cookies"
   }
 ];
 
