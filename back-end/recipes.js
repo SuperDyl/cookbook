@@ -33,6 +33,7 @@ const recipes = [
     dishName: "Charlene's Rolls",
     labels: ["bread"],
     desc: "My aunt's rolls",
+    totalTime: "3 hours",
     ingredients: [
       "2 c milk",
       "1 c shortening",
@@ -58,6 +59,7 @@ const recipes = [
   {
     dishName: "Honey Currey Chicken",
     labels: ["dinner"],
+    totalTime: "50 minutes",
     desc: "A simple, sweet chicken currey",
     ingredients: [
       "1/2 c honey",
@@ -78,6 +80,7 @@ const recipes = [
   {
     dishName: "Pumpkin Chocolate Chip Cookies",
     labels: ["dessert"],
+    totalTime: "85 minutes",
     desc: "These cake cookies are very soft and moist",
     ingredients: [
       "15 oz can of pumpkin",
@@ -86,10 +89,11 @@ const recipes = [
       "1 bag semi-sweet chocolate chips"
     ],
     steps: [
-      "Preheat oven to 375 F",
-      "Combine all but the chicken in a 9x13 pan",
-      "Coat chicken and layer in same pan",
-      "Bake 30-40 minutes"
+      "Preheat oven to 350 F",
+      "Mix all ingredients in a large bowl",
+      "Scoop balls onto a lined baking sheet",
+      "Bake 14 minutes",
+      "Let cool completely before packing or storing"
     ],
     notes: "Makes 20 large cookies"
   }
