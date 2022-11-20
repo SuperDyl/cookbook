@@ -12,7 +12,7 @@ import {
 } from "./styles";
 import PencilIcon from "./pencil-icon.svg";
 
-function RecipeCard({
+function EditRecipeCard({
   dishName = "",
   labels = [],
   desc = "",
@@ -31,11 +31,11 @@ function RecipeCard({
         <DishTitle>
           {dishName}
         </DishTitle>
-        {
-          <EditButton>
-            <img src={PencilIcon} width="20px" height="20px" />
-          </EditButton>
-        }
+        {false
+          ? <EditButton>
+              <img src={PencilIcon} width="20px" height="20px" />
+            </EditButton>
+          : <span />}
       </TitleBox>
       {/* <p>{`Labels: ${labels.reduce(
         (curr, prev) => curr + ", " + prev,
@@ -68,4 +68,4 @@ function RecipeCard({
   );
 }
 
-export default memo(RecipeCard);
+export default memo(EditRecipeCard);
