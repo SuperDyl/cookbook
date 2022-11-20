@@ -8,11 +8,14 @@ import {
   StepsList,
   NotesText,
   TitleBox,
-  EditButton
+  CancelEditButton,
+  SaveEditButton,
+  EditButtonGroup
 } from "./styles";
 import PencilIcon from "./pencil-icon.svg";
 
 function EditRecipeCard({
+  toggleEdit = () => {},
   dishName = "",
   labels = [],
   desc = "",
@@ -20,22 +23,27 @@ function EditRecipeCard({
   ingredients = [],
   steps = [],
   notes = "",
+  id,
   ...rest
 }) {
   console.log("Labels: ", labels);
   console.log("REST: ", rest);
 
+  function saveEdit() {
+    toggleEdit();
+  }
+
   return (
     <CardBody>
       <TitleBox>
-        <DishTitle>
-          {dishName}
-        </DishTitle>
-        {false
-          ? <EditButton>
-              <img src={PencilIcon} width="20px" height="20px" />
-            </EditButton>
-          : <span />}
+        <span>
+          <DishTitle>
+            {`Edit: `}
+          </DishTitle>
+          <DishTitle contentEditable="true">
+            {dishName}
+          </DishTitle>
+        </span>
       </TitleBox>
       {/* <p>{`Labels: ${labels.reduce(
         (curr, prev) => curr + ", " + prev,
@@ -64,6 +72,10 @@ function EditRecipeCard({
       <NotesText>
         {`${notes}`}
       </NotesText>
+      <EditButtonGroup>
+        <CancelEditButton onClick={toggleEdit}>Cancel Edit</CancelEditButton>
+        <SaveEditButton onClick={saveEdit}>Save Edit</SaveEditButton>
+      </EditButtonGroup>
     </CardBody>
   );
 }

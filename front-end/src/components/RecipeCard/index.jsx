@@ -11,7 +11,7 @@ function RecipeCard(params) {
   };
 
   return editMode
-    ? <EditRecipeCard {...params} />
+    ? <EditRecipeCard toggleEdit={toggleEdit} {...params} />
     : <DisplayRecipeCard toggleEdit={toggleEdit} {...params} />;
 }
 

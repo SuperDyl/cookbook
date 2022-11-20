@@ -11,7 +11,9 @@ import {
   EditButton as DisplayEditButton
 } from "../DisplayRecipeCard/styles";
 
-export const CardBody = DisplayCardBody;
+export const CardBody = styled(DisplayCardBody)`
+  border-style: solid;
+`;
 
 export const TitleBox = DisplayTitleBox;
 
@@ -25,4 +27,24 @@ export const StepsList = DisplayStepsList;
 
 export const NotesText = DisplayNotesText;
 
-export const EditButton = DisplayEditButton;
+export const CancelEditButton = styled(DisplayEditButton)`
+  margin: 2px;
+  padding: 8px;
+  border: solid black 2px;
+  font-size: 16px;
+  background: #d7d7d7;
+
+  :hover {
+    border: solid black 2px;
+    font-weight: bold;
+  }
+`;
+
+export const SaveEditButton = styled(CancelEditButton)`
+  background-color: #7cde81;
+`;
+
+export const EditButtonGroup = styled.span`
+  display: flex;
+  justify-content: space-around;
+`;
