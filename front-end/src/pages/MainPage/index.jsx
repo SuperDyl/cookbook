@@ -26,6 +26,25 @@ function MainPage() {
     }
   };
 
+  const putRecipe = async (_id, newData) => {
+    console.log("putRecipe called: ", newData);
+    try {
+      console.log("Tried to put!!");
+      await axios.put(`/api/recipes/${_id}`);
+
+      let allRecipesCopy = [...allRecipes];
+      for (const index in allRecipes) {
+        if (allRecipes[index]._id === _id) {
+          allRecipesCopy[index] = newData;
+          break;
+        }
+      }
+      setAllRecipes(allRecipesCopy);
+    } catch (error) {
+      setError("error retrieving tasks: " + error);
+    }
+  };
+
   useLayoutEffect(() => {
     fetchAllRecipes();
   }, []);
@@ -36,7 +55,11 @@ function MainPage() {
       <MainContent>
         <ReadingPane>
           {allRecipes.map(recipeData =>
-            <RecipeCard {...recipeData} key={`card-${recipeData.dishName}`} />
+            <RecipeCard
+              {...recipeData}
+              putRecipe={putRecipe}
+              key={`card-${recipeData.dishName}`}
+            />
           )}
         </ReadingPane>
       </MainContent>

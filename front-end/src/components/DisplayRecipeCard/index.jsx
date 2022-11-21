@@ -23,9 +23,6 @@ function DisplayRecipeCard({
   notes = "",
   ...rest
 }) {
-  console.log("Labels: ", labels);
-  console.log("REST: ", rest);
-
   return (
     <CardBody>
       <TitleBox>

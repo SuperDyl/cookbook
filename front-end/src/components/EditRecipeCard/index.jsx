@@ -1,5 +1,5 @@
 import React from "react";
-import { memo } from "react";
+import { memo, useRef } from "react";
 import {
   CardBody,
   DishTitle,
@@ -14,8 +14,17 @@ import {
 } from "./styles";
 import PencilIcon from "./pencil-icon.svg";
 
+function getListItemText(someNode) {
+  const listItemText = [];
+  for (const item of someNode.children) {
+    listItemText.push(item.innerText);
+  }
+  return listItemText;
+}
+
 function EditRecipeCard({
   toggleEdit = () => {},
+  saveEdit,
   dishName = "",
   labels = [],
   desc = "",
@@ -23,14 +32,32 @@ function EditRecipeCard({
   ingredients = [],
   steps = [],
   notes = "",
-  id,
+  _id,
   ...rest
 }) {
-  console.log("Labels: ", labels);
-  console.log("REST: ", rest);
+  const editedDishName = useRef(null);
+  const editedDesc = useRef(null);
+  const editedTotalTime = useRef(null);
+  const editedIngredients = useRef(null);
+  const editedSteps = useRef(null);
+  const editedNotes = useRef(null);
 
-  function saveEdit() {
-    toggleEdit();
+  if (typeof saveEdit === "undefined") {
+    saveEdit = toggleEdit;
+  }
+
+  function onSave() {
+    const items = {
+      _id,
+      dishName: editedDishName.current.innerText,
+      desc: editedDesc.current.innerText,
+      totalTime: editedTotalTime.current.innerText,
+      ingredients: getListItemText(editedIngredients.current),
+      steps: getListItemText(editedSteps.current),
+      notes: editedNotes.current.innerText
+    };
+    console.log("onSave", items);
+    saveEdit(items);
   }
 
   return (
@@ -40,7 +67,7 @@ function EditRecipeCard({
           <DishTitle>
             {`Edit: `}
           </DishTitle>
-          <DishTitle contentEditable="true">
+          <DishTitle ref={editedDishName} contentEditable="true">
             {dishName}
           </DishTitle>
         </span>
@@ -49,32 +76,32 @@ function EditRecipeCard({
         (curr, prev) => curr + ", " + prev,
         ""
       )}`}</p> */}
-      <p>
+      <p ref={editedDesc}>
         {desc}
       </p>
-      <p>
+      <p ref={editedTotalTime}>
         {totalTime}
       </p>
-      <IngredientList>
+      <IngredientList ref={editedIngredients}>
         {ingredients.map(ingredient =>
           <IngredientItem key={`ingredient-${ingredient}`}>
             {ingredient}
           </IngredientItem>
         )}
       </IngredientList>
-      <StepsList>
+      <StepsList ref={editedSteps}>
         {steps.map(step =>
           <li key={`step-${step}`}>
             {step}
           </li>
         )}
       </StepsList>
-      <NotesText>
+      <NotesText ref={editedNotes}>
         {`${notes}`}
       </NotesText>
       <EditButtonGroup>
         <CancelEditButton onClick={toggleEdit}>Cancel Edit</CancelEditButton>
-        <SaveEditButton onClick={saveEdit}>Save Edit</SaveEditButton>
+        <SaveEditButton onClick={onSave}>Save Edit</SaveEditButton>
       </EditButtonGroup>
     </CardBody>
   );
