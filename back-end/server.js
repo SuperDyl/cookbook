@@ -84,6 +84,39 @@ app.post("/api/recipes", async (req, res) => {
   }
 });
 
+app.put("/api/recipes/:id", async (req, res) => {
+  console.log("put updated");
+
+  const {
+    dishName,
+    labels,
+    desc,
+    totalTime,
+    ingredients,
+    steps,
+    notes
+  } = req.body;
+
+  try {
+    const recipe = await Recipe.findOne({ _id: req.params.id });
+
+    recipe.overwrite({
+      dishName,
+      labels,
+      desc,
+      totalTime,
+      ingredients,
+      steps,
+      notes
+    });
+    await recipe.save();
+    res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
 app.delete("/api/recipes/:id", async (req, res) => {
   try {
     await Recipe.deleteOne({
