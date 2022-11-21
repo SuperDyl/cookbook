@@ -67,7 +67,7 @@ function EditRecipeCard({
           <DishTitle>
             {`Edit: `}
           </DishTitle>
-          <DishTitle ref={editedDishName} contentEditable="true">
+          <DishTitle ref={editedDishName} contentEditable>
             {dishName}
           </DishTitle>
         </span>
@@ -76,27 +76,27 @@ function EditRecipeCard({
         (curr, prev) => curr + ", " + prev,
         ""
       )}`}</p> */}
-      <p ref={editedDesc}>
+      <p ref={editedDesc} contentEditable>
         {desc}
       </p>
-      <p ref={editedTotalTime}>
+      <p ref={editedTotalTime} contentEditable>
         {totalTime}
       </p>
-      <IngredientList ref={editedIngredients}>
+      <IngredientList ref={editedIngredients} contentEditable>
         {ingredients.map(ingredient =>
           <IngredientItem key={`ingredient-${ingredient}`}>
             {ingredient}
           </IngredientItem>
         )}
       </IngredientList>
-      <StepsList ref={editedSteps}>
+      <StepsList ref={editedSteps} contentEditable>
         {steps.map(step =>
           <li key={`step-${step}`}>
             {step}
           </li>
         )}
       </StepsList>
-      <NotesText ref={editedNotes}>
+      <NotesText ref={editedNotes} contentEditable>
         {`${notes}`}
       </NotesText>
       <EditButtonGroup>
