@@ -27,10 +27,9 @@ function MainPage() {
   };
 
   const putRecipe = async (_id, newData) => {
-    console.log("putRecipe called: ", newData);
     try {
       console.log("Tried to put!!");
-      await axios.put(`/api/recipes/${_id}`);
+      await axios.put(`/api/recipes/${_id}`, newData);
 
       let allRecipesCopy = [...allRecipes];
       for (const index in allRecipes) {

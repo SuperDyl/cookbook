@@ -56,7 +56,6 @@ function EditRecipeCard({
       steps: getListItemText(editedSteps.current),
       notes: editedNotes.current.innerText
     };
-    console.log("onSave", items);
     saveEdit(items);
   }
 

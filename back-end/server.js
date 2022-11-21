@@ -109,6 +109,7 @@ app.put("/api/recipes/:id", async (req, res) => {
       steps,
       notes
     });
+    await recipe.save();
     res.sendStatus(200);
   } catch (error) {
     console.log(error);

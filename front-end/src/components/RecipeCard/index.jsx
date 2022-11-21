@@ -11,7 +11,6 @@ function RecipeCard({ putRecipe, ...params }) {
   };
 
   const saveEdit = saveItems => {
-    console.log("saveItems: ", saveItems);
     putRecipe(saveItems._id, saveItems);
     toggleEdit();
   };
