@@ -6,6 +6,7 @@ export const CardBody = styled.div`
   margin: 24px;
   background-color: #ffd3d0;
   border: red thick dotted;
+  border-radius: 30px;
 `;
 
 export const TitleBox = styled.span`

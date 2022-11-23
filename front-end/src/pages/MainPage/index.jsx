@@ -9,6 +9,7 @@ import {
   ReadingPane
 } from "./styles";
 import RecipeCard from "../../components/RecipeCard";
+import FloatingAddButton from "../../components/FloatingAddButton";
 import axios from "axios";
 
 function MainPage() {
@@ -60,6 +61,7 @@ function MainPage() {
               key={`card-${recipeData.dishName}`}
             />
           )}
+          <FloatingAddButton />
         </ReadingPane>
       </MainContent>
       <Footer>
