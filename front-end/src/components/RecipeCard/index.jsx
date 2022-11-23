@@ -3,7 +3,7 @@ import { memo, useState } from "react";
 import DisplayRecipeCard from "../DisplayRecipeCard";
 import EditRecipeCard from "../EditRecipeCard";
 
-function RecipeCard({ putRecipe, ...params }) {
+function RecipeCard({ putRecipe, deleteRecipe, ...params }) {
   const [editMode, setEditMode] = useState(false);
 
   const toggleEdit = () => {
@@ -16,7 +16,12 @@ function RecipeCard({ putRecipe, ...params }) {
   };
 
   return editMode
-    ? <EditRecipeCard toggleEdit={toggleEdit} saveEdit={saveEdit} {...params} />
+    ? <EditRecipeCard
+        toggleEdit={toggleEdit}
+        saveEdit={saveEdit}
+        deleteRecipe={deleteRecipe}
+        {...params}
+      />
     : <DisplayRecipeCard toggleEdit={toggleEdit} {...params} />;
 }
 

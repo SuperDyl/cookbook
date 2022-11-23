@@ -48,10 +48,24 @@ function MainPage() {
   const postRecipe = async recipeData => {
     try {
       console.log("Tried to post!!");
-      await axios.post(`/api/recipes`, recipeData);
-      setAllRecipes([...allRecipes, recipeData]);
+      const response = await axios.post(`/api/recipes`, recipeData);
+      console.log("post response: ", response);
+      setAllRecipes([...allRecipes, { recipeData, ...response.data.recipe }]);
+      console.log(allRecipes);
     } catch (error) {
+      console.log("Failed to post!");
       setError("error posting recipe: " + error);
+    }
+  };
+
+  const deleteRecipe = async _id => {
+    try {
+      console.log("Tried to put!!");
+      await axios.delete(`/api/recipes/${_id}`);
+      const allRecipesCopy = allRecipes.filter(({ _id: id }) => id !== _id);
+      setAllRecipes(allRecipesCopy);
+    } catch (error) {
+      setError("error udpating recipe: " + error);
     }
   };
 
@@ -68,6 +82,7 @@ function MainPage() {
             <RecipeCard
               {...recipeData}
               putRecipe={putRecipe}
+              deleteRecipe={deleteRecipe}
               key={`card-${recipeData.dishName}`}
             />
           )}

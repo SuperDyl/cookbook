@@ -10,7 +10,8 @@ import {
   TitleBox,
   CancelEditButton,
   SaveEditButton,
-  EditButtonGroup
+  EditButtonGroup,
+  DeleteCardButton
 } from "./styles";
 import PencilIcon from "./pencil-icon.svg";
 
@@ -25,6 +26,7 @@ function getListItemText(someNode) {
 function EditRecipeCard({
   toggleEdit = () => {},
   saveEdit,
+  deleteRecipe = () => {},
   dishName = "",
   labels = [],
   desc = "",
@@ -99,6 +101,9 @@ function EditRecipeCard({
         {`${notes}`}
       </NotesText>
       <EditButtonGroup>
+        <DeleteCardButton onClick={() => deleteRecipe(_id)}>
+          Delete Card
+        </DeleteCardButton>
         <CancelEditButton onClick={toggleEdit}>Cancel Edit</CancelEditButton>
         <SaveEditButton onClick={onSave}>Save Edit</SaveEditButton>
       </EditButtonGroup>

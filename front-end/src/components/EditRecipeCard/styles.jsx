@@ -44,6 +44,10 @@ export const SaveEditButton = styled(CancelEditButton)`
   background-color: #7cde81;
 `;
 
+export const DeleteCardButton = styled(CancelEditButton)`
+  background-color: #e27373;
+`;
+
 export const EditButtonGroup = styled.span`
   display: flex;
   justify-content: space-around;
