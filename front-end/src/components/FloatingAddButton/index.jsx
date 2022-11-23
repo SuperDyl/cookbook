@@ -2,10 +2,10 @@ import React from "react";
 import { memo } from "react";
 import { PositioningSlide, AddButton } from "./styles";
 
-function FloatingAddButton() {
+function FloatingAddButton({ onClick }) {
   return (
     <PositioningSlide>
-      <AddButton>+</AddButton>
+      <AddButton onClick={onClick}>+</AddButton>
     </PositioningSlide>
   );
 }

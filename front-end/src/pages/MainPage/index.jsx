@@ -23,7 +23,7 @@ function MainPage() {
       setAllRecipes(response.data.recipes);
       console.log("allRecipes: ", response.data.recipes);
     } catch (error) {
-      setError("error retrieving tasks: " + error);
+      setError("error retrieving recipes: " + error);
     }
   };
 
@@ -41,7 +41,17 @@ function MainPage() {
       }
       setAllRecipes(allRecipesCopy);
     } catch (error) {
-      setError("error retrieving tasks: " + error);
+      setError("error udpating recipe: " + error);
+    }
+  };
+
+  const postRecipe = async recipeData => {
+    try {
+      console.log("Tried to post!!");
+      await axios.post(`/api/recipes`, recipeData);
+      setAllRecipes([...allRecipes, recipeData]);
+    } catch (error) {
+      setError("error posting recipe: " + error);
     }
   };
 
@@ -61,7 +71,7 @@ function MainPage() {
               key={`card-${recipeData.dishName}`}
             />
           )}
-          <FloatingAddButton />
+          <FloatingAddButton onClick={() => postRecipe({})} />
         </ReadingPane>
       </MainContent>
       <Footer>
