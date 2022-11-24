@@ -11,7 +11,10 @@ import {
   CancelEditButton,
   SaveEditButton,
   EditButtonGroup,
-  DeleteCardButton
+  DeleteCardButton,
+  DishTitleHeader,
+  EditableText,
+  StepsListItem
 } from "./styles";
 import PencilIcon from "./pencil-icon.svg";
 
@@ -65,9 +68,9 @@ function EditRecipeCard({
     <CardBody>
       <TitleBox>
         <span>
-          <DishTitle>
+          <DishTitleHeader>
             {`Edit: `}
-          </DishTitle>
+          </DishTitleHeader>
           <DishTitle ref={editedDishName} contentEditable>
             {dishName}
           </DishTitle>
@@ -77,12 +80,12 @@ function EditRecipeCard({
         (curr, prev) => curr + ", " + prev,
         ""
       )}`}</p> */}
-      <p ref={editedDesc} contentEditable>
+      <EditableText ref={editedDesc} contentEditable>
         {desc}
-      </p>
-      <p ref={editedTotalTime} contentEditable>
+      </EditableText>
+      <EditableText ref={editedTotalTime} contentEditable>
         {totalTime}
-      </p>
+      </EditableText>
       <IngredientList ref={editedIngredients} contentEditable>
         {ingredients.map(ingredient =>
           <IngredientItem key={`ingredient-${ingredient}`}>
@@ -92,9 +95,9 @@ function EditRecipeCard({
       </IngredientList>
       <StepsList ref={editedSteps} contentEditable>
         {steps.map(step =>
-          <li key={`step-${step}`}>
+          <StepsListItem key={`step-${step}`}>
             {step}
-          </li>
+          </StepsListItem>
         )}
       </StepsList>
       <NotesText ref={editedNotes} contentEditable>
