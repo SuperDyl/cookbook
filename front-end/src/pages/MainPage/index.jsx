@@ -81,7 +81,8 @@ function MainPage() {
       x: 20,
       y: -12,
       width: 10,
-      windowWidth: 50
+      windowWidth: 50,
+      autoPaging: "text"
     });
   };
 

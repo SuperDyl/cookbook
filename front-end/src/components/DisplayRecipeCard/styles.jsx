@@ -6,7 +6,7 @@ export const CardBody = styled.div`
   padding: 16px;
   margin: 24px;
   ${({ $hidebackground }) =>
-    !$hidebackground && `background-color: #ffd3d0;`} border: red thick dotted;
+    !$hidebackground && `background-color: #ffd3d0;`} border: red thick solid;
   border-radius: 30px;
 `;
 
