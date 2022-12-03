@@ -76,6 +76,8 @@ function MainPage() {
 
   const printRecipes = async () => {
     let doc = new jsPDF();
+    // doc.setFont('-apple-system', 'normal');
+    doc.setFont('Segoe UI', 'normal');
     doc.html(recipesHtml.current, {
       callback: doc => doc.save(),
       x: 20,
