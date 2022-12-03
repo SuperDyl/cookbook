@@ -79,7 +79,9 @@ function MainPage() {
     doc.html(recipesHtml.current, {
       callback: doc => doc.save(),
       x: 10,
-      y: 10
+      y: 10,
+      width: 10,
+      windowWidth: 50
     });
   };
 
