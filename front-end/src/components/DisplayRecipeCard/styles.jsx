@@ -23,7 +23,7 @@ export const DishTitle = styled.h2`
 export const IngredientList = styled.ul`
   padding-left: 0;
   margin-left: 20px;
-  list-style-type: circle;
+  list-style-type: disc;
 `;
 
 export const IngredientItem = styled.li`font-style: italic;`;
