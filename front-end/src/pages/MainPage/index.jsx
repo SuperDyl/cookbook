@@ -78,8 +78,8 @@ function MainPage() {
     let doc = new jsPDF();
     doc.html(recipesHtml.current, {
       callback: doc => doc.save(),
-      x: 10,
-      y: 10,
+      x: 20,
+      y: -12,
       width: 10,
       windowWidth: 50
     });
