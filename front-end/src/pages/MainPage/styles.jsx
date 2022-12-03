@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import IconButton from "../../components/IconButton";
 
 export const FullWindow = styled.div`
   overflow: auto;
@@ -44,8 +45,26 @@ export const ReadingPane = styled.div`
   }
 `;
 
-export const Text = styled.p`
-  padding-top: 16px;
-  padding-bottom: 16px;
-  margin: 0;
+// export const Text = styled.p`
+//   padding-top: 16px;
+//   padding-bottom: 16px;
+//   margin: 0;
+// `;
+
+export const Toolbar = styled.div`
+  min-height: 50px;
+  border: red thin;
+  border-bottom-style: solid;
+  border-top-style: solid;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+export const StyledIconButton = styled(IconButton)`
+  margin-right: 20px;
+  padding: 10px;
+
+  :active {
+    background-color: #f5abaa;
+  }
 `;

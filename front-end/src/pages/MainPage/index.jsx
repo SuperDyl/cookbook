@@ -5,12 +5,14 @@ import {
   Header,
   Footer,
   MainContent,
-  Text,
-  ReadingPane
+  ReadingPane,
+  Toolbar,
+  StyledIconButton
 } from "./styles";
 import RecipeCard from "../../components/RecipeCard";
 import FloatingAddButton from "../../components/FloatingAddButton";
 import axios from "axios";
+import PrinterIcon from "./printer.svg";
 
 function MainPage() {
   const [allRecipes, setAllRecipes] = useState([]);
@@ -78,6 +80,11 @@ function MainPage() {
       <Header>Recipes Database</Header>{" "}
       <MainContent>
         <ReadingPane>
+          <Toolbar>
+            <StyledIconButton>
+              <img src={PrinterIcon} height="20px" width="20px" />
+            </StyledIconButton>
+          </Toolbar>
           {allRecipes.map(recipeData =>
             <RecipeCard
               {...recipeData}
