@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import IconButton from "../IconButton";
 
 export const CardBody = styled.div`
   text-align: left;
@@ -34,16 +35,4 @@ export const StepsList = styled.ol`
 
 export const NotesText = styled.p`font-weight: bold;`;
 
-export const EditButton = styled.button`
-  padding: 0;
-  border: none;
-  background: none;
-
-  :hover {
-    border: black thin solid;
-  }
-
-  :active {
-    background-color: white;
-  }
-`;
+export const EditButton = IconButton;

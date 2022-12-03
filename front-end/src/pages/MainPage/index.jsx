@@ -12,6 +12,7 @@ import {
 import RecipeCard from "../../components/RecipeCard";
 import FloatingAddButton from "../../components/FloatingAddButton";
 import axios from "axios";
+import PrinterIcon from "./printer.svg";
 
 function MainPage() {
   const [allRecipes, setAllRecipes] = useState([]);
@@ -70,6 +71,17 @@ function MainPage() {
       setError("error udpating recipe: " + error);
     }
   };
+  
+  const printRecipes = async () => {
+    var doc = new jsPDF();
+    doc.html(recipesHtml.current, {
+      callback: function (doc) {
+        doc.save();
+      },
+      x: 10,
+      y: 10
+    });
+  }
 
   useLayoutEffect(() => {
     fetchAllRecipes();
@@ -80,6 +92,11 @@ function MainPage() {
       <Header>Recipes Database</Header>{" "}
       <MainContent>
         <ReadingPane ref={recipesHtml}>
+          <Toolbar>
+            <StyledIconButton onClick={() => printRecipes({})}>
+              <img src={PrinterIcon} height="20px" width="20px" />
+            </StyledIconButton>
+          </Toolbar>
           {allRecipes.map(recipeData =>
             <RecipeCard
               {...recipeData}
