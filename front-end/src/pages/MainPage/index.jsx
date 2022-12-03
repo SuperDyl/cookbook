@@ -1,5 +1,6 @@
 import React from "react";
-import { memo, useState, useLayoutEffect } from "react";
+import { jsPDF } from "jspdf";
+import { memo, useState, useLayoutEffect, useRef } from "react";
 import {
   FullWindow,
   Header,
@@ -15,6 +16,7 @@ import axios from "axios";
 function MainPage() {
   const [allRecipes, setAllRecipes] = useState([]);
   const [error, setError] = useState("");
+  const recipesHtml = useRef(null);
 
   const fetchAllRecipes = async () => {
     try {
@@ -77,7 +79,7 @@ function MainPage() {
     <FullWindow>
       <Header>Recipes Database</Header>{" "}
       <MainContent>
-        <ReadingPane>
+        <ReadingPane ref={recipesHtml}>
           {allRecipes.map(recipeData =>
             <RecipeCard
               {...recipeData}
