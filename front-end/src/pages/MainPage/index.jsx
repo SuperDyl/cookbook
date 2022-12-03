@@ -7,7 +7,9 @@ import {
   Footer,
   MainContent,
   Text,
-  ReadingPane
+  ReadingPane,
+  Toolbar,
+  StyledIconButton
 } from "./styles";
 import RecipeCard from "../../components/RecipeCard";
 import FloatingAddButton from "../../components/FloatingAddButton";
@@ -71,17 +73,15 @@ function MainPage() {
       setError("error udpating recipe: " + error);
     }
   };
-  
+
   const printRecipes = async () => {
-    var doc = new jsPDF();
+    let doc = new jsPDF();
     doc.html(recipesHtml.current, {
-      callback: function (doc) {
-        doc.save();
-      },
+      callback: doc => doc.save(),
       x: 10,
       y: 10
     });
-  }
+  };
 
   useLayoutEffect(() => {
     fetchAllRecipes();
