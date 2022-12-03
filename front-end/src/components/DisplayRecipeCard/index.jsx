@@ -21,19 +21,19 @@ function DisplayRecipeCard({
   ingredients = [],
   steps = [],
   notes = "",
+  printReady = false,
   ...rest
 }) {
   return (
-    <CardBody>
+    <CardBody $hidebackground={printReady}>
       <TitleBox>
         <DishTitle>
           {dishName}
         </DishTitle>
-        {
+        {!printReady &&
           <EditButton onClick={toggleEdit}>
             <img src={PencilIcon} width="20px" height="20px" />
-          </EditButton>
-        }
+          </EditButton>}
       </TitleBox>
       {/* <p>{`Labels: ${labels.reduce(
         (curr, prev) => curr + ", " + prev,
