@@ -9,7 +9,7 @@ import {
   Text,
   ReadingPane,
   Toolbar,
-  StyledIconButton
+  StyledIconButton,
 } from "./styles";
 import RecipeCard from "../../components/RecipeCard";
 import FloatingAddButton from "../../components/FloatingAddButton";
@@ -50,7 +50,7 @@ function MainPage() {
     }
   };
 
-  const postRecipe = async recipeData => {
+  const postRecipe = async (recipeData) => {
     try {
       console.log("Tried to post!!");
       const response = await axios.post(`/api/recipes`, recipeData);
@@ -63,7 +63,7 @@ function MainPage() {
     }
   };
 
-  const deleteRecipe = async _id => {
+  const deleteRecipe = async (_id) => {
     try {
       console.log("Tried to put!!");
       await axios.delete(`/api/recipes/${_id}`);
@@ -77,14 +77,14 @@ function MainPage() {
   const printRecipes = async () => {
     let doc = new jsPDF();
     // doc.setFont('-apple-system', 'normal');
-    doc.setFont('Segoe UI', 'normal');
+    doc.setFont("Segoe UI", "normal");
     doc.html(recipesHtml.current, {
-      callback: doc => doc.save(),
+      callback: (doc) => doc.save(),
       x: 20,
       y: -12,
       width: 10,
       windowWidth: 50,
-      autoPaging: "text"
+      autoPaging: "text",
     });
   };
 
@@ -102,19 +102,19 @@ function MainPage() {
               <img src={PrinterIcon} height="20px" width="20px" />
             </StyledIconButton>
           </Toolbar>
-          {allRecipes.map(recipeData =>
+          {allRecipes.map((recipeData) => (
             <RecipeCard
               {...recipeData}
               putRecipe={putRecipe}
               deleteRecipe={deleteRecipe}
               key={`card-${recipeData.dishName}`}
             />
-          )}
+          ))}
           <FloatingAddButton onClick={() => postRecipe({})} />
         </ReadingPane>
       </MainContent>
       <Footer>
-        By the Fabulous Ryan Harper and his sidekick Dylan Jones{" | "}
+        By the Fabulous Ryan Harper and his sidekick SuperDyl{" | "}
         <a href="https://github.com/SuperDyl/cookbook">GitHub</a>
       </Footer>
     </FullWindow>
