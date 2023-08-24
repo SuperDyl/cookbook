@@ -14,9 +14,9 @@ import {
   DeleteCardButton,
   DishTitleHeader,
   EditableText,
-  StepsListItem
+  StepsListItem,
 } from "./styles";
-import PencilIcon from "./pencil-icon.svg";
+// import PencilIcon from "./pencil-icon.svg";
 
 function getListItemText(someNode) {
   const listItemText = [];
@@ -59,7 +59,7 @@ function EditRecipeCard({
       totalTime: editedTotalTime.current.innerText,
       ingredients: getListItemText(editedIngredients.current),
       steps: getListItemText(editedSteps.current),
-      notes: editedNotes.current.innerText
+      notes: editedNotes.current.innerText,
     };
     saveEdit(items);
   }
@@ -68,9 +68,7 @@ function EditRecipeCard({
     <CardBody>
       <TitleBox>
         <span>
-          <DishTitleHeader>
-            {`Edit: `}
-          </DishTitleHeader>
+          <DishTitleHeader>{`Edit: `}</DishTitleHeader>
           <DishTitle ref={editedDishName} contentEditable>
             {dishName}
           </DishTitle>
@@ -87,18 +85,16 @@ function EditRecipeCard({
         {totalTime}
       </EditableText>
       <IngredientList ref={editedIngredients} contentEditable>
-        {ingredients.map(ingredient =>
+        {ingredients.map((ingredient) => (
           <IngredientItem key={`ingredient-${ingredient}`}>
             {ingredient}
           </IngredientItem>
-        )}
+        ))}
       </IngredientList>
       <StepsList ref={editedSteps} contentEditable>
-        {steps.map(step =>
-          <StepsListItem key={`step-${step}`}>
-            {step}
-          </StepsListItem>
-        )}
+        {steps.map((step) => (
+          <StepsListItem key={`step-${step}`}>{step}</StepsListItem>
+        ))}
       </StepsList>
       <NotesText ref={editedNotes} contentEditable>
         {`${notes}`}

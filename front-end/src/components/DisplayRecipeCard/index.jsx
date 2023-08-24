@@ -8,7 +8,7 @@ import {
   StepsList,
   NotesText,
   TitleBox,
-  EditButton
+  EditButton,
 } from "./styles";
 import PencilIcon from "./pencil-icon.svg";
 
@@ -25,43 +25,34 @@ function DisplayRecipeCard({
   ...rest
 }) {
   return (
-    <CardBody $hidebackground={printReady}>
+    <CardBody $hideBackground={printReady}>
       <TitleBox>
-        <DishTitle>
-          {dishName}
-        </DishTitle>
-        {!printReady &&
+        <DishTitle>{dishName}</DishTitle>
+        {!printReady && (
           <EditButton onClick={toggleEdit}>
-            <img src={PencilIcon} width="20px" height="20px" />
-          </EditButton>}
+            <img src={PencilIcon} width="20px" height="20px" alt="Edit Icon" />
+          </EditButton>
+        )}
       </TitleBox>
       {/* <p>{`Labels: ${labels.reduce(
         (curr, prev) => curr + ", " + prev,
         ""
       )}`}</p> */}
-      <p>
-        {desc}
-      </p>
-      <p>
-        {totalTime}
-      </p>
+      <p>{desc}</p>
+      <p>{totalTime}</p>
       <IngredientList>
-        {ingredients.map(ingredient =>
+        {ingredients.map((ingredient) => (
           <IngredientItem key={`ingredient-${ingredient}`}>
             {ingredient}
           </IngredientItem>
-        )}
+        ))}
       </IngredientList>
       <StepsList>
-        {steps.map(step =>
-          <li key={`step-${step}`}>
-            {step}
-          </li>
-        )}
+        {steps.map((step) => (
+          <li key={`step-${step}`}>{step}</li>
+        ))}
       </StepsList>
-      <NotesText>
-        {`${notes}`}
-      </NotesText>
+      <NotesText>{`${notes}`}</NotesText>
     </CardBody>
   );
 }

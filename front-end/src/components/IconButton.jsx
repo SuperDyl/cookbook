@@ -1,5 +1,3 @@
-import React from "react";
-import { memo } from "react";
 import styled from "styled-components";
 
 const IconButton = styled.button`
@@ -16,4 +14,4 @@ const IconButton = styled.button`
   }
 `;
 
-export default memo(IconButton);
+export default IconButton;

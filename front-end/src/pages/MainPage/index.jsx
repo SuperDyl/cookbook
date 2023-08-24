@@ -6,7 +6,6 @@ import {
   Header,
   Footer,
   MainContent,
-  Text,
   ReadingPane,
   Toolbar,
   StyledIconButton,
@@ -18,7 +17,7 @@ import PrinterIcon from "./printer.svg";
 
 function MainPage() {
   const [allRecipes, setAllRecipes] = useState([]);
-  const [error, setError] = useState("");
+  const [, setError] = useState("");
   const recipesHtml = useRef(null);
 
   const fetchAllRecipes = async () => {
@@ -46,7 +45,7 @@ function MainPage() {
       }
       setAllRecipes(allRecipesCopy);
     } catch (error) {
-      setError("error udpating recipe: " + error);
+      setError("error updating recipe: " + error);
     }
   };
 
@@ -70,7 +69,7 @@ function MainPage() {
       const allRecipesCopy = allRecipes.filter(({ _id: id }) => id !== _id);
       setAllRecipes(allRecipesCopy);
     } catch (error) {
-      setError("error udpating recipe: " + error);
+      setError("error updating recipe: " + error);
     }
   };
 
@@ -99,7 +98,7 @@ function MainPage() {
         <ReadingPane ref={recipesHtml}>
           <Toolbar>
             <StyledIconButton onClick={() => printRecipes({})}>
-              <img src={PrinterIcon} height="20px" width="20px" />
+              <img src={PrinterIcon} height="20px" width="20px" alt="Print" />
             </StyledIconButton>
           </Toolbar>
           {allRecipes.map((recipeData) => (
