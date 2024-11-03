@@ -1,3 +1,7 @@
 pdfs
 .vscode
 .DS_Store
+node_modules/
+.cache/
+public/
+website/src/gatsby-types.d.ts
