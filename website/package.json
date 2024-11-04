@@ -21,7 +21,8 @@
     "gatsby-plugin-styled-components": "^6.13.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "styled-components": "^6.1.13"
+    "styled-components": "^6.1.13",
+    "the-new-css-reset": "^1.11.3"
   },
   "devDependencies": {
     "@types/node": "^20.11.19",
