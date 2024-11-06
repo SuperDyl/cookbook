@@ -13,7 +13,7 @@ type LayoutProps = {
 	children?: ReactNode;
 };
 
-const Layout: React.FunctionComponent<LayoutProps> = ({ children }) => {
+const Layout = ({ children }: LayoutProps) => {
 	return (
 		<>
 			<GlobalStyle />

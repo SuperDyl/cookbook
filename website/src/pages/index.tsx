@@ -1,8 +1,8 @@
-import * as React from "react";
+import React from "react";
 import type { HeadFC, PageProps } from "gatsby";
 import Layout from "../components/Layout";
 
-const IndexPage: React.FC<PageProps> = () => {
+const HomePage = ({}: PageProps) => {
 	return (
 		<>
 			<Layout>
@@ -12,6 +12,6 @@ const IndexPage: React.FC<PageProps> = () => {
 	);
 };
 
-export default IndexPage;
+export default HomePage;
 
 export const Head: HeadFC = () => <title>Cookbook - Sign in</title>;
