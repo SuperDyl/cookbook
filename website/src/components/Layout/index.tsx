@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { createGlobalStyle, ThemeProvider } from "styled-components";
+import { createGlobalStyle, keyframes, ThemeProvider } from "styled-components";
 import { DarkTheme } from "../../constants";
 
 let currentTheme = DarkTheme;
@@ -20,10 +20,16 @@ const GlobalStyle = createGlobalStyle`
 		margin: 0;
 		overflow: hidden;
 		position: relative;
+
+		background-image: linear-gradient(
+			150deg,
+			${currentTheme.backgroundCompliment} 0%,
+			${currentTheme.background} 100%
+		);
   }
 
 	button {
-		background-color: ${currentTheme.background};
+		background-color: unset;
 		border-color: ${currentTheme.text};
 		border-style: solid;
 		border-radius: .67em;
@@ -42,10 +48,19 @@ const GlobalStyle = createGlobalStyle`
 			color: ${currentTheme.active};
 		}
 
-		&:focus {
-			/* border-color: ${currentTheme.focus};
-			color: ${currentTheme.focus}; */
+		@media (prefers-reduced-motion: no-preference) {
+			&:not(:hover) {
+				transition: color 500ms ease, border-color 500ms ease;
+			}
+
+			&:hover {
+				/* transition: color 125ms ease, border-color 125ms ease; */
+			}
 		}
+	}
+
+	text {
+		user-select: none;
 	}
 `;
 

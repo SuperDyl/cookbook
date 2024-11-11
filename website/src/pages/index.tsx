@@ -28,4 +28,4 @@ const HomePage = ({}: PageProps) => {
 
 export default HomePage;
 
-export const Head: HeadFC = () => <title>Cookbook - Sign in</title>;
+export const Head: HeadFC = () => <title>Home-Cookbook</title>;
