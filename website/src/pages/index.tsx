@@ -1,7 +1,13 @@
 import React from "react";
 import type { HeadFC, PageProps } from "gatsby";
 import Layout from "../components/Layout";
-import { HomeContentBox, Button, Svg, CenteredContent } from "../styles/home";
+import {
+	HomeContentBox,
+	Button,
+	Svg,
+	CenteredContent,
+	StyledBlurSiblings,
+} from "../styles/home";
 
 const HomePage = ({}: PageProps) => {
 	return (
@@ -17,8 +23,10 @@ const HomePage = ({}: PageProps) => {
 								Cookbook
 							</text>
 						</Svg>
-						<Button>Login</Button>
-						<Button>Register</Button>
+						<StyledBlurSiblings>
+							<Button>Login</Button>
+							<Button>Register</Button>
+						</StyledBlurSiblings>
 					</HomeContentBox>
 				</CenteredContent>
 			</Layout>

@@ -1,4 +1,5 @@
 import { styled } from "styled-components";
+import { BlurSiblings } from "../components/BlurSiblings";
 
 export const CenteredContent = styled.div`
 	display: flex;
@@ -31,4 +32,9 @@ export const Button = styled.button`
 
 export const Svg = styled.svg`
 	margin: 10px 0;
+`;
+
+export const StyledBlurSiblings = styled(BlurSiblings)`
+	display: flex;
+	flex-direction: column;
 `;
