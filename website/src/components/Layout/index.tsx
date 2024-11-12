@@ -74,13 +74,11 @@ type LayoutProps = {
 	children?: ReactNode;
 };
 
-const Layout = ({ children }: LayoutProps) => {
-	return (
-		<>
-			<GlobalStyle />
-			<ThemeProvider theme={currentTheme}>{children}</ThemeProvider>
-		</>
-	);
-};
+const Layout = ({ children }: LayoutProps) => (
+	<>
+		<GlobalStyle />
+		<ThemeProvider theme={currentTheme}>{children}</ThemeProvider>
+	</>
+);
 
 export default Layout;

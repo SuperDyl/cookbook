@@ -6,10 +6,8 @@ export type BlurSiblingsProps = {
 	className?: string;
 };
 
-export const BlurSiblings = ({ children, className }: BlurSiblingsProps) => {
-	return (
-		<BlurSiblingsContainer className={className}>
-			{children}
-		</BlurSiblingsContainer>
-	);
-};
+export const BlurSiblings = ({ children, className }: BlurSiblingsProps) => (
+	<BlurSiblingsContainer className={className}>
+		{children}
+	</BlurSiblingsContainer>
+);
