@@ -11,6 +11,8 @@ declare module "styled-components" {
 		active: string;
 		focus: string;
 
+		disabled: string;
+
 		contentWidth: string;
 	}
 }

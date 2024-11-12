@@ -48,6 +48,12 @@ const GlobalStyle = createGlobalStyle`
 			color: ${currentTheme.active};
 		}
 
+		&:disabled {
+			border-color: ${currentTheme.disabled};
+			color: ${currentTheme.disabled};
+			pointer-events: none;
+		}
+
 		@media (prefers-reduced-motion: no-preference) {
 			&:not(:hover) {
 				transition: color 500ms ease, border-color 500ms ease;
