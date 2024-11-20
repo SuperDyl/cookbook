@@ -32,6 +32,7 @@ export const Button = styled.button`
 
 export const Svg = styled.svg`
 	margin: 10px 0;
+	min-height: 4em;
 `;
 
 export const StyledBlurSiblings = styled(BlurSiblings)`

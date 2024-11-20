@@ -15,7 +15,7 @@ const HomePage = ({}: PageProps) => {
 			<Layout>
 				<CenteredContent>
 					<HomeContentBox>
-						<Svg viewBox="0 0 67 16">
+						<Svg viewBox="0 0 76 17">
 							<text
 								x="0"
 								y="12"

@@ -5,8 +5,17 @@ import { DarkTheme } from "../../constants";
 let currentTheme = DarkTheme;
 
 const GlobalStyle = createGlobalStyle`
+	@font-face {
+		font-family: 'Lora';
+		font-style: normal;
+		font-weight: 400;
+		font-display: swap;
+		src: url(/fonts/lora/lora-variable.ttf) format('truetype');
+	}
+
 	* {
 		color: ${currentTheme.text};
+		font-family: Lora, 'Times New Roman', Times, serif;
 	}
 
 	text {
