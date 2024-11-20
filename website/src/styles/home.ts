@@ -2,26 +2,20 @@ import { styled } from "styled-components";
 import { BlurSiblings } from "../components/BlurSiblings";
 
 export const CenteredContent = styled.div`
-	display: flex;
+	min-height: 100vh;
+
+	display: grid;
 	justify-content: center;
-
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-
-	margin-bottom: 10%;
+	align-items: center;
+	grid-template-columns: 1fr min(65ch, 100vw) 1fr;
 `;
 
 export const HomeContentBox = styled.div`
-	max-width: ${({ theme }) => theme.contentWidth};
 	margin: 4em 2em;
 	display: flex;
 	flex-direction: column;
+	grid-column: 2;
 	justify-content: center;
-
-	flex: 1;
 `;
 
 export const Button = styled.button`

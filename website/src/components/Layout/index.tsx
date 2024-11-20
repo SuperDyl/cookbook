@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import { createGlobalStyle, keyframes, ThemeProvider } from "styled-components";
 import { DarkTheme } from "../../constants";
+import { Background } from "./styles";
 
 let currentTheme = DarkTheme;
 
@@ -23,18 +24,8 @@ const GlobalStyle = createGlobalStyle`
 	}
 
   body {
-    min-width: 100vw;
-    min-height: 100vh;
     background-color: ${currentTheme.background};
 		margin: 0;
-		overflow: hidden;
-		position: relative;
-
-		background-image: linear-gradient(
-			150deg,
-			${currentTheme.backgroundCompliment} 0%,
-			${currentTheme.background} 100%
-		);
   }
 
 	button {
@@ -86,7 +77,10 @@ type LayoutProps = {
 const Layout = ({ children }: LayoutProps) => (
 	<>
 		<GlobalStyle />
-		<ThemeProvider theme={currentTheme}>{children}</ThemeProvider>
+
+		<ThemeProvider theme={currentTheme}>
+			<Background>{children}</Background>
+		</ThemeProvider>
 	</>
 );
 
