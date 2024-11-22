@@ -36,6 +36,7 @@ const GlobalStyle = createGlobalStyle`
 		font-size: 1em;
 		user-select: none;
 		margin: .2em .4em;
+		padding: 0.5em;
 
 		&:hover {
 			cursor: pointer;

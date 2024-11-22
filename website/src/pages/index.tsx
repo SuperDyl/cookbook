@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import type { HeadFC, PageProps } from "gatsby";
 import Layout from "../components/Layout";
 import {
@@ -8,8 +8,13 @@ import {
 	CenteredContent,
 	StyledBlurSiblings,
 } from "../styles/home";
+import { LoginForm } from "../components/LoginForm";
+import { Drawer } from "../components/Drawer";
 
 const HomePage = ({}: PageProps) => {
+	const [loginOpen, setLoginOpen] = useState(false);
+	const [registerOpen, setRegisterOpen] = useState(false);
+
 	return (
 		<>
 			<Layout>
@@ -23,10 +28,32 @@ const HomePage = ({}: PageProps) => {
 								Cookbook
 							</text>
 						</Svg>
-						<StyledBlurSiblings>
-							<Button>Login</Button>
-							<Button>Register</Button>
-						</StyledBlurSiblings>
+						<Drawer isOpen={loginOpen}>
+							<LoginForm cancelAction={() => setLoginOpen(false)} />
+						</Drawer>
+						<Drawer isOpen={registerOpen}>
+							<LoginForm cancelAction={() => setRegisterOpen(false)} />
+						</Drawer>
+						<Drawer isOpen={!(loginOpen || registerOpen)}>
+							<StyledBlurSiblings>
+								<Button
+									onClick={() => {
+										setLoginOpen(!loginOpen);
+										setRegisterOpen(false);
+									}}
+								>
+									Login
+								</Button>
+								<Button
+									onClick={() => {
+										setLoginOpen(false);
+										setRegisterOpen(!registerOpen);
+									}}
+								>
+									Register
+								</Button>
+							</StyledBlurSiblings>
+						</Drawer>
 					</HomeContentBox>
 				</CenteredContent>
 			</Layout>

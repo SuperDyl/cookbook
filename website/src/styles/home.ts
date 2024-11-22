@@ -21,7 +21,6 @@ export const HomeContentBox = styled.div`
 export const Button = styled.button`
 	margin: 10px 0;
 	font-size: 1.25rem;
-	padding: 0.5em 0;
 `;
 
 export const Svg = styled.svg`

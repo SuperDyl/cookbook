@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useLayoutEffect, useRef, useState } from "react";
 import { InnerContainer, OuterContainer } from "./styles";
 
 export type DrawerProps = {
@@ -10,13 +10,28 @@ export type DrawerProps = {
 };
 
 export const Drawer = ({ children, className, style, isOpen }: DrawerProps) => {
+	const innerRef = useRef<HTMLDivElement>(null);
+	const [height, setHeight] = useState(isOpen ? 500 : 0);
+
+	useLayoutEffect(() => {
+		if (isOpen) {
+			setHeight(innerRef.current?.scrollHeight || height);
+		} else {
+			setHeight(0);
+		}
+	}, [isOpen]);
+
 	return (
 		<OuterContainer
-			$isOpen={isOpen}
-			style={style}
+			style={{ ...style, maxHeight: `${height}px` }}
 			className={className}
 		>
-			<InnerContainer $isOpen={isOpen}>{children}</InnerContainer>
+			<InnerContainer
+				$isOpen={isOpen}
+				ref={innerRef}
+			>
+				{children}
+			</InnerContainer>
 		</OuterContainer>
 	);
 };
