@@ -6,10 +6,11 @@ import {
 	Button,
 	Svg,
 	CenteredContent,
-	StyledBlurSiblings,
+	ButtonContainer,
 } from "../styles/home";
-import { LoginForm } from "../components/LoginForm";
+import { FormLogin } from "../components/FormLogin";
 import { Drawer } from "../components/Drawer";
+import { FormRegister } from "../components/FormRegister";
 
 const HomePage = ({}: PageProps) => {
 	const [loginOpen, setLoginOpen] = useState(false);
@@ -29,13 +30,13 @@ const HomePage = ({}: PageProps) => {
 							</text>
 						</Svg>
 						<Drawer isOpen={loginOpen}>
-							<LoginForm cancelAction={() => setLoginOpen(false)} />
+							<FormLogin cancelAction={() => setLoginOpen(false)} />
 						</Drawer>
 						<Drawer isOpen={registerOpen}>
-							<LoginForm cancelAction={() => setRegisterOpen(false)} />
+							<FormRegister cancelAction={() => setRegisterOpen(false)} />
 						</Drawer>
 						<Drawer isOpen={!(loginOpen || registerOpen)}>
-							<StyledBlurSiblings>
+							<ButtonContainer>
 								<Button
 									onClick={() => {
 										setLoginOpen(!loginOpen);
@@ -52,7 +53,7 @@ const HomePage = ({}: PageProps) => {
 								>
 									Register
 								</Button>
-							</StyledBlurSiblings>
+							</ButtonContainer>
 						</Drawer>
 					</HomeContentBox>
 				</CenteredContent>

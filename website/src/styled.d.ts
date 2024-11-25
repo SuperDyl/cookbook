@@ -5,6 +5,7 @@ declare module "styled-components" {
 		background: string;
 		backgroundCompliment: string;
 		text: string;
+		textCompliment: string;
 
 		action: string;
 		hover: string;

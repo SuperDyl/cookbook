@@ -3,11 +3,12 @@ import { DefaultTheme } from "styled-components";
 export const darkGreen = "#263728";
 export const nearDarkGreen = "#2b6422";
 export const nearWhite = "#d8f9dc";
-export const nearWhiteCompliment = "#baf9c1";
+export const nearWhiteCompliment = "#7cc585";
 export const brightGreen = "#40c81e";
 export const green = "#358629";
 
 export const nearBlack = "#1a1d1a";
+export const nearBlackCompliment = "#2a2d2a";
 
 export const contentWidth = "800px";
 
@@ -15,6 +16,8 @@ export const DarkTheme: DefaultTheme = {
 	background: darkGreen,
 	backgroundCompliment: nearDarkGreen,
 	text: nearWhite,
+	textCompliment: nearWhiteCompliment,
+
 	action: brightGreen,
 	hover: brightGreen,
 	active: green,
@@ -29,6 +32,8 @@ export const LightTheme: DefaultTheme = {
 	background: nearWhite,
 	backgroundCompliment: nearWhiteCompliment,
 	text: nearBlack,
+	textCompliment: nearBlackCompliment,
+
 	action: darkGreen,
 	hover: green,
 	active: nearBlack,

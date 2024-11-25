@@ -1,5 +1,4 @@
 import { styled } from "styled-components";
-import { BlurSiblings } from "../components/BlurSiblings";
 
 export const CenteredContent = styled.div`
 	min-height: 100vh;
@@ -28,7 +27,7 @@ export const Svg = styled.svg`
 	min-height: 4em;
 `;
 
-export const StyledBlurSiblings = styled(BlurSiblings)`
+export const ButtonContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 `;

@@ -1,4 +1,4 @@
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 
 type InnerContainerProps = {
 	$isOpen: boolean;
@@ -6,11 +6,11 @@ type InnerContainerProps = {
 
 export const OuterContainer = styled.div`
 	overflow: hidden;
-	transition: max-height 1.5s ease;
+	transition: max-height 0.75s ease;
 `;
 
 export const InnerContainer = styled.div<InnerContainerProps>`
-	transform: translateY(${({ $isOpen }) => ($isOpen ? "0" : "-3rem")});
-	transition: transform 1.5s ease;
+	opacity: ${({ $isOpen }) => ($isOpen ? "100%" : "0")};
+	transition: transform, opacity 0.75s ease;
 	display: flow-root;
 `;
