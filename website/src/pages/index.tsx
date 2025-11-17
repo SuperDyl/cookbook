@@ -55,6 +55,7 @@ const HomePage = ({}: PageProps) => {
 								</Button>
 							</ButtonContainer>
 						</Drawer>
+						<a href="./recipes">Recipes</a>
 					</HomeContentBox>
 				</CenteredContent>
 			</Layout>
