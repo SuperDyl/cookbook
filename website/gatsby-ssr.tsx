@@ -1,6 +1,8 @@
 import * as React from "react";
 
-export const onRenderBody = ({ setHeadComponents }) => {
+// see https://www.gatsbyjs.com/docs/how-to/custom-configuration/typescript/#gatsby-browsertsx--gatsby-ssrtsx
+
+export const onRenderBody = ({ setHeadComponents}: any) => {
 	setHeadComponents([
 		<link
 			rel="preload"

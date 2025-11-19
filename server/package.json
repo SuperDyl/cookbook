@@ -4,7 +4,9 @@
 	"main": "build/index.js",
 	"type":"module",
 	"scripts": {
-		"develop": "npx tsc --watch & node --watch ./build/index.js",
+		"develop": "concurrently 'npm run dev-build' 'npm run dev-run'",
+		"dev-build": "npx tsc --watch",
+		"dev-run": "node --watch ./build/index.js",
 		"migrate": "flyway migrate",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
