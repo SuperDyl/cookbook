@@ -1,6 +1,6 @@
 import { UUID } from "crypto";
-import Connection from "./connection";
-import { Recipe } from "../models";
+import Connection from "./connection.js";
+import { Recipe } from "server-api";
 
 type JSON_STRING = string;
 
@@ -31,14 +31,14 @@ export default class DatabaseFacade {
                 select * from recipes;
             `;
 
-        return recipes.map<Recipe>(recipe => ({
-            id: recipe.id,
-            version: recipe.version,
-            title: recipe.title,
-            subtitle: recipe.subtitle,
-            author: recipe.author,
-            ingredients: JSON.parse(recipe.ingredients),
-            instructions: JSON.parse(recipe.instructions),
+        return recipes.map<Recipe>(sqlRecipe => ({
+            id: sqlRecipe.id,
+            version: sqlRecipe.version,
+            title: sqlRecipe.title,
+            subtitle: sqlRecipe.subtitle,
+            author: sqlRecipe.author,
+            ingredients: JSON.parse(sqlRecipe.ingredients),
+            instructions: JSON.parse(sqlRecipe.instructions),
         }));
     }
 }

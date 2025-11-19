@@ -88,3 +88,5 @@ npm build
 * Make database calls asynchronous https://www.npmjs.com/package/sqlite3
 * Type check returned SQL values
 * Make some way to separate development from production for databases
+* Use react context to reduce server calls and share state
+* Investigate npm monorepo
