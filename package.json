@@ -1,0 +1,27 @@
+{
+  "name": "cookbook",
+  "version": "1.0.0",
+  "description": "This project aims to create a website for hosting cookbooks.",
+  "scripts": {
+    "develop": "concurrently 'npm run develop --workspace=server' 'npm run develop --workspace=server-api' 'npm run develop --workspace=website'",
+    "migrate": "npm run migrate --workspace=server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "workspaces": [
+    "server",
+    "website",
+    "server-api"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SuperDyl/cookbook.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SuperDyl/cookbook/issues"
+  },
+  "homepage": "https://github.com/SuperDyl/cookbook#readme",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

@@ -14,25 +14,11 @@ Potential features:
 
 ## Server setup
 
-### Development
+This project is not yet stable and doesn't have a production build process.
 
-```bash
-cd server
-npm i
-npx tsc
-node --watch public/index.js
-```
-
-### Production
-
-```bash
-cd server
-npm i
-npx tsc
-node public/index.js
-```
-
-## Website setup
+To make development setup simple, 
+this project uses npm workspaces
+and development scripts.
 
 ### Database
 
@@ -48,23 +34,56 @@ brew install flyway
 If this is your first time, you will need to run the database migrations:
 
 ```bash
-cd server/migrations
+npm run migrate
+```
+
+This just runs `flyway migrate` for you.
+If you need to use other flyway commands, you will need to do so from the `./server` directory:
+
+```bash
+cd server
 flyway migrate
 ```
 
-### Development
+### Node
+
+You will need to install node `v22.18.0` as specified in `.node-version` .
+Check your node version using `node -v` .
+
+To install a second version of node, 
+use a tool like [fnm](https://github.com/Schniz/fnm#)
+or [nvm](https://github.com/nvm-sh/nvm).
+
+If you have `fnm` [configured correctly](https://github.com/Schniz/fnm/blob/master/docs/configuration.md)
+the correct node version will automatically be setup
+when your terminal is within the `cookbook` directory.
+
+### NPM scripts
+
+Currently this project is setup to use NPM.
+I may consider switching to a faster alternative in the future.
+
+To install all packages:
 
 ```bash
-cd website
-gatsby develop
+npm i
 ```
 
-### Production
+To run the entire project in developments:
 
 ```bash
-cd website
-npm build
+npm run develop
 ```
+
+To run individual projects, go to the specific directory and run the same command:
+
+```bash
+cd server # or server-api or website
+npm run develop
+```
+
+In development mode, 
+as you save changes to files, that portion of the project should reload immediately.
 
 ## Checklist
 
