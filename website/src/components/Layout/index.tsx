@@ -1,3 +1,5 @@
+"use client"
+
 import React, { ReactNode } from "react";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 import { DarkTheme } from "../../constants";
