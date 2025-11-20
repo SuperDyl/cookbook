@@ -18,6 +18,7 @@
     "the-new-css-reset": "^1.11.3"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",

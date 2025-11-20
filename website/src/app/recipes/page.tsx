@@ -8,7 +8,7 @@ import Head from "next/head";
 export default function RecipesPage() {
   const [recipes, setRecipes] = useState<Recipe[] | null>(null);
 
-  const api = new CookbookApiV1("https://cookbook.superdyl.net/api/v1");
+  const api = new CookbookApiV1("http://localhost:3001");
 
   useEffect(() => {
     async function fetchRecipes(): Promise<void> {
@@ -29,7 +29,7 @@ export default function RecipesPage() {
         <title>Recipes-Cookbook</title>
       </Head>
       <Layout>
-        <a href="./new">New Recipe</a>
+        <a href="/recipes/new-recipe">New Recipe</a>
         <ul>
         </ul>
       </Layout>

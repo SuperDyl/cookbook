@@ -2,7 +2,7 @@
 	"name": "cookbook-server",
 	"version": "1.0.0",
 	"main": "build/index.js",
-	"type":"module",
+	"type": "module",
 	"scripts": {
 		"develop": "concurrently 'npm run dev-build' 'npm run dev-run'",
 		"dev-build": "npx tsc --watch",
@@ -20,6 +20,7 @@
 		"typescript": "^5.6.3"
 	},
 	"dependencies": {
+		"cors": "^2.8.5",
 		"express": "^5.1.0",
 		"server-api": "file:../server-api"
 	}

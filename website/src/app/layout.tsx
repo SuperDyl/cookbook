@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Layout from "@/components/Layout"
+import StyledComponentsRegistry from "@/components/registry";
 
 export const metadata: Metadata = {
   title: `superdyl-cookbook`,
@@ -14,9 +15,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Layout>
-          {children}
-        </Layout>
+        <StyledComponentsRegistry>
+          <Layout>
+            {children}
+          </Layout>
+        </StyledComponentsRegistry>
       </body>
     </html>
   );

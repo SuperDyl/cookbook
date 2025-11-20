@@ -109,3 +109,10 @@ as you save changes to files, that portion of the project should reload immediat
 * Make some way to separate development from production for databases
 * Use react context to reduce server calls and share state
 * Investigate npm monorepo
+* Pages move on load
+* Investigate replacing styled components global styles
+* Optimize font loading
+* Ensure Nextjs isn't adding anything odd in data
+* Setup cors site to be loaded with a config
+* Setup config with development vs production config
+* Setup website with config for server api
