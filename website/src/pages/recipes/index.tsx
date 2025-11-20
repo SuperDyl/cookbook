@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import type { HeadFC, PageProps } from "gatsby";
-import Layout from "../components/Layout";
+import Layout from "../../components/Layout";
 import { CookbookApiV1, type Recipe } from "server-api";
 
 const RecipesPage = ({}: PageProps) => {
@@ -25,8 +25,8 @@ const RecipesPage = ({}: PageProps) => {
 	return (
 		<>
 			<Layout>
+                <a href="./new">New Recipe</a>
                 <ul>
-
                 </ul>
 			</Layout>
 		</>
