@@ -69,25 +69,33 @@ const GlobalStyle = createGlobalStyle`
 		color: ${currentTheme.text};
 		font-family: Lora, 'Times New Roman', Times, serif;
 		font-weight: 500;
+
+		&:focus-visible {
+			outline: 2px ${currentTheme.focus} solid;
+			border-color: #fff0;
+			border-radius: .4rem;
+        }
 	}
 
 	input {
 		background-color: unset;
 		border-color: ${currentTheme.text};
 		border-style: solid;
-		border-radius: .67em;
-		font-size: 1em;
-		margin: .2em .4em;
-		padding: 0.5em;
+		border-radius: .67rem;
+		font-size: 1rem;
+		margin: .2em .4rem;
+		padding: 0.5rem;
 	}
 
 	input[type="text"] {
 		font-family: monospace;
-	}
+		outline: none;
+    }
 
 	input[type="text"]::placeholder {
 		color: ${currentTheme.textCompliment};
 		font-family: Lora, 'Times New Roman', Times, serif;
+		user-select: none;
 	}
 
 	text {
@@ -103,11 +111,10 @@ const GlobalStyle = createGlobalStyle`
 		background-color: unset;
 		border-color: ${currentTheme.text};
 		border-style: solid;
-		border-radius: .67em;
-		font-size: 1em;
+		border-radius: .67rem;
 		user-select: none;
-		margin: .2em .4em;
-		padding: 0.5em;
+		margin: .2rem .4rem;
+		padding: 0.5rem;
 
 		&:hover {
 			cursor: pointer;
