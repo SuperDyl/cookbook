@@ -8,7 +8,7 @@ import {
   Svg,
   CenteredContent,
   ButtonContainer,
-} from "../styles/home";
+} from "./styles";
 import { FormLogin } from "../components/FormLogin";
 import { Drawer } from "../components/Drawer";
 import { FormRegister } from "../components/FormRegister";
