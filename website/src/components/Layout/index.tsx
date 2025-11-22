@@ -5,7 +5,7 @@ import { createGlobalStyle, ThemeProvider } from "styled-components";
 import { DarkTheme } from "../../constants";
 import { Background } from "./styles";
 
-let currentTheme = DarkTheme;
+const currentTheme = DarkTheme;
 
 const GlobalStyle = createGlobalStyle`
 	/* From https://www.joshwcomeau.com/css/custom-css-reset/ */
@@ -68,6 +68,7 @@ const GlobalStyle = createGlobalStyle`
 	* {
 		color: ${currentTheme.text};
 		font-family: Lora, 'Times New Roman', Times, serif;
+		font-weight: 500;
 	}
 
 	input {
@@ -93,10 +94,10 @@ const GlobalStyle = createGlobalStyle`
 		fill: ${currentTheme.text};
 	}
 
-  body {
-    background-color: ${currentTheme.background};
-		margin: 0;
-  }
+	body {
+		background-color: ${currentTheme.background};
+			margin: 0;
+	}
 
 	button {
 		background-color: unset;

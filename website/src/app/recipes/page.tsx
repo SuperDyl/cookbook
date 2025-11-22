@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Layout from "@/components/Layout";
 import { CookbookApiV1, type Recipe } from "server-api";
 import Head from "next/head";
@@ -8,7 +8,7 @@ import Head from "next/head";
 export default function RecipesPage() {
   const [recipes, setRecipes] = useState<Recipe[] | null>(null);
 
-  const api = new CookbookApiV1("http://localhost:3001");
+  const api = useMemo(() => new CookbookApiV1("http://localhost:3001"), []);
 
   useEffect(() => {
     async function fetchRecipes(): Promise<void> {
@@ -21,7 +21,7 @@ export default function RecipesPage() {
     }
 
     fetchRecipes();
-  }, []);
+  }, [api]);
 
   return (
     <>
