@@ -3,9 +3,11 @@ import styled from "styled-components";
 export const SubtleTextInput = styled.input`
     &[type="text"] {
         font-family: unset;
-        border: 0.5px ${({theme}) => theme.textCompliment} solid;
-        max-width: fit-content;
-        field-sizing: content;
+        border: none;
+        outline: 0.5px ${({theme}) => theme.textCompliment} solid;
+
+        margin: 0;
+        border-radius: 0;
     }
 `;
 

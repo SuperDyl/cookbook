@@ -81,7 +81,7 @@ const GlobalStyle = createGlobalStyle`
 		background-color: unset;
 		border-color: ${currentTheme.text};
 		border-style: solid;
-		border-radius: .67rem;
+		border-radius: .4rem;
 		font-size: 1rem;
 		margin: .2em .4rem;
 		padding: 0.5rem;
@@ -89,7 +89,6 @@ const GlobalStyle = createGlobalStyle`
 
 	input[type="text"] {
 		font-family: monospace;
-		outline: none;
     }
 
 	input[type="text"]::placeholder {
