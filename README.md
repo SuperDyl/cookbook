@@ -115,3 +115,6 @@ as you save changes to files, that portion of the project should reload immediat
 * Setup config with development vs production config
 * Setup website with config for server api
 * Add limit and offset to facades
+* Auto save the recipe
+* Make fields like "author" optional
+* Allow/remove instructions and ingredients automatically
