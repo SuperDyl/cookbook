@@ -11,6 +11,12 @@ export const SubtleTextInput = styled.input`
     }
 `;
 
+export const DishTitleTextInput = styled(SubtleTextInput)`
+    &[type="text"] {
+        font-size: 1.8rem;
+    }
+`;
+
 export const RecipeSpace = styled.div`
     display: flex;
     flex-direction: column;

@@ -4,7 +4,12 @@ import React, { ChangeEvent, useCallback, useState } from "react";
 import Layout from "@/components/Layout";
 import Head from "next/head";
 import { Button } from "@/app/styles";
-import { IngredientContainer, InstructionContainer, RecipeSpace, SubtleTextInput } from "./styles";
+import {
+  DishTitleTextInput,
+  IngredientContainer,
+  InstructionContainer,
+  RecipeSpace,
+  SubtleTextInput } from "./styles";
 import { Ingredient, Instruction } from "server-api";
 
 export default function NewRecipePage() {
@@ -46,15 +51,11 @@ export default function NewRecipePage() {
       <Layout>
         <a href="/recipes">Go Back</a>
         <RecipeSpace>
-            <SubtleTextInput
+            <DishTitleTextInput
               type="text"
               placeholder="Dish"
               value={dishTitle}
-              onChange={handleDishTitle}
-              style={{
-                fontSize: "1.8rem",
-                fieldSizing: "content",
-              }}/>
+              onChange={handleDishTitle}/>
             <SubtleTextInput
               type="text"
               placeholder="Subtitle"
