@@ -1,18 +1,30 @@
 import type crypto = require("crypto");
 
 export type Ingredient = {
+    id: crypto.UUID,
     version: number,
+    sequence: number,
     raw: string,
 };
 
-export type Recipe = {
+export type Instruction = {
+    id: crypto.UUID,
+    version: number,
+    sequence: number,
+    raw: string,
+};
+
+export type RecipeStub = {
     id: crypto.UUID,
     version: number,
     title: string,
     subtitle: string | null,
     author: string | null,
+};
+
+export type Recipe = RecipeStub & {
     ingredients: Ingredient[],
-    instructions: string[],
+    instructions: Instruction[],
 };
 
 export class CookbookApiV1 {
@@ -32,7 +44,11 @@ export class CookbookApiV1 {
         return await response.json() as T;
     }
 
-    public async getRecipes(): Promise<Recipe[]> {
-        return await this.get<Recipe[]>("recipes");
+    public async getRecipeStubs(): Promise<RecipeStub[]> {
+        return await this.get<RecipeStub[]>("recipe-stubs");
+    }
+
+    public async getRecipes(recipeId: crypto.UUID): Promise<Recipe[]> {
+        return await this.get<Recipe[]>(`recipe/${recipeId}`);
     }
 }

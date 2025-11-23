@@ -1,12 +1,14 @@
 "use client"
 
-import React from "react";
+import React, { useState } from "react";
 import Layout from "@/components/Layout";
 import Head from "next/head";
 import { Button } from "@/app/styles";
-import { RecipeSpace, SubtleTextInput } from "./styles";
+import { IngredientContainer, RecipeSpace, SubtleTextInput } from "./styles";
+import { Ingredient } from "server-api";
 
 export default function NewRecipePage() {
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
 
   return (
     <>
@@ -25,7 +27,10 @@ export default function NewRecipePage() {
               }}/>
             <SubtleTextInput type="text" placeholder="Subtitle"></SubtleTextInput>
             <SubtleTextInput type="text" placeholder="Author"></SubtleTextInput>
-            <SubtleTextInput type="text" placeholder="Ingredients"></SubtleTextInput>
+            <IngredientContainer>
+              {ingredients.map(ingredient => <SubtleTextInput type="text" placeholder="Ingredients" key={ingredient.id}></SubtleTextInput>)}
+              <SubtleTextInput type="text" placeholder="Ingredients"></SubtleTextInput>
+            </IngredientContainer>
             <SubtleTextInput type="text" placeholder="Instructions"></SubtleTextInput>
             <Button>Save</Button>
         </RecipeSpace>

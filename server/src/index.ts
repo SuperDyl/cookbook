@@ -2,6 +2,7 @@ import cors from 'cors';
 import express from 'express';
 import Connection from './sql/connection.js';
 import DatabaseFacade from './sql/facade.js';
+import { parseUUID } from './util.js';
 
 const db = new DatabaseFacade(
     new Connection('./cookbook.sqlite'));
@@ -17,11 +18,20 @@ app.use(
         ]
     }));
 
-app.get('/recipes', (request, result) => {
+app.get('/recipe-stubs', (request, result) => {
+    result.send(db.getRecipeStubs());
+});
 
-    const recipes = db.getRecipes();
+app.get('/recipe/:id', (request, result) => {
+    const recipeIdString = request.params.id;
+    const recipeId = parseUUID(recipeIdString);
 
-    result.send(recipes);
+    if (recipeId === null) {
+        result.status(400).send();
+        return;
+    }
+
+    result.send(db.getRecipe(recipeId));
 });
 
 app.listen(port, () => {

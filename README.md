@@ -116,3 +116,6 @@ as you save changes to files, that portion of the project should reload immediat
 * Setup cors site to be loaded with a config
 * Setup config with development vs production config
 * Setup website with config for server api
+* Add limit and offset to facades
+* Q: Should I have a recipe type that is simple and avoids joins?
+* Q: Could I batch calls using joins?
