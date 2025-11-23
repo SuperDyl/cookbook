@@ -13,15 +13,15 @@ import {
 import { Ingredient, Instruction } from "server-api";
 
 export default function NewRecipePage() {
-  const [dishTitle, setDishTitle] = useState<string>("");
-  const [dishSubTitle, setDishSubtitle] = useState<string>("");
-  const [dishAuthor, setDishAuthor] = useState<string>("");
+  const [title, setTitle] = useState<string>("");
+  const [subTitle, setSubtitle] = useState<string>("");
+  const [author, setAuthor] = useState<string>("");
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [instructions, setInstructions] = useState<Instruction[]>([]);
 
-  const handleDishTitle = useCallback((e: ChangeEvent<HTMLInputElement>) => setDishTitle(e.currentTarget.value), []);
-  const handleDishSubtitle = useCallback((e: ChangeEvent<HTMLInputElement>) => setDishSubtitle(e.currentTarget.value), []);
-  const handleDishAuthor = useCallback((e: ChangeEvent<HTMLInputElement>) => setDishAuthor(e.currentTarget.value), []);
+  const handleTitle = useCallback((e: ChangeEvent<HTMLInputElement>) => setTitle(e.currentTarget.value), []);
+  const handleSubtitle = useCallback((e: ChangeEvent<HTMLInputElement>) => setSubtitle(e.currentTarget.value), []);
+  const handleAuthor = useCallback((e: ChangeEvent<HTMLInputElement>) => setAuthor(e.currentTarget.value), []);
 
   const handleIngredient = useCallback(
     (e: ChangeEvent<HTMLInputElement>, index: number) => {
@@ -54,18 +54,18 @@ export default function NewRecipePage() {
             <DishTitleTextInput
               type="text"
               placeholder="Dish"
-              value={dishTitle}
-              onChange={handleDishTitle}/>
+              value={title}
+              onChange={handleTitle}/>
             <SubtleTextInput
               type="text"
               placeholder="Subtitle"
-              value={dishSubTitle}
-              onChange={handleDishSubtitle}/>
+              value={subTitle}
+              onChange={handleSubtitle}/>
             <SubtleTextInput
               type="text"
               placeholder="Author"
-              value={dishAuthor} 
-              onChange={handleDishAuthor}/>
+              value={author}
+              onChange={handleAuthor}/>
             <IngredientContainer>
               {ingredients.map(
                 (ingredient, index) =>
