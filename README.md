@@ -105,10 +105,8 @@ as you save changes to files, that portion of the project should reload immediat
 * Database location should be configurable
 * Add a database timeout see https://nodejs.org/api/sqlite.html#new-databasesyncpath-options
 * Make database calls asynchronous https://www.npmjs.com/package/sqlite3
-* Type check returned SQL values
 * Make some way to separate development from production for databases
 * Use react context to reduce server calls and share state
-* Investigate npm monorepo
 * Pages move on load
 * Investigate replacing styled components global styles
 * Optimize font loading
@@ -117,5 +115,3 @@ as you save changes to files, that portion of the project should reload immediat
 * Setup config with development vs production config
 * Setup website with config for server api
 * Add limit and offset to facades
-* Q: Should I have a recipe type that is simple and avoids joins?
-* Q: Could I batch calls using joins?
