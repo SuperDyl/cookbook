@@ -21,5 +21,12 @@ export const IngredientContainer = styled.div`
     display: flex;
     flex-direction: column;
 
-    padding: 1.5rem 0;
+    padding: 1rem 0 .75rem 0;
+`;
+
+export const InstructionContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+
+    padding: 0.75rem 0 0.5rem 0;
 `;
