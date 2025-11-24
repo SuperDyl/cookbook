@@ -48,23 +48,19 @@ export default function NewRecipePage() {
 
   const handleIngredient = useCallback(
     (e: ChangeEvent<HTMLInputElement>, index: number) => {
-      setIngredients((prevIngredients => {
-        const newIngredients = [...prevIngredients];
-        newIngredients[index].raw = e.currentTarget.value;
-        return newIngredients;
-      }));
+      const newIngredients = [...ingredients];
+      newIngredients[index].raw = e.currentTarget.value;
+      setIngredients(newIngredients);
     },
-    []);
+    [ingredients]);
 
   const handleInstruction = useCallback(
     (e: ChangeEvent<HTMLInputElement>, index: number) => {
-      setInstructions((prevInstructions => {
-        const newInstructions = [...prevInstructions];
-        newInstructions[index].raw = e.currentTarget.value;
-        return newInstructions;
-      }));
+      const newInstructions = [...instructions];
+      newInstructions[index].raw = e.currentTarget.value;
+      setInstructions(newInstructions);
     },
-    []);
+    [instructions]);
 
   const allFocusableInputs = useCallback(() => {
     return [
