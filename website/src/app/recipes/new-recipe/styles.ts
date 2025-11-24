@@ -17,7 +17,7 @@ export const DishTitleTextInput = styled(SubtleTextInput)`
     }
 `;
 
-export const RecipeSpace = styled.div`
+export const RecipeContainer = styled.div`
     display: flex;
     flex-direction: column;
     margin: 2rem;
