@@ -20,8 +20,8 @@ import { type UUID } from "crypto";
 
 export default function NewRecipePage() {
   const [title, setTitle] = useState<string>("");
-  const [subTitle, setSubtitle] = useState<string>("");
   const [author, setAuthor] = useState<string>("");
+  const [url, setUrl] = useState<string>("");
   const [ingredients, setIngredients] = useState<Ingredient[]>([{
     id: crypto.randomUUID() as UUID,
     version: 0,
@@ -36,15 +36,15 @@ export default function NewRecipePage() {
   }]);
 
   const titleRef = useRef<HTMLInputElement>(null);
-  const subtitleRef = useRef<HTMLInputElement>(null);
   const authorRef = useRef<HTMLInputElement>(null);
+  const urlRef = useRef<HTMLInputElement>(null);
 
   const ingredientsRefs = useRef<(HTMLInputElement | null)[]>([]);
   const instructionsRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const handleTitleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => setTitle(e.currentTarget.value), []);
-  const handleSubtitleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => setSubtitle(e.currentTarget.value), []);
   const handleAuthorChange = useCallback((e: ChangeEvent<HTMLInputElement>) => setAuthor(e.currentTarget.value), []);
+  const handleUrlChange = useCallback((e: ChangeEvent<HTMLInputElement>) => setUrl(e.currentTarget.value), []);
 
   const handleIngredient = useCallback(
     (e: ChangeEvent<HTMLInputElement>, index: number) => {
@@ -65,8 +65,8 @@ export default function NewRecipePage() {
   const allFocusableInputs = useCallback(() => {
     return [
       titleRef.current,
-      subtitleRef.current,
       authorRef.current,
+      urlRef.current,
       ...ingredientsRefs.current,
       ...instructionsRefs.current,
     ].filter((ref): ref is HTMLInputElement => ref !== null);
@@ -122,18 +122,18 @@ export default function NewRecipePage() {
               ref={titleRef}/>
             <SubtleTextInput
               type="text"
-              placeholder="Subtitle"
-              value={subTitle}
-              onChange={handleSubtitleChange}
-              onKeyDown={onKeydown}
-              ref={subtitleRef}/>
-            <SubtleTextInput
-              type="text"
               placeholder="Author"
               value={author}
               onChange={handleAuthorChange}
               onKeyDown={onKeydown}
               ref={authorRef}/>
+            <SubtleTextInput
+              type="text"
+              placeholder="Url"
+              value={url}
+              onChange={handleUrlChange}
+              onKeyDown={onKeydown}
+              ref={urlRef}/>
             <IngredientContainer>
               {ingredients.map(
                 (ingredient, index) =>

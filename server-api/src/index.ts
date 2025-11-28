@@ -18,8 +18,8 @@ export type RecipeStub = {
     id: UUID,
     version: number,
     title: string,
-    subtitle: string | null,
     author: string | null,
+    url: string | null,
 };
 
 export type Recipe = RecipeStub & {

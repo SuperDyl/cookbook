@@ -2,8 +2,8 @@ create table recipes (
     id text collate nocase not null,
     version int not null,
     title text not null,
-    subtitle text,
     author text,
+    url text,
     primary key (id)
 )  strict;
 

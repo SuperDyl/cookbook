@@ -22,8 +22,8 @@ type SqlRecipe = {
     id: UUID,
     version: number,
     title: string,
-    subtitle: string | null,
     author: string | null,
+    url: string | null,
 };
 
 export default class DatabaseFacade {
@@ -42,8 +42,8 @@ export default class DatabaseFacade {
             id: sqlRecipe.id,
             version: sqlRecipe.version,
             title: sqlRecipe.title,
-            subtitle: sqlRecipe.subtitle,
             author: sqlRecipe.author,
+            url: sqlRecipe.url,
         }));
     }
 
@@ -62,8 +62,8 @@ export default class DatabaseFacade {
             id: recipe.id,
             version: recipe.version,
             title: recipe.title,
-            subtitle: recipe.subtitle,
             author: recipe.author,
+            url: recipe.url,
             ingredients: this.database.all<SqlIngredient>`
                     select *
                     from ingredients
