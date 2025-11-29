@@ -87,18 +87,25 @@ as you save changes to files, that portion of the project should reload immediat
 
 ## Checklist
 
+* Auto save the recipe
+* Make auto-saving somewhat efficient
+* Make adding multiple recipes in a row easy
+* Add ingredient parsing
+
+* Updating recipe list
+* Merge the create recipe page into an edit recipe view
+* Create a cookbook list
+* Allow creating new cookbooks
+* Allow organizing cookbook recipes with drag/drop
+* Allow printing a cookbook
+* Make recipes avoid splitting between pages
+* Ensure that randomUUID() works on non-localhost
+
 * Printer first!
 * Add recipes
 * Edit recipes
 * See all recipes
 * Print recipes
-
-* Mobile first!
-* Landing page
-* Login
-* Sign up (with email confirmation)
-* Cookies/local storage
-* Recipes, Cookbooks, sharing, groups...
 
 * OTEL server-side
 * Port should be configurable
@@ -115,6 +122,16 @@ as you save changes to files, that portion of the project should reload immediat
 * Setup config with development vs production config
 * Setup website with config for server api
 * Add limit and offset to facades
-* Auto save the recipe
-* Make fields like "author" optional
+* Make recipe fields like `author` or `url` optional
 * Allow/remove instructions and ingredients automatically
+* Make ingredients/instructions replacements less destructive
+* Deal with multiple tabs editing the same recipe
+* Keep history of recipe changes
+* Add picture support within cookbooks
+
+* Mobile first!
+* Landing page
+* Login
+* Sign up (with email confirmation)
+* Cookies/local storage
+* Recipes, Cookbooks, sharing, groups...
