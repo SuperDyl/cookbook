@@ -89,12 +89,26 @@ const GlobalStyle = createGlobalStyle`
 
 	input[type="text"] {
 		font-family: monospace;
+
+		&::placeholder {
+			color: ${currentTheme.textCompliment};
+			font-family: Lora, 'Times New Roman', Times, serif;
+			user-select: none;
+		}
     }
 
-	input[type="text"]::placeholder {
-		color: ${currentTheme.textCompliment};
-		font-family: Lora, 'Times New Roman', Times, serif;
-		user-select: none;
+	textarea {
+		color: ${currentTheme.text};
+		background: none;
+		resize: none;
+		field-sizing: content;
+		padding: .5rem;
+
+		&::placeholder {
+			color: ${currentTheme.textCompliment};
+			font-family: Lora, 'Times New Roman', Times, serif;
+			user-select: none;
+		}
 	}
 
 	text {
