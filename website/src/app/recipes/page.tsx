@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import Layout from "@/components/Layout";
 import { CookbookApiV1, type RecipeStub } from "server-api";
 import Head from "next/head";
+import Link from "next/link";
 
 export default function RecipesPage() {
   const [recipes, setRecipes] = useState<RecipeStub[] | null>(null);
@@ -29,7 +30,7 @@ export default function RecipesPage() {
         <title>Recipes-Cookbook</title>
       </Head>
       <Layout>
-        <a href="/recipes/new-recipe">New Recipe</a>
+        <Link href="/recipe/new">New Recipe</Link>
         <ul>
         </ul>
       </Layout>

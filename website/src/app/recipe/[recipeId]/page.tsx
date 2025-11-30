@@ -3,6 +3,7 @@
 import React, {
   type ChangeEvent,
   type KeyboardEvent,
+  use,
   useCallback,
   useMemo,
   useRef,
@@ -17,8 +18,17 @@ import {
   SubtleTextInput } from "./styles";
 import { Ingredient, Instruction } from "server-api";
 import { type UUID } from "crypto";
+import Link from "next/link";
 
-export default function NewRecipePage() {
+type EditRecipesPageProps = {
+  params: Promise<{
+    recipeId: string,
+  }>
+};
+
+export default function EditRecipePage({params}: EditRecipesPageProps) {
+  const {recipeId} = use(params);
+
   const [title, setTitle] = useState<string>("");
   const [author, setAuthor] = useState<string>("");
   const [url, setUrl] = useState<string>("");
@@ -55,8 +65,6 @@ export default function NewRecipePage() {
 
   const handleIngredients = useCallback(
     (e: ChangeEvent<HTMLTextAreaElement>) => {
-      console.log(e);
-
       const newRaws = e.currentTarget.value.split('\n');
 
       setIngredients(
@@ -74,8 +82,6 @@ export default function NewRecipePage() {
 
   const handleInstructions = useCallback(
     (e: ChangeEvent<HTMLTextAreaElement>) => {
-      console.log(e);
-
       const newRaws = e.currentTarget.value.split('\n');
 
       setInstructions(
@@ -144,7 +150,7 @@ export default function NewRecipePage() {
         <title>Recipes-Cookbook</title>
       </Head>
       <Layout>
-        <a href="/recipes">Go Back</a>
+        <Link href="/recipes">Go Back</Link>
         <RecipeContainer>
             <DishTitleTextInput
               type="text"

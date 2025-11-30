@@ -93,7 +93,6 @@ as you save changes to files, that portion of the project should reload immediat
 * Add ingredient parsing
 
 * Updating recipe list
-* Merge the create recipe page into an edit recipe view
 * Create a cookbook list
 * Allow creating new cookbooks
 * Allow organizing cookbook recipes with drag/drop
