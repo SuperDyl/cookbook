@@ -5,11 +5,12 @@ import Layout from "@/components/Layout";
 import { CookbookApiV1, type RecipeStub } from "server-api";
 import Head from "next/head";
 import Link from "next/link";
+import { apiBase } from "@/constants";
 
 export default function RecipesPage() {
   const [recipes, setRecipes] = useState<RecipeStub[] | null>(null);
 
-  const api = useMemo(() => new CookbookApiV1("http://localhost:3001"), []);
+  const api = useMemo(() => new CookbookApiV1(apiBase), []);
 
   useEffect(() => {
     async function fetchRecipeStubs(): Promise<void> {

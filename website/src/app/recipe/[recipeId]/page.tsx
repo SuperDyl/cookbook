@@ -5,6 +5,7 @@ import React, {
   type KeyboardEvent,
   use,
   useCallback,
+  useEffect,
   useMemo,
   useRef,
   useState } from "react";
@@ -16,9 +17,15 @@ import {
   RecipeContainer,
   SubtleTextAreaInput,
   SubtleTextInput } from "./styles";
-import { Ingredient, Instruction } from "server-api";
+import {
+  CookbookApiV1,
+  Ingredient,
+  Instruction,
+  parseUUID,
+  Recipe } from "server-api";
 import { type UUID } from "crypto";
 import Link from "next/link";
+import { apiBase } from "@/constants";
 
 type EditRecipesPageProps = {
   params: Promise<{
@@ -26,8 +33,18 @@ type EditRecipesPageProps = {
   }>
 };
 
+enum PageStates {
+  NETWORK_ERROR = 'NETWORK_ERROR',
+  RECIPE_ID_PARSE_ERROR = 'RECIPE_ID_PARSE_ERROR',
+  LOADED = 'LOADED',
+  LOADING = 'LOADING',
+}
+
 export default function EditRecipePage({params}: EditRecipesPageProps) {
-  const {recipeId} = use(params);
+  const {recipeId: recipeIdString} = use(params);
+  const recipeId = parseUUID(recipeIdString);
+
+  const [pageState, setPageState] = useState<PageStates>(PageStates.LOADING);
 
   const [title, setTitle] = useState<string>("");
   const [author, setAuthor] = useState<string>("");
@@ -144,49 +161,104 @@ export default function EditRecipePage({params}: EditRecipesPageProps) {
     },
     []);
 
+  const api = useMemo(() => new CookbookApiV1(apiBase), []);
+
+  useEffect(
+    () => {
+      async function getRecipe() {
+        if (recipeId === null) {
+          setPageState(PageStates.RECIPE_ID_PARSE_ERROR);
+          return;
+        }
+
+        let recipe: Recipe | null;
+        try {
+          recipe = await api.getRecipe(recipeId);
+        } catch (e: unknown) {
+          console.error(e);
+          setPageState(PageStates.NETWORK_ERROR);
+          return;
+        }
+
+        if (recipe !== null) {
+          setTitle(recipe.title);
+          setAuthor(recipe.author ?? '');
+          setUrl(recipe.url ?? '');
+          setIngredients(recipe.ingredients);
+          setInstructions(recipe.instructions);
+        }
+
+        setPageState(PageStates.LOADED);
+      }
+
+      getRecipe();
+    },
+    [api, recipeId]);
+
   return (
     <>
       <Head>
         <title>Recipes-Cookbook</title>
       </Head>
       <Layout>
-        <Link href="/recipes">Go Back</Link>
-        <RecipeContainer>
-            <DishTitleTextInput
-              type="text"
-              placeholder="Dish"
-              value={title}
-              onChange={handleTitleChange}
-              onKeyDown={onTitleKeydown}
-              ref={titleRef}/>
-            <SubtleTextInput
-              type="text"
-              placeholder="Author"
-              value={author}
-              onChange={handleAuthorChange}
-              onKeyDown={onAuthorKeydown}
-              ref={authorRef}/>
-            <SubtleTextInput
-              type="text"
-              placeholder="Url"
-              value={url}
-              onChange={handleUrlChange}
-              onKeyDown={onUrlKeydown}
-              ref={urlRef}/>
-            <SubtleTextAreaInput
-              placeholder="Ingredients"
-              value={ingredientsText}
-              onChange={e => handleIngredients(e)}
-              onKeyDown={onIngredientsKeydown}
-              ref={ingredientsRef}/>
-            <SubtleTextAreaInput
-              placeholder="Instructions"
-              value={instructionsText}
-              onChange={e => handleInstructions(e)}
-              onKeyDown={onInstructionsKeydown}
-              ref={instructionsRef}/>
-            <Button>Save</Button>
-        </RecipeContainer>
+      <Link href="/recipes">Go Back</Link>
+      {pageState === PageStates.NETWORK_ERROR &&
+        <>
+          <p>Encountered a networking error!</p>
+          <Link href='/recipe/new'>Create New Recipe</Link>
+        </>
+      }
+      {pageState === PageStates.RECIPE_ID_PARSE_ERROR &&
+        <>
+          <p>The provided recipe is invalid!</p>
+          <Link href='/recipe/new'>Create New Recipe</Link>
+        </>
+      }
+      {[PageStates.LOADED, PageStates.LOADING].includes(pageState) &&
+        <>
+          <RecipeContainer>
+              <DishTitleTextInput
+                type="text"
+                placeholder="Dish"
+                value={title}
+                onChange={handleTitleChange}
+                onKeyDown={onTitleKeydown}
+                ref={titleRef}
+                disabled={pageState === PageStates.LOADING}/>
+              <SubtleTextInput
+                type="text"
+                placeholder="Author"
+                value={author}
+                onChange={handleAuthorChange}
+                onKeyDown={onAuthorKeydown}
+                ref={authorRef}
+                disabled={pageState === PageStates.LOADING}/>
+              <SubtleTextInput
+                type="text"
+                placeholder="Url"
+                value={url}
+                onChange={handleUrlChange}
+                onKeyDown={onUrlKeydown}
+                ref={urlRef}
+                disabled={pageState === PageStates.LOADING}/>
+              <SubtleTextAreaInput
+                placeholder="Ingredients"
+                value={ingredientsText}
+                onChange={e => handleIngredients(e)}
+                onKeyDown={onIngredientsKeydown}
+                ref={ingredientsRef}
+                disabled={pageState === PageStates.LOADING}/>
+              <SubtleTextAreaInput
+                placeholder="Instructions"
+                value={instructionsText}
+                onChange={e => handleInstructions(e)}
+                onKeyDown={onInstructionsKeydown}
+                ref={instructionsRef}
+                disabled={pageState === PageStates.LOADING}/>
+              <Button disabled={pageState === PageStates.LOADING}>Save</Button>
+          </RecipeContainer>
+        </>
+      }
       </Layout>
     </>
   );

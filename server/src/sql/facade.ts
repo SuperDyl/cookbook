@@ -51,7 +51,7 @@ export default class DatabaseFacade {
         const recipe = this.database.get<SqlRecipe>`
                 select *
                 from recipes
-                where recipeId = ${recipeId};
+                where id = ${recipeId};
             `;
 
         if (recipe === undefined) {

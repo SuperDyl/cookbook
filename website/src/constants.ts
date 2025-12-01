@@ -43,3 +43,5 @@ export const LightTheme: DefaultTheme = {
 
 	contentWidth: contentWidth,
 };
+
+export const apiBase = 'http://localhost:3001';

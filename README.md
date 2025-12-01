@@ -134,3 +134,7 @@ as you save changes to files, that portion of the project should reload immediat
 * Sign up (with email confirmation)
 * Cookies/local storage
 * Recipes, Cookbooks, sharing, groups...
+
+* Make it so buttons don't have a weird fade when tabbed over
+* Allow sub-files for server-api
+* Correctly ensure that the client uses real UUIDs

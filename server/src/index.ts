@@ -2,7 +2,7 @@ import cors from 'cors';
 import express from 'express';
 import Connection from './sql/connection.js';
 import DatabaseFacade from './sql/facade.js';
-import { parseUUID } from './util.js';
+import { parseUUID } from 'server-api';
 
 const db = new DatabaseFacade(
     new Connection('./cookbook.sqlite'));
@@ -19,7 +19,7 @@ app.use(
     }));
 
 app.get('/recipe-stubs', (request, result) => {
-    result.send(db.getRecipeStubs());
+    result.json(db.getRecipeStubs());
 });
 
 app.get('/recipe/:id', (request, result) => {
@@ -31,7 +31,7 @@ app.get('/recipe/:id', (request, result) => {
         return;
     }
 
-    result.send(db.getRecipe(recipeId));
+    result.json(db.getRecipe(recipeId));
 });
 
 app.listen(port, () => {
