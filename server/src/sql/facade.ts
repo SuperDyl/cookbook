@@ -1,6 +1,6 @@
-import { UUID } from "crypto";
+import { type UUID } from "crypto";
 import Connection from "./connection.js";
-import { Ingredient, Instruction, Recipe, RecipeStub } from "server-api";
+import { type Ingredient, type Instruction, type Recipe, type RecipeStub } from "server-api";
 
 type SqlIngredient = {
     id: UUID,
@@ -86,5 +86,57 @@ export default class DatabaseFacade {
                     sequence: sqlInstruction.sequence,
                     raw: sqlInstruction.raw,
                 }))};
+    }
+
+    public postRecipe(recipeId: UUID, recipe: Recipe): void {
+        // For simplicity, `recipe.id` is ignored and `recipeId` is used.
+        // Really, I should have a separate recipe type that has all but the id.
+
+        this.database.transaction(() => {
+            this.database.run`
+                replace into recipes (
+                    id,
+                    version,
+                    title,
+                    author,
+                    url)
+                values (
+                    ${recipeId},
+                    ${recipe.version},
+                    ${recipe.title},
+                    ${recipe.author},
+                    ${recipe.url});
+            `;
+
+            this.database.bulk`
+                insert into ingredients (
+                    id,
+                    version,
+                    recipeId,
+                    sequence,
+                    raw)
+                values (
+                    ${recipe.ingredients.map(i => i.id)},
+                    ${recipe.ingredients.map(i => i.version)},
+                    ${recipe.ingredients.map(() => recipe.id)},
+                    ${recipe.ingredients.map(i => i.sequence)},
+                    ${recipe.ingredients.map(i => i.raw)},)
+            `;
+
+            this.database.bulk`
+                insert into instructions (
+                    id,
+                    version,
+                    recipeId,
+                    sequence,
+                    raw)
+                values (
+                    ${recipe.instructions.map(i => i.id)},
+                    ${recipe.instructions.map(i => i.version)},
+                    ${recipe.instructions.map(() => recipe.id)},
+                    ${recipe.instructions.map(i => i.sequence)},
+                    ${recipe.instructions.map(i => i.raw)},)
+            `;
+        })
     }
 }

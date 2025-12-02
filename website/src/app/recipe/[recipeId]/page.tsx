@@ -53,13 +53,13 @@ export default function EditRecipePage({params}: EditRecipesPageProps) {
     id: crypto.randomUUID() as UUID,
     version: 0,
     sequence: 0,
-    raw: ""
+    raw: "",
   }]);
   const [instructions, setInstructions] = useState<Instruction[]>([{
     id: crypto.randomUUID() as UUID,
     version: 0,
     sequence: 0,
-    raw: ""
+    raw: "",
   }]);
 
   const titleRef = useRef<HTMLInputElement>(null);
@@ -90,7 +90,7 @@ export default function EditRecipePage({params}: EditRecipesPageProps) {
             id: crypto.randomUUID() as UUID,
             sequence: index,
             raw: raw,
-            version: 0
+            version: 0,
           };
           return ingredient;
       }));
@@ -107,12 +107,47 @@ export default function EditRecipePage({params}: EditRecipesPageProps) {
             id: crypto.randomUUID() as UUID,
             sequence: index,
             raw: raw,
-            version: 0
+            version: 0,
           };
           return instruction;
       }));
     },
     []);
+
+  const api = useMemo(() => new CookbookApiV1(apiBase), []);
+
+  const saveRecipe = useCallback(
+    () => {
+      async function saveRecipe() {
+        if (recipeId === null) {
+          console.warn("Reached an impossible state of saving a recipe with an invalid recipeId");
+          return;
+        }
+
+        // TODO: Add debouncing
+        // TODO: Add a saving state for the `saving` display
+        await api.postRecipe({
+          id: recipeId,
+          version: 0,
+          title: title,
+          author: author.length === 0 ? null:author,
+          url: url.length === 0 ? null:url,
+          ingredients: ingredients,
+          instructions: instructions,
+        });
+      }
+
+      saveRecipe();
+    },
+    [
+      api,
+      author,
+      ingredients,
+      instructions,
+      recipeId,
+      title,
+      url,
+    ]);
 
   const onTitleKeydown = useCallback(
     (e: KeyboardEvent<HTMLInputElement>) => {
@@ -160,8 +195,6 @@ export default function EditRecipePage({params}: EditRecipesPageProps) {
       }
     },
     []);
-
-  const api = useMemo(() => new CookbookApiV1(apiBase), []);
 
   useEffect(
     () => {

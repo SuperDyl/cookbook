@@ -44,12 +44,28 @@ export class CookbookApiV1 {
         return await response.json() as T;
     }
 
+    private async post<P, R>(path: string, payload: P): Promise<R> {
+        const response = await fetch(`${this.apiBase}/${path}`, {method: "POST"});
+
+        if (!response.ok) {
+            throw new Error(`Response failed. status=${response.status}; statusText=${response.statusText}`);
+        }
+
+        return await response.json() as R;
+    }
+
     public async getRecipeStubs(): Promise<RecipeStub[]> {
         return await this.get<RecipeStub[]>("recipe-stubs");
     }
 
     public async getRecipe(recipeId: UUID): Promise<Recipe | null> {
         return await this.get<Recipe | null>(`recipe/${recipeId}`);
+    }
+
+    public async postRecipe(recipe: Recipe): Promise<void> {
+        // The field `id` in `recipe` is ignored and `recipe.id` is used instead.
+        // For simplicity, I left it in for this API facade to make everything simpler.
+        await this.post<Recipe, null>(`recipe/${recipe.id}`, recipe);
     }
 }
 
