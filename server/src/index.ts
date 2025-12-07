@@ -37,7 +37,8 @@ app.get('/recipe/:id', (request, result) => {
 
 app.post('/recipe/:id', (request, result) => {
     const recipeId = parseUUID(request.params.id);
-    const recipe: Recipe = request.body.json();
+
+    const recipe: Recipe = request.body;
 
     if (recipeId === null) {
         result.status(400).send(`recipeId must be a UUID. Received '${request.params.id}'.`);
@@ -50,6 +51,8 @@ app.post('/recipe/:id', (request, result) => {
     }
 
     db.postRecipe(recipeId, recipe);
+
+    result.sendStatus(201);
 });
 
 app.listen(port, () => {
