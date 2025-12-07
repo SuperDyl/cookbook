@@ -1,2 +1,3 @@
 build/
-cookbook.sqlite
+*.sqlite
+*.sqlite-journal
