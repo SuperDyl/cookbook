@@ -11,7 +11,6 @@ import React, {
   useState } from "react";
 import Layout from "@/components/Layout";
 import Head from "next/head";
-import { Button } from "@/app/styles";
 import {
   DishTitleTextInput,
   RecipeContainer,
@@ -37,8 +36,9 @@ type EditRecipesPageProps = {
 enum PageStates {
   NETWORK_ERROR = 'NETWORK_ERROR',
   RECIPE_ID_PARSE_ERROR = 'RECIPE_ID_PARSE_ERROR',
-  LOADED = 'LOADED',
+  LOADED_AND_SAVED = 'LOADED_AND_SAVED',
   LOADING = 'LOADING',
+  SAVING = 'SAVING',
 }
 
 export default function EditRecipePage({params}: EditRecipesPageProps) {
@@ -72,7 +72,7 @@ export default function EditRecipePage({params}: EditRecipesPageProps) {
   const api = useMemo(() => new CookbookApiV1(apiBase), []);
 
   const saveRecipe = useCallback(
-    ({
+    async ({
         title: newTitle = title,
         author: newAuthor = author,
         url: newUrl = url,
@@ -85,26 +85,24 @@ export default function EditRecipePage({params}: EditRecipesPageProps) {
       ingredients?: Ingredient[],
       instructions?: Instruction[]
     }) => {
-      async function saveRecipe() {
-        if (recipeId === null) {
-          console.warn("Reached an impossible state of saving a recipe with an invalid recipeId");
-          return;
-        }
-
-        // TODO: Add debouncing
-        // TODO: Add a saving state for the `saving` display
-        await api.postRecipe({
-          id: recipeId,
-          version: 0,
-          title: newTitle,
-          author: newAuthor.length === 0 ? null:newAuthor,
-          url: newUrl.length === 0 ? null:newUrl,
-          ingredients: newIngredients,
-          instructions: newInstructions,
-        });
+      if (recipeId === null) {
+        console.warn("Reached an impossible state of saving a recipe with an invalid recipeId");
+        return;
       }
 
-      saveRecipe();
+      setPageState(PageStates.SAVING);
+
+      await api.postRecipe({
+        id: recipeId,
+        version: 0,
+        title: newTitle,
+        author: newAuthor.length === 0 ? null:newAuthor,
+        url: newUrl.length === 0 ? null:newUrl,
+        ingredients: newIngredients,
+        instructions: newInstructions,
+      });
+
+      setPageState(PageStates.LOADED_AND_SAVED);
     },
     [api, author, ingredients, instructions, recipeId, title, url]);
 
@@ -245,7 +243,7 @@ export default function EditRecipePage({params}: EditRecipesPageProps) {
           setInstructions(recipe.instructions);
         }
 
-        setPageState(PageStates.LOADED);
+        setPageState(PageStates.LOADED_AND_SAVED);
       }
 
       getRecipe();
@@ -271,7 +269,7 @@ export default function EditRecipePage({params}: EditRecipesPageProps) {
           <Link href='/recipe/new'>Create New Recipe</Link>
         </>
       }
-      {[PageStates.LOADED, PageStates.LOADING].includes(pageState) &&
+      {[PageStates.LOADED_AND_SAVED, PageStates.LOADING, PageStates.SAVING].includes(pageState) &&
         <>
           <RecipeContainer>
               <DishTitleTextInput
@@ -312,7 +310,7 @@ export default function EditRecipePage({params}: EditRecipesPageProps) {
                 onKeyDown={onInstructionsKeydown}
                 ref={instructionsRef}
                 disabled={pageState === PageStates.LOADING}/>
-              <Button disabled={pageState === PageStates.LOADING}>Save</Button>
+              {pageState === PageStates.SAVING && <h2>Saving...</h2>}
           </RecipeContainer>
         </>
       }

@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef } from "react";
 
-export function useDebounce<T extends unknown[]>(delayMs: number, callback: (...args: T) => void | Promise<void>): (...args: T) => void {
+export function useDebounce<T extends unknown[]>(delayMs: number, callback: (...args: T) => void | Promise<void>): (...args: T) => Promise<void> {
 
     const lockedRef = useRef<boolean>(false);
-    const queuedRef = useRef<null | ((...args:T) => void)>(null);
+    const queuedRef = useRef<null | ((...args:T) => (void | Promise<void>))>(null);
     const queuedArgsRef = useRef<T | null>(null);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -18,7 +18,7 @@ export function useDebounce<T extends unknown[]>(delayMs: number, callback: (...
         []);
 
     return useCallback(
-        (...args: T) => {
+        async (...args: T) => {
             if (lockedRef.current) {
                 queuedRef.current = callback;
                 queuedArgsRef.current = args;
@@ -26,17 +26,27 @@ export function useDebounce<T extends unknown[]>(delayMs: number, callback: (...
             }
 
             lockedRef.current = true;
-            callback(...args);
+            const result = callback(...args);
+            if (result instanceof Promise) {
+                await result;
+            }
 
             timeoutRef.current = setTimeout(
                 () => {
-                    if (queuedRef.current !== null && queuedArgsRef.current !== null) {
-                        queuedRef.current(...(queuedArgsRef.current));
+                    async function callQueued() {
+                        if (queuedRef.current !== null && queuedArgsRef.current !== null) {
+                            const result = queuedRef.current(...(queuedArgsRef.current));
+                            if (result instanceof Promise) {
+                                await result;
+                            }
+                        }
+
+                        queuedRef.current = null;
+                        queuedArgsRef.current = null;
+                        lockedRef.current = false;
                     }
 
-                    queuedRef.current = null;
-                    queuedArgsRef.current = null;
-                    lockedRef.current = false;
+                    callQueued();
                 },
                 delayMs);
         },
