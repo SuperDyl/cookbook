@@ -27,6 +27,32 @@ export type Recipe = RecipeStub & {
     instructions: Instruction[],
 };
 
+type TypedArray =
+    | Int8Array
+    | Uint8Array
+    | Uint8ClampedArray
+    | Int16Array
+    | Uint16Array
+    | Int32Array
+    | Uint32Array
+    | Float16Array
+    | Float64Array
+    | BigInt64Array
+    | BigUint64Array;
+
+type BodyInit =
+    | string
+    | ArrayBuffer
+    | TypedArray
+    | DataView
+    | Blob
+    | File
+    | URLSearchParams
+    | FormData
+    | ReadableStream;
+
+type PostBody = BodyInit | object | null | undefined;
+
 export class CookbookApiV1 {
     public apiBase: string;
 
@@ -44,8 +70,25 @@ export class CookbookApiV1 {
         return await response.json() as T;
     }
 
-    private async post<P, R>(path: string, payload: P): Promise<R> {
-        const response = await fetch(`${this.apiBase}/${path}`, {method: "POST"});
+    private async post<P extends PostBody, R>(path: string, payload: P): Promise<R> {
+        const requestOptions: RequestInit = {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            method: "POST",
+        };
+
+        if (payload !== null && payload !== undefined) {
+            switch (typeof payload) {
+                case 'string':
+                    requestOptions.body = payload;
+                    break;
+                case 'object':
+                    requestOptions.body = JSON.stringify(payload);
+            }
+        }
+
+        const response = await fetch(`${this.apiBase}/${path}`, requestOptions);
 
         if (!response.ok) {
             throw new Error(`Response failed. status=${response.status}; statusText=${response.statusText}`);
