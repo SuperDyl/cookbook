@@ -87,8 +87,6 @@ as you save changes to files, that portion of the project should reload immediat
 
 ## Checklist
 
-* Auto save the recipe
-* Make auto-saving somewhat efficient
 * Make adding multiple recipes in a row easy
 * Add ingredient parsing
 
@@ -141,3 +139,4 @@ as you save changes to files, that portion of the project should reload immediat
 * Make the edit recipe page smoothly enter in
 * Add checks to API to prevent DOS attacks
 * Add nested transactions
+* Make `Saving...` text not awkwardly swap back and forth

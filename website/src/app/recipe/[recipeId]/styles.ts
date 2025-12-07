@@ -38,3 +38,12 @@ export const RecipeContainer = styled.div`
     flex-direction: column;
     margin: 2rem;
 `;
+
+export type SavingTextProps = {
+    $visible: boolean,
+};
+
+export const SavingText = styled.h2<SavingTextProps>`
+    transition: opacity .5s;
+    opacity: ${({$visible}) => $visible ? 100:0};
+`;

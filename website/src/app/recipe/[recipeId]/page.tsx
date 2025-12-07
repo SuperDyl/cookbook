@@ -14,6 +14,7 @@ import Head from "next/head";
 import {
   DishTitleTextInput,
   RecipeContainer,
+  SavingText,
   SubtleTextAreaInput,
   SubtleTextInput } from "./styles";
 import {
@@ -310,7 +311,7 @@ export default function EditRecipePage({params}: EditRecipesPageProps) {
                 onKeyDown={onInstructionsKeydown}
                 ref={instructionsRef}
                 disabled={pageState === PageStates.LOADING}/>
-              {pageState === PageStates.SAVING && <h2>Saving...</h2>}
+              <SavingText $visible={pageState === PageStates.SAVING}>Saving...</SavingText>
           </RecipeContainer>
         </>
       }
