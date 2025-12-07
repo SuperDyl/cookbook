@@ -26,6 +26,7 @@ import {
 import { type UUID } from "crypto";
 import Link from "next/link";
 import { apiBase } from "@/constants";
+import { useDebounce } from "@/hooks/useDebounce";
 
 type EditRecipesPageProps = {
   params: Promise<{
@@ -68,9 +69,65 @@ export default function EditRecipePage({params}: EditRecipesPageProps) {
   const ingredientsRef = useRef<HTMLTextAreaElement>(null);
   const instructionsRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleTitleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => setTitle(e.currentTarget.value), []);
-  const handleAuthorChange = useCallback((e: ChangeEvent<HTMLInputElement>) => setAuthor(e.currentTarget.value), []);
-  const handleUrlChange = useCallback((e: ChangeEvent<HTMLInputElement>) => setUrl(e.currentTarget.value), []);
+  const api = useMemo(() => new CookbookApiV1(apiBase), []);
+
+  const saveRecipe = useCallback(
+    ({
+        title: newTitle = title,
+        author: newAuthor = author,
+        url: newUrl = url,
+        ingredients: newIngredients = ingredients,
+        instructions: newInstructions = instructions
+    }: {
+      title?: string,
+      author?: string,
+      url?: string,
+      ingredients?: Ingredient[],
+      instructions?: Instruction[]
+    }) => {
+      async function saveRecipe() {
+        if (recipeId === null) {
+          console.warn("Reached an impossible state of saving a recipe with an invalid recipeId");
+          return;
+        }
+
+        // TODO: Add debouncing
+        // TODO: Add a saving state for the `saving` display
+        await api.postRecipe({
+          id: recipeId,
+          version: 0,
+          title: newTitle,
+          author: newAuthor.length === 0 ? null:newAuthor,
+          url: newUrl.length === 0 ? null:newUrl,
+          ingredients: newIngredients,
+          instructions: newInstructions,
+        });
+      }
+
+      saveRecipe();
+    },
+    [api, author, ingredients, instructions, recipeId, title, url]);
+
+  const debouncedSaveRecipe = useDebounce(
+    500,
+    saveRecipe);
+
+  const handleTitleChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setTitle(e.currentTarget.value);
+      debouncedSaveRecipe({title: e.currentTarget.value});
+    },
+    [debouncedSaveRecipe]);
+  const handleAuthorChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setAuthor(e.currentTarget.value);
+      debouncedSaveRecipe({author: e.currentTarget.value});
+    }, [debouncedSaveRecipe]);
+  const handleUrlChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setUrl(e.currentTarget.value);
+      debouncedSaveRecipe({url: e.currentTarget.value});
+    }, [debouncedSaveRecipe]);
 
   const ingredientsText = useMemo(
     () => ingredients.map((x) => x.raw).join('\n'),
@@ -83,9 +140,7 @@ export default function EditRecipePage({params}: EditRecipesPageProps) {
   const handleIngredients = useCallback(
     (e: ChangeEvent<HTMLTextAreaElement>) => {
       const newRaws = e.currentTarget.value.split('\n');
-
-      setIngredients(
-        newRaws.map((raw, index) => {
+      const newIngredients: Ingredient[] = newRaws.map((raw, index) => {
           const ingredient: Ingredient = {
             id: crypto.randomUUID() as UUID,
             sequence: index,
@@ -93,16 +148,17 @@ export default function EditRecipePage({params}: EditRecipesPageProps) {
             version: 0,
           };
           return ingredient;
-      }));
+      })
+
+      setIngredients(newIngredients);
+      debouncedSaveRecipe({ingredients: newIngredients});
     },
-    []);
+    [debouncedSaveRecipe]);
 
   const handleInstructions = useCallback(
     (e: ChangeEvent<HTMLTextAreaElement>) => {
       const newRaws = e.currentTarget.value.split('\n');
-
-      setInstructions(
-        newRaws.map((raw, index) => {
+      const newInstructions: Instruction[] = newRaws.map((raw, index) => {
           const instruction: Instruction = {
             id: crypto.randomUUID() as UUID,
             sequence: index,
@@ -110,44 +166,12 @@ export default function EditRecipePage({params}: EditRecipesPageProps) {
             version: 0,
           };
           return instruction;
-      }));
+      })
+
+      setInstructions(newInstructions);
+      debouncedSaveRecipe({instructions: newInstructions});
     },
-    []);
-
-  const api = useMemo(() => new CookbookApiV1(apiBase), []);
-
-  const saveRecipe = useCallback(
-    () => {
-      async function saveRecipe() {
-        if (recipeId === null) {
-          console.warn("Reached an impossible state of saving a recipe with an invalid recipeId");
-          return;
-        }
-
-        // TODO: Add debouncing
-        // TODO: Add a saving state for the `saving` display
-        await api.postRecipe({
-          id: recipeId,
-          version: 0,
-          title: title,
-          author: author.length === 0 ? null:author,
-          url: url.length === 0 ? null:url,
-          ingredients: ingredients,
-          instructions: instructions,
-        });
-      }
-
-      saveRecipe();
-    },
-    [
-      api,
-      author,
-      ingredients,
-      instructions,
-      recipeId,
-      title,
-      url,
-    ]);
+    [debouncedSaveRecipe]);
 
   const onTitleKeydown = useCallback(
     (e: KeyboardEvent<HTMLInputElement>) => {
