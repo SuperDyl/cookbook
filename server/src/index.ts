@@ -1,11 +1,11 @@
 import cors from 'cors';
 import express from 'express';
-import Connection from './sql/connection.js';
-import DatabaseFacade from './sql/facade.js';
+import DatabaseFacade from './sql/DatabaseFacade.js';
 import { parseUUID, type Recipe } from 'server-api';
+import SqliteConnection from './sql/SqliteConnection.js';
 
 const db = new DatabaseFacade(
-    new Connection('./cookbook.sqlite'));
+    new SqliteConnection('./cookbook.sqlite'));
 
 const app = express();
 const port = 3001;

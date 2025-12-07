@@ -1,6 +1,6 @@
 import { type UUID } from "crypto";
-import Connection from "./connection.js";
-import { type Ingredient, type Instruction, type Recipe, type RecipeStub } from "server-api";
+import type { Ingredient, Instruction, Recipe, RecipeStub } from "server-api";
+import SqliteConnection from "./SqliteConnection.js";
 
 type SqlIngredient = {
     id: UUID,
@@ -29,7 +29,7 @@ type SqlRecipe = {
 export default class DatabaseFacade {
     private database;
 
-    constructor(dbConnection: Connection) {
+    constructor(dbConnection: SqliteConnection) {
         this.database = dbConnection;
     }
 

@@ -1,6 +1,6 @@
 import { DatabaseSync } from 'node:sqlite';
 
-export default class Connection {
+export default class SqliteConnection {
     private _db: DatabaseSync;
 
     constructor(path: string) {
