@@ -140,3 +140,4 @@ as you save changes to files, that portion of the project should reload immediat
 * Add checks to API to prevent DOS attacks
 * Add nested transactions
 * Make `Saving...` text not awkwardly swap back and forth
+* Prevent closing editor until recipe is saved

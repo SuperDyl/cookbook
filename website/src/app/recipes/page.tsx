@@ -33,6 +33,13 @@ export default function RecipesPage() {
       <Layout>
         <Link href="/recipe/new">New Recipe</Link>
         <ul>
+          {recipes?.map(recipe =>
+            <li key={recipe.id}>
+              <Link href={`/recipe/${recipe.id}`}>
+                {recipe.title}
+              </Link>
+            </li>
+          )}
         </ul>
       </Layout>
     </>
