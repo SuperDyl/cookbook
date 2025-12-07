@@ -67,7 +67,7 @@ export default class DatabaseFacade {
             ingredients: this.database.all<SqlIngredient>`
                     select *
                     from ingredients
-                    where recipeId = '${recipe.id}'
+                    where recipeId = ${recipe.id}
                     order by sequence;
                 `.map<Ingredient>(sqlIngredient => ({
                     id: sqlIngredient.id,
@@ -77,8 +77,8 @@ export default class DatabaseFacade {
                 })),
             instructions: this.database.all<SqlInstruction>`
                     select *
-                    from ingredients
-                    where recipeId = '${recipe.id}'
+                    from instructions
+                    where recipeId = ${recipe.id}
                     order by sequence;
                 `.map<Instruction>(sqlInstruction => ({
                     id: sqlInstruction.id,
@@ -120,7 +120,7 @@ export default class DatabaseFacade {
                     ${recipe.ingredients.map(i => i.version)},
                     ${recipe.ingredients.map(() => recipe.id)},
                     ${recipe.ingredients.map(i => i.sequence)},
-                    ${recipe.ingredients.map(i => i.raw)},)
+                    ${recipe.ingredients.map(i => i.raw)});
             `;
 
             this.database.bulk`
@@ -135,7 +135,7 @@ export default class DatabaseFacade {
                     ${recipe.instructions.map(i => i.version)},
                     ${recipe.instructions.map(() => recipe.id)},
                     ${recipe.instructions.map(i => i.sequence)},
-                    ${recipe.instructions.map(i => i.raw)},)
+                    ${recipe.instructions.map(i => i.raw)});
             `;
         })
     }
