@@ -94,7 +94,14 @@ export class CookbookApiV1 {
             throw new Error(`Response failed. status=${response.status}; statusText=${response.statusText}`);
         }
 
-        return await response.json() as R;
+        switch (response.headers.get("Content-Type")) {
+            case "application/json":
+                return await response.json() as R;
+            case "application/text":
+                return response.text() as R;
+        }
+
+        return await response.bytes() as R;
     }
 
     public async getRecipeStubs(): Promise<RecipeStub[]> {
