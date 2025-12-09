@@ -1,6 +1,7 @@
 import { type UUID } from "crypto";
 import type { Ingredient, Instruction, Recipe, RecipeStub } from "server-api";
 import SqliteConnection from "./SqliteConnection.js";
+import { Cookbook, CookbookStub } from "server-api/build/shared-types.js";
 
 type SqlIngredient = {
     id: UUID,
@@ -26,11 +27,50 @@ type SqlRecipe = {
     url: string | null,
 };
 
+type SqlCookbook = {
+    id: UUID,
+    version: number,
+    title: string,
+    author: string | null,
+};
+
+type SqlCookbookRecipe = {
+    cookbookId: UUID,
+    recipeId: UUID,
+    sequence: number,
+
+    version: number,
+    title: string,
+    author: string | null,
+    url: string | null,
+};
+
+type SqlCookbookSection = {
+    id: UUID,
+    cookbookId: UUID,
+    version: number,
+    sequenceBefore: number,
+    sectionName: string,
+};
+
 export default class DatabaseFacade {
     private database;
 
     constructor(dbConnection: SqliteConnection) {
         this.database = dbConnection;
+    }
+
+    public getCookbookStubs(): CookbookStub[] {
+        const cookbooks = this.database.all<SqlCookbook>`
+                select * from cookbooks;
+            `;
+
+        return cookbooks.map<CookbookStub>(sqlCookbook => ({
+            id: sqlCookbook.id,
+            version: sqlCookbook.version,
+            title: sqlCookbook.title,
+            author: sqlCookbook.author,
+        }));
     }
 
     public getRecipeStubs(): RecipeStub[] {
@@ -86,6 +126,40 @@ export default class DatabaseFacade {
                     sequence: sqlInstruction.sequence,
                     raw: sqlInstruction.raw,
                 }))};
+    }
+
+    public getCookbook(cookbookId: UUID): Cookbook | null {
+        const cookbook = this.database.get<SqlCookbook>`
+                select *
+                from cookbooks
+                where id = ${cookbookId};
+            `;
+
+        if (cookbook === undefined) {
+            return null;
+        }
+
+        return {
+            id: cookbook.id,
+            version: cookbook.version,
+            title: cookbook.title,
+            author: cookbook.author,
+            recipes: this.database.all<UUID>`
+                    select recipeId
+                    from cookbookRecipes
+                    where cookbookId = ${cookbook.id};`
+                .map(recipeId => this.getRecipe(recipeId)) as Recipe[],
+            sections: this.database.all<SqlCookbookSection>`
+                select *
+                from cookbookSections
+                where cookbookId = ${cookbook.id};`
+                .map(section => ({
+                    id: section.id,
+                    version: section.version,
+                    sequenceBefore: section.sequenceBefore,
+                    sectionName: section.sectionName,
+                })),
+            };
     }
 
     public postRecipe(recipeId: UUID, recipe: Recipe): void {

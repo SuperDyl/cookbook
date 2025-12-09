@@ -26,3 +26,22 @@ export type Recipe = RecipeStub & {
     ingredients: Ingredient[],
     instructions: Instruction[],
 };
+
+export type CookbookSection = {
+    id: UUID,
+    version: number,
+    sequenceBefore: number,
+    sectionName: string,
+};
+
+export type CookbookStub = {
+    id: UUID,
+    version: number,
+    title: string,
+    author: string | null,
+};
+
+export type Cookbook = CookbookStub & {
+    recipes: Recipe[],
+    sections: CookbookSection[],
+};

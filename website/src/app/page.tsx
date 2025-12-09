@@ -61,6 +61,7 @@ export default function Home() {
               </ButtonContainer>
             </Drawer>
             <a href="./recipes">Recipes</a>
+            <a href="./cookbooks">Cookbooks</a>
           </HomeContentBox>
         </CenteredContent>
       </Layout>

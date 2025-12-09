@@ -3,6 +3,7 @@ import express from 'express';
 import DatabaseFacade from './sql/DatabaseFacade.js';
 import { parseUUID, type Recipe } from 'server-api';
 import SqliteConnection from './sql/SqliteConnection.js';
+import { Cookbook } from 'server-api/build/shared-types.js';
 
 const db = new DatabaseFacade(
     new SqliteConnection('./cookbook.sqlite'));
@@ -19,6 +20,21 @@ app.use(
     }),
     express.json(),
 );
+
+app.get('/cookbook-stubs', (request, result) => {
+    result.json(db.getCookbookStubs());
+});
+
+app.get('/cookbook/:id', (request, result) => {
+    const cookbookId = parseUUID(request.params.id);
+
+    if (cookbookId === null) {
+        result.status(400).send(`cookbookId must be a UUID. Received '${request.params.id}'`);
+        return;
+    }
+
+    result.json(db.getCookbook(cookbookId));
+});
 
 app.get('/recipe-stubs', (request, result) => {
     result.json(db.getRecipeStubs());

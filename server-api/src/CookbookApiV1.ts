@@ -1,5 +1,5 @@
 import type { UUID } from "crypto";
-import type { Recipe, RecipeStub } from "./shared-types.js";
+import type { Cookbook, CookbookStub, Recipe, RecipeStub } from "./shared-types.js";
 
 type TypedArray =
     | Int8Array
@@ -76,6 +76,14 @@ export class CookbookApiV1 {
         }
 
         return await response.bytes() as R;
+    }
+
+    public async getCookbookStubs(): Promise<CookbookStub[]> {
+        return await this.get<CookbookStub[]>("cookbook-stubs");
+    }
+
+    public async getCookbook(cookbookId: UUID): Promise<Cookbook | null> {
+        return await this.get<Cookbook | null>(`cookbook/${cookbookId}`);
     }
 
     public async getRecipeStubs(): Promise<RecipeStub[]> {
