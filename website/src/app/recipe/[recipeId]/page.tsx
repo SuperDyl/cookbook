@@ -34,11 +34,27 @@ type EditRecipesPageProps = {
   }>
 };
 
+/**
+ * This lists all possible states for the page to be in.
+ * It should be considered a state machine,
+ * where displayed page content and available actions depend
+ * on the current state.
+ *
+ * Currently:
+ *
+ * PageLoad -> RECIPE_ID_PARSE_ERROR, FETCHING_DATA, NETWORK_FETCH_ERROR
+ *
+ * FETCHING_DATA -> NORMAL_EDITING
+ *
+ * NORMAL_EDITING -> SAVING
+ *
+ * SAVING -> NORMAL_EDITING
+ */
 enum PageStates {
-  NETWORK_ERROR = 'NETWORK_ERROR',
+  NETWORK_FETCH_ERROR = 'NETWORK_FETCH_ERROR',
   RECIPE_ID_PARSE_ERROR = 'RECIPE_ID_PARSE_ERROR',
-  LOADED_AND_SAVED = 'LOADED_AND_SAVED',
-  LOADING = 'LOADING',
+  NORMAL_EDITING = 'NORMAL_EDITING',
+  FETCHING_DATA = 'FETCHING_DATA',
   SAVING = 'SAVING',
 }
 
@@ -46,7 +62,7 @@ export default function EditRecipePage({params}: EditRecipesPageProps) {
   const {recipeId: recipeIdString} = use(params);
   const recipeId = parseUUID(recipeIdString);
 
-  const [pageState, setPageState] = useState<PageStates>(PageStates.LOADING);
+  const [pageState, setPageState] = useState<PageStates>(PageStates.FETCHING_DATA);
 
   const [title, setTitle] = useState<string>("");
   const [author, setAuthor] = useState<string>("");
@@ -103,7 +119,7 @@ export default function EditRecipePage({params}: EditRecipesPageProps) {
         instructions: newInstructions,
       });
 
-      setPageState(PageStates.LOADED_AND_SAVED);
+      setPageState(PageStates.NORMAL_EDITING);
     },
     [api, author, ingredients, instructions, recipeId, title, url]);
 
@@ -232,7 +248,7 @@ export default function EditRecipePage({params}: EditRecipesPageProps) {
           recipe = await api.getRecipe(recipeId);
         } catch (e: unknown) {
           console.error(e);
-          setPageState(PageStates.NETWORK_ERROR);
+          setPageState(PageStates.NETWORK_FETCH_ERROR);
           return;
         }
 
@@ -244,7 +260,7 @@ export default function EditRecipePage({params}: EditRecipesPageProps) {
           setInstructions(recipe.instructions);
         }
 
-        setPageState(PageStates.LOADED_AND_SAVED);
+        setPageState(PageStates.NORMAL_EDITING);
       }
 
       getRecipe();
@@ -258,7 +274,7 @@ export default function EditRecipePage({params}: EditRecipesPageProps) {
       </Head>
       <Layout>
       <Link href="/recipes">Go Back</Link>
-      {pageState === PageStates.NETWORK_ERROR &&
+      {pageState === PageStates.NETWORK_FETCH_ERROR &&
         <>
           <p>Encountered a networking error!</p>
           <Link href='/recipe/new'>Create New Recipe</Link>
@@ -270,7 +286,8 @@ export default function EditRecipePage({params}: EditRecipesPageProps) {
           <Link href='/recipe/new'>Create New Recipe</Link>
         </>
       }
-      {[PageStates.LOADED_AND_SAVED, PageStates.LOADING, PageStates.SAVING].includes(pageState) &&
+      {pageState === PageStates.FETCHING_DATA && <p>Fetching</p>}
+      {[PageStates.NORMAL_EDITING, PageStates.SAVING].includes(pageState) &&
         <>
           <RecipeContainer>
               <DishTitleTextInput
@@ -279,38 +296,33 @@ export default function EditRecipePage({params}: EditRecipesPageProps) {
                 value={title}
                 onChange={handleTitleChange}
                 onKeyDown={onTitleKeydown}
-                ref={titleRef}
-                disabled={pageState === PageStates.LOADING}/>
+                ref={titleRef}/>
               <SubtleTextInput
                 type="text"
                 placeholder="Author"
                 value={author}
                 onChange={handleAuthorChange}
                 onKeyDown={onAuthorKeydown}
-                ref={authorRef}
-                disabled={pageState === PageStates.LOADING}/>
+                ref={authorRef}/>
               <SubtleTextInput
                 type="text"
                 placeholder="Url"
                 value={url}
                 onChange={handleUrlChange}
                 onKeyDown={onUrlKeydown}
-                ref={urlRef}
-                disabled={pageState === PageStates.LOADING}/>
+                ref={urlRef}/>
               <SubtleTextAreaInput
                 placeholder="Ingredients"
                 value={ingredientsText}
                 onChange={e => handleIngredients(e)}
                 onKeyDown={onIngredientsKeydown}
-                ref={ingredientsRef}
-                disabled={pageState === PageStates.LOADING}/>
+                ref={ingredientsRef}/>
               <SubtleTextAreaInput
                 placeholder="Instructions"
                 value={instructionsText}
                 onChange={e => handleInstructions(e)}
                 onKeyDown={onInstructionsKeydown}
-                ref={instructionsRef}
-                disabled={pageState === PageStates.LOADING}/>
+                ref={instructionsRef}/>
               <SavingText $visible={pageState === PageStates.SAVING}>Saving...</SavingText>
           </RecipeContainer>
         </>
