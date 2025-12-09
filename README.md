@@ -141,3 +141,16 @@ as you save changes to files, that portion of the project should reload immediat
 * Add nested transactions
 * Make `Saving...` text not awkwardly swap back and forth
 * Prevent closing editor until recipe is saved
+* Trim whitespace from recipe editing fields
+* Deal with other recipe states like failing to save
+* Add default link text when a recipe/cookbook name is blank
+* Make recipes default to being a view mode with an edit button
+* Show list of recipe names in Cookbook view
+* Make recipe names expandable
+* Allow editing recipes inline of the Cookbook
+* Give option when editing recipes of what Cookbooks it should apply to
+* Show which cookbooks a recipe is attached to in recipe view
+* Add drag-and-drop interface for recipe order in cookbook
+* Allow editing recipe styles
+* Add WYSIWYG view
+* Give cookbook editor fields for cookbook title etc.
