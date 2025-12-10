@@ -42,20 +42,21 @@ type EditRecipesPageProps = {
  *
  * Currently:
  *
- * PageLoad -> RECIPE_ID_PARSE_ERROR, FETCHING_DATA, NETWORK_FETCH_ERROR
+ * PageLoad -> FETCHING_DATA, RECIPE_ID_PARSE_ERROR, NETWORK_FETCH_ERROR
  *
- * FETCHING_DATA -> NORMAL_EDITING
+ * FETCHING_DATA -> VIEWING -> EDITING
  *
- * NORMAL_EDITING -> SAVING
+ * EDITING -> SAVING & VIEWING
  *
- * SAVING -> NORMAL_EDITING
+ * SAVING -> EDITING
  */
 enum PageStates {
+  FETCHING_DATA = 'FETCHING_DATA',
+  VIEWING = 'VIEWING',
+  EDITING = 'EDITING',
+  SAVING = 'SAVING',
   NETWORK_FETCH_ERROR = 'NETWORK_FETCH_ERROR',
   RECIPE_ID_PARSE_ERROR = 'RECIPE_ID_PARSE_ERROR',
-  NORMAL_EDITING = 'NORMAL_EDITING',
-  FETCHING_DATA = 'FETCHING_DATA',
-  SAVING = 'SAVING',
 }
 
 export default function EditRecipePage({params}: EditRecipesPageProps) {
@@ -119,7 +120,7 @@ export default function EditRecipePage({params}: EditRecipesPageProps) {
         instructions: newInstructions,
       });
 
-      setPageState(PageStates.NORMAL_EDITING);
+      setPageState(PageStates.EDITING);
     },
     [api, author, ingredients, instructions, recipeId, title, url]);
 
@@ -260,7 +261,7 @@ export default function EditRecipePage({params}: EditRecipesPageProps) {
           setInstructions(recipe.instructions);
         }
 
-        setPageState(PageStates.NORMAL_EDITING);
+        setPageState(PageStates.EDITING);
       }
 
       getRecipe();
@@ -287,7 +288,7 @@ export default function EditRecipePage({params}: EditRecipesPageProps) {
         </>
       }
       {pageState === PageStates.FETCHING_DATA && <p>Fetching</p>}
-      {[PageStates.NORMAL_EDITING, PageStates.SAVING].includes(pageState) &&
+      {[PageStates.EDITING, PageStates.SAVING].includes(pageState) &&
         <>
           <RecipeContainer>
               <DishTitleTextInput

@@ -134,7 +134,6 @@ as you save changes to files, that portion of the project should reload immediat
 * Recipes, Cookbooks, sharing, groups...
 
 * Make it so buttons don't have a weird fade when tabbed over
-* Allow sub-files for server-api
 * Correctly ensure that the client uses real UUIDs
 * Make the edit recipe page smoothly enter in
 * Add checks to API to prevent DOS attacks
