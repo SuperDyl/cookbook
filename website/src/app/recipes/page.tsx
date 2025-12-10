@@ -31,7 +31,11 @@ export default function RecipesPage() {
         <title>Recipes-Cookbook</title>
       </Head>
       <Layout>
-        <Link href="/recipe/new">New Recipe</Link>
+        <nav>
+          <p><Link href="/">Home</Link></p>
+          <p><Link href="/recipe/new">New Recipe</Link></p>
+        </nav>
+
         <ul>
           {recipes?.map(recipe =>
             <li key={recipe.id}>

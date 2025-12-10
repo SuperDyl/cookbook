@@ -22,7 +22,10 @@ export default function EditRecipePage({params}: EditRecipesPageProps) {
         <Head>
           <title>Recipes-Cookbook</title>
         </Head>
-        <Link href="/recipes">Go Back</Link>
+        <nav>
+          <p><Link href="/">Home</Link></p>
+          <p><Link href="/recipes">See all recipes</Link></p>
+        </nav>
         {recipeId === null
           ? <>
               <p>The provided recipe is invalid!</p>
