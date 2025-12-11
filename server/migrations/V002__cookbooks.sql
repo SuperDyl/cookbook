@@ -32,3 +32,16 @@ create table cookbookSections (
         on delete cascade,
     unique (cookbookId, sequenceBefore)
 )  strict;
+
+create table subRecipes (
+    id text collate nocase not null,
+    version int not null,
+    recipeId text collate nocase not null,
+    sequence int not null,
+    title text,
+    primary key (id),
+    foreign key (recipeId) references recipes(id)
+        on update cascade
+        on delete cascade,
+    unique (recipeId, sequence)
+)  strict;

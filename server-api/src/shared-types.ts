@@ -14,6 +14,15 @@ export type Instruction = {
     raw: string,
 };
 
+export type SubRecipe = {
+    id: UUID,
+    version: number,
+    sequence: number,
+    title: string | null,
+    ingredients: Ingredient[],
+    instructions: Instruction[],
+}
+
 export type RecipeStub = {
     id: UUID,
     version: number,
@@ -23,8 +32,7 @@ export type RecipeStub = {
 };
 
 export type Recipe = RecipeStub & {
-    ingredients: Ingredient[],
-    instructions: Instruction[],
+    subRecipes: SubRecipe[],
 };
 
 export type CookbookSection = {

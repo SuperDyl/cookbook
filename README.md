@@ -155,3 +155,4 @@ as you save changes to files, that portion of the project should reload immediat
 * Allow editing recipe styles
 * Add WYSIWYG view
 * Allow adding recipes to multiple cookbooks
+* Ensure that ingredient and instruction fields are cleaned before posting recipe

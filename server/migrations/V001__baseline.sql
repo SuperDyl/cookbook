@@ -10,25 +10,25 @@ create table recipes (
 create table ingredients (
     id text collate nocase not null,
     version int not null,
-    recipeId text collate nocase not null,
+    subRecipeId text collate nocase not null,
     sequence int not null,
     raw text not null,
     primary key (id),
-    foreign key (recipeId) references recipes(id)
+    foreign key (subRecipeId) references subRecipes(id)
         on update cascade
         on delete cascade,
-    unique (recipeId, sequence)
+    unique (subRecipeId, sequence)
 )  strict;
 
 create table instructions (
     id text collate nocase not null,
     version int not null,
-    recipeId text collate nocase not null,
+    subRecipeId text collate nocase not null,
     sequence int not null,
     raw text not null,
     primary key (id),
-    foreign key (recipeId) references recipes(id)
+    foreign key (subRecipeId) references subRecipes(id)
         on update cascade
         on delete cascade,
-    unique (recipeId, sequence)
+    unique (subRecipeId, sequence)
 )  strict;

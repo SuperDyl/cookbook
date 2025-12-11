@@ -3,7 +3,6 @@ import express from 'express';
 import DatabaseFacade from './sql/DatabaseFacade.js';
 import { parseUUID, type Recipe } from 'server-api';
 import SqliteConnection from './sql/SqliteConnection.js';
-import { Cookbook } from 'server-api/build/shared-types.js';
 
 const db = new DatabaseFacade(
     new SqliteConnection('./cookbook.sqlite'));

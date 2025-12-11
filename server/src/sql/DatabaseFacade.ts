@@ -1,7 +1,14 @@
 import { type UUID } from "crypto";
-import type { Ingredient, Instruction, Recipe, RecipeStub } from "server-api";
 import SqliteConnection from "./SqliteConnection.js";
-import { Cookbook, CookbookStub } from "server-api/build/shared-types.js";
+import type {
+    Cookbook,
+    CookbookStub,
+    Ingredient,
+    Instruction,
+    Recipe,
+    RecipeStub,
+    SubRecipe
+} from "server-api";
 
 type SqlIngredient = {
     id: UUID,
@@ -17,6 +24,14 @@ type SqlInstruction = {
     recipeId: UUID,
     sequence: number,
     raw: string,
+};
+
+type SqlSubRecipe = {
+    id: UUID,
+    version: number,
+    recipeId: UUID,
+    sequence: number,
+    title: string | null,
 };
 
 type SqlRecipe = {
@@ -104,28 +119,40 @@ export default class DatabaseFacade {
             title: recipe.title,
             author: recipe.author,
             url: recipe.url,
-            ingredients: this.database.all<SqlIngredient>`
+            subRecipes: this.database.all<SqlSubRecipe>`
                     select *
-                    from ingredients
+                    from subRecipes
                     where recipeId = ${recipe.id}
                     order by sequence;
-                `.map<Ingredient>(sqlIngredient => ({
+                `.map<SubRecipe>(sqlSubRecipe => ({
+                id: sqlSubRecipe.id,
+                version: sqlSubRecipe.version,
+                sequence: sqlSubRecipe.sequence,
+                title: sqlSubRecipe.title,
+                ingredients: this.database.all<SqlIngredient>`
+                            select *
+                            from ingredients
+                            where recipeId = ${recipe.id}
+                            order by sequence;
+                        `.map<Ingredient>(sqlIngredient => ({
                     id: sqlIngredient.id,
                     version: sqlIngredient.version,
                     sequence: sqlIngredient.sequence,
                     raw: sqlIngredient.raw,
                 })),
-            instructions: this.database.all<SqlInstruction>`
-                    select *
-                    from instructions
-                    where recipeId = ${recipe.id}
-                    order by sequence;
-                `.map<Instruction>(sqlInstruction => ({
+                instructions: this.database.all<SqlInstruction>`
+                            select *
+                            from instructions
+                            where recipeId = ${recipe.id}
+                            order by sequence;
+                        `.map<Instruction>(sqlInstruction => ({
                     id: sqlInstruction.id,
                     version: sqlInstruction.version,
                     sequence: sqlInstruction.sequence,
                     raw: sqlInstruction.raw,
-                }))};
+                })),
+            }))
+        };
     }
 
     public getCookbook(cookbookId: UUID): Cookbook | null {
@@ -159,7 +186,7 @@ export default class DatabaseFacade {
                     sequenceBefore: section.sequenceBefore,
                     sectionName: section.sectionName,
                 })),
-            };
+        };
     }
 
     public postRecipe(recipeId: UUID, recipe: Recipe): void {
@@ -182,35 +209,70 @@ export default class DatabaseFacade {
                     ${recipe.url});
             `;
 
-            this.database.bulk`
-                insert into ingredients (
-                    id,
-                    version,
-                    recipeId,
-                    sequence,
-                    raw)
-                values (
-                    ${recipe.ingredients.map(i => i.id)},
-                    ${recipe.ingredients.map(i => i.version)},
-                    ${recipe.ingredients.map(() => recipe.id)},
-                    ${recipe.ingredients.map(i => i.sequence)},
-                    ${recipe.ingredients.map(i => i.raw)});
+            this.database.run`
+                delete from subRecipes
+                where recipeId = ${recipe.id};
             `;
 
             this.database.bulk`
-                insert into instructions (
+                insert into subRecipes (
                     id,
-                    version,
                     recipeId,
+                    version,
                     sequence,
-                    raw)
+                    title)
                 values (
-                    ${recipe.instructions.map(i => i.id)},
-                    ${recipe.instructions.map(i => i.version)},
-                    ${recipe.instructions.map(() => recipe.id)},
-                    ${recipe.instructions.map(i => i.sequence)},
-                    ${recipe.instructions.map(i => i.raw)});
+                    ${recipe.subRecipes.map(subRecipe => subRecipe.id)},
+                    ${recipe.subRecipes.map(() => recipe.id)},
+                    ${recipe.subRecipes.map(subRecipe => subRecipe.version)},
+                    ${recipe.subRecipes.map(subRecipe => subRecipe.sequence)},
+                    ${recipe.subRecipes.map(subRecipe => subRecipe.title)});
             `;
+
+            for (const subRecipe of recipe.subRecipes) {
+
+                this.database.run`
+                    delete from ingredients
+                    where subRecipeId = ${subRecipe.id};
+                `;
+
+                this.database.bulk`
+                    insert into ingredients (
+                        id,
+                        version,
+                        subRecipeId,
+                        sequence,
+                        raw)
+                    values (
+                        ${subRecipe.ingredients.map(i => i.id)},
+                        ${subRecipe.ingredients.map(i => i.version)},
+                        ${subRecipe.ingredients.map(() => subRecipe.id)},
+                        ${subRecipe.ingredients.map(i => i.sequence)},
+                        ${subRecipe.ingredients.map(i => i.raw)});
+                `;
+
+                this.database.run`
+                    delete from instructions
+                    where subRecipeId = ${subRecipe.id};
+                `;
+
+                this.database.bulk`
+                    insert into instructions (
+                        id,
+                        version,
+                        subRecipeId,
+                        sequence,
+                        raw)
+                    values (
+                        ${subRecipe.instructions.map(i => i.id)},
+                        ${subRecipe.instructions.map(i => i.version)},
+                        ${subRecipe.instructions.map(() => subRecipe.id)},
+                        ${subRecipe.instructions.map(i => i.sequence)},
+                        ${subRecipe.instructions.map(i => i.raw)});
+                `;
+            }
+
+
         })
     }
 }
