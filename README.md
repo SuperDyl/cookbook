@@ -87,13 +87,17 @@ as you save changes to files, that portion of the project should reload immediat
 
 ## Checklist
 
+* Add sub-recipes
+* Allow editing to travel between sub-recipes
+* Add cookbook fields for title etc.
+* Add toggle for cookbook recipe order vs. editing
+* Allow organizing cookbook recipes with drag/drop
+* Add button to add sections between cookbook recipes
+
 * Make adding multiple recipes in a row easy
 * Add ingredient parsing
 
-* Updating recipe list
 * Create a cookbook list
-* Allow creating new cookbooks
-* Allow organizing cookbook recipes with drag/drop
 * Allow printing a cookbook
 * Make recipes avoid splitting between pages
 * Ensure that randomUUID() works on non-localhost
@@ -146,10 +150,8 @@ as you save changes to files, that portion of the project should reload immediat
 * Make recipes default to being a view mode with an edit button
 * Show list of recipe names in Cookbook view
 * Make recipe names expandable
-* Allow editing recipes inline of the Cookbook
 * Give option when editing recipes of what Cookbooks it should apply to
 * Show which cookbooks a recipe is attached to in recipe view
-* Add drag-and-drop interface for recipe order in cookbook
 * Allow editing recipe styles
 * Add WYSIWYG view
-* Give cookbook editor fields for cookbook title etc.
+* Allow adding recipes to multiple cookbooks
