@@ -7,12 +7,16 @@ export default class SqliteConnection {
         this._db = new DatabaseSync(path);
     }
 
-    public transaction<T>(transactionCallback: () => T) {
+    public transaction(transactionCallback: () => 'commit' | 'rollback'): 'commit' | 'rollback' {
         const savepointName = `save_${crypto.randomUUID().replaceAll(/-/g,'_')};`;
         this.exec(`savepoint ${savepointName};`);
         try {
             const result = transactionCallback();
-            this.exec(`release savepoint ${savepointName};`);
+            if (result === 'commit') {
+                this.exec(`release savepoint ${savepointName};`);
+            } else {
+                this.exec(`rollback to savepoint ${savepointName};`);
+            }
             return result;
         } catch (e: unknown) {
             console.error('Received error during transaction, rolling back', e);
@@ -42,16 +46,18 @@ export default class SqliteConnection {
 
     public bulk(strings: TemplateStringsArray, ...parameterLists: any[][])
         : { changes: number, lastInsertRowid: number }[] {
-        return this.transaction(() => {
-            const statement = this._db.prepare(strings.join('?'));
-            const results = [];
+        const results: { changes: number, lastInsertRowid: number }[] = [];
 
+        this.transaction(() => {
+            const statement = this._db.prepare(strings.join('?'));
             for (let i = 0; i < parameterLists[0].length; i++) {
                 const parameters = parameterLists.map(list => list[i]);
                 results.push(statement.run(...parameters) as { changes: number, lastInsertRowid: number });
             }
 
-            return results;
+            return 'commit';
         });
+
+        return results;
     }
 }

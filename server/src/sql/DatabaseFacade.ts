@@ -272,7 +272,7 @@ export default class DatabaseFacade {
                 `;
             }
 
-
+            return 'commit';
         })
     }
 }
