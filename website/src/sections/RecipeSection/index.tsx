@@ -19,10 +19,10 @@ import {
   SubtleTextInput } from "./styles";
 import {
   CookbookApiV1,
-  Ingredient,
-  Instruction,
-  Recipe, 
-  SubRecipe} from "server-api";
+  type Ingredient,
+  type Instruction,
+  type Recipe,
+  type SubRecipe} from "server-api";
 import { type UUID } from "crypto";
 import Link from "next/link";
 import { apiBase } from "@/constants";
@@ -237,6 +237,7 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
   const authorRef = useRef<HTMLInputElement>(null);
   const urlRef = useRef<HTMLInputElement>(null);
   const subRecipesRef = useRef<(MultiFocusComponent | null)[]>([]);
+  const insertSectionButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const api = useMemo(() => new CookbookApiV1(apiBase), []);
 
@@ -387,6 +388,34 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
     },
     [debouncedSaveRecipe, subRecipes]);
 
+  const insertSubRecipe = useCallback(
+    (index: number) => {
+      const newSubRecipe: SubRecipe = {
+        id: crypto.randomUUID() as UUID,
+        version: 0,
+        sequence: 0,
+        title: null,
+        ingredients: [],
+        instructions: []
+      };
+
+      const newSubRecipes = [
+          ...subRecipes.slice(0, index),
+          newSubRecipe,
+          ...subRecipes.slice(index),
+        ];
+
+      for(let i = 0; i < newSubRecipes.length; i++) {
+        newSubRecipes[i].sequence = i;
+      }
+
+      setSubRecipes(newSubRecipes);
+
+      debouncedSaveRecipe({subRecipes: newSubRecipes});
+    },
+    [debouncedSaveRecipe, subRecipes],
+  )
+
   useEffect(
     () => {
       async function getRecipe() {
@@ -448,16 +477,22 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
                 ref={urlRef}/>
               {
                 subRecipes.map((subRecipe, index) => (
-                  <SubRecipeSection
-                    key={subRecipe.id}
-                    title={subRecipe.title ?? ''}
-                    ingredients={subRecipe.ingredients}
-                    instructions={subRecipe.instructions}
-                    setTitle={(newTitle: string) => updateSubRecipe(index, {title: newTitle})}
-                    setIngredients={(newIngredients: Ingredient[]) => updateSubRecipe(index, {ingredients: [...newIngredients]})}
-                    setInstructions={(newInstructions: Instruction[]) => updateSubRecipe(index, {instructions: [...newInstructions]})}
-                    onKeyDown={e => onSubRecipeKeydown(index, e)}
-                    ref={ref => {subRecipesRef.current[index] = ref;}}/>))
+                  <React.Fragment key={subRecipe.id}>
+                    <SubRecipeSection
+                      title={subRecipe.title ?? ''}
+                      ingredients={subRecipe.ingredients}
+                      instructions={subRecipe.instructions}
+                      setTitle={(newTitle: string) => updateSubRecipe(index, {title: newTitle})}
+                      setIngredients={(newIngredients: Ingredient[]) => updateSubRecipe(index, {ingredients: [...newIngredients]})}
+                      setInstructions={(newInstructions: Instruction[]) => updateSubRecipe(index, {instructions: [...newInstructions]})}
+                      onKeyDown={e => onSubRecipeKeydown(index, e)}
+                      ref={ref => {subRecipesRef.current[index] = ref;}}/>
+                    <button
+                      ref={ref => {insertSectionButtonRefs.current[index] = ref;}}
+                      onClick={() => insertSubRecipe(index + 1)}>
+                        Insert Recipe Section
+                    </button>
+                  </React.Fragment>))
               }
               <SavingText $visible={recipeState === RecipeStates.SAVING}>Saving...</SavingText>
           </RecipeContainer>

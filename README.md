@@ -87,7 +87,8 @@ as you save changes to files, that portion of the project should reload immediat
 
 ## Checklist
 
-* Add sub-recipes
+* Automatically delete empty recipe sub-sections
+* Make focus switch between buttons and sub-recipes
 * Allow editing to travel between sub-recipes
 * Add cookbook fields for title etc.
 * Add toggle for cookbook recipe order vs. editing
@@ -157,3 +158,6 @@ as you save changes to files, that portion of the project should reload immediat
 * Allow adding recipes to multiple cookbooks
 * Ensure that ingredient and instruction fields are cleaned before posting recipe
 * Changing focus into a text field should place the cursor in the appropriate location
+* Allow inserting sub-recipe before the first sub-recipe
+* Delete sub-recipes in the UI
+* Delete recipes in the UI

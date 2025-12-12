@@ -36,7 +36,7 @@ export const SubtleTextAreaInput = styled.textarea`
 export const SubRecipeContainer = styled.div`
     display: flex;
     flex-direction: column;
-    margin: 2rem 0;
+    margin: 2rem 0 1rem 0;
 `;
 
 export const RecipeContainer = styled.div`

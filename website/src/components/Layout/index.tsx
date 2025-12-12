@@ -146,15 +146,11 @@ const GlobalStyle = createGlobalStyle`
 			pointer-events: none;
 		}
 
-		@media (prefers-reduced-motion: no-preference) {
+		/* @media (prefers-reduced-motion: no-preference) {
 			&:not(:hover) {
 				transition: color 500ms ease, border-color 500ms ease;
 			}
-
-			&:hover {
-				/* transition: color 125ms ease, border-color 125ms ease; */
-			}
-		}
+		} */
 	}
 
 	text {
