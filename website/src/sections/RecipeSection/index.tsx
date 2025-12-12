@@ -138,24 +138,27 @@ function SubRecipeSection({
 
   const onIngredientsKeydown = useCallback(
     (e: KeyboardEvent<HTMLTextAreaElement>) => {
-      if (e.key === "ArrowUp" && e.currentTarget.selectionStart === 0) {
-        e.preventDefault();
+      if (e.key === "ArrowUp") {
         e.stopPropagation();
-        titleRef?.current?.focus();
-      } else if (e.key === "ArrowDown" && e.currentTarget.selectionStart === e.currentTarget.value.length) {
-        e.preventDefault();
+        if (e.currentTarget.selectionStart === 0) {
+          titleRef?.current?.focus();
+        }
+      } else if (e.key === "ArrowDown") {
         e.stopPropagation();
-        instructionsRef?.current?.focus();
+        if (e.currentTarget.selectionStart === e.currentTarget.value.length) {
+          instructionsRef?.current?.focus();
+        }
       }
     },
     []);
 
   const onInstructionsKeydown = useCallback(
     (e: KeyboardEvent<HTMLTextAreaElement>) => {
-      if (e.key === "ArrowUp" && e.currentTarget.selectionStart === 0) {
-        e.preventDefault();
+      if (e.key === "ArrowUp") {
         e.stopPropagation();
-        ingredientsRef?.current?.focus();
+        if (e.currentTarget.selectionStart === 0) {
+          ingredientsRef?.current?.focus();
+        }
       }
     },
     []);
@@ -294,11 +297,13 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
       debouncedSaveRecipe({title: e.currentTarget.value});
     },
     [debouncedSaveRecipe]);
+
   const handleAuthorChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       setAuthor(e.currentTarget.value);
       debouncedSaveRecipe({author: e.currentTarget.value});
     }, [debouncedSaveRecipe]);
+
   const handleUrlChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       setUrl(e.currentTarget.value);
@@ -358,23 +363,29 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
     },
     []);
 
-  // const onIngredientsKeydown = useCallback(
-  //   (e: KeyboardEvent<HTMLTextAreaElement>) => {
-  //     if (e.key === "ArrowUp" && e.currentTarget.selectionStart === 0) {
-  //       urlRef?.current?.focus();
-  //     } else if (e.key === "ArrowDown" && e.currentTarget.selectionStart === e.currentTarget.value.length) {
-  //       instructionsRef?.current?.focus();
-  //     }
-  //   },
-  //   []);
+  const updateSubRecipe = useCallback(
+    (
+      index: number,
+      subRecipeChange: {
+        title?: string,
+        ingredients?: Ingredient[],
+        instructions?: Instruction[],
+      },
+    ) => {
+      const newSubRecipes = [
+          ...subRecipes.slice(0, index),
+          {
+            ...subRecipes[index],
+            ...subRecipeChange,
+          },
+          ...subRecipes.slice(index + 1),
+        ];
 
-  // const onInstructionsKeydown = useCallback(
-  //   (e: KeyboardEvent<HTMLTextAreaElement>) => {
-  //     if (e.key === "ArrowUp" && e.currentTarget.selectionStart === 0) {
-  //       ingredientsRef?.current?.focus();
-  //     }
-  //   },
-  //   []);
+      setSubRecipes(newSubRecipes);
+
+      debouncedSaveRecipe({subRecipes: newSubRecipes});
+    },
+    [debouncedSaveRecipe, subRecipes]);
 
   useEffect(
     () => {
@@ -442,30 +453,9 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
                     title={subRecipe.title ?? ''}
                     ingredients={subRecipe.ingredients}
                     instructions={subRecipe.instructions}
-                    setTitle={(newTitle: string) => setSubRecipes(old => [
-                      ...old.slice(0, index),
-                      {
-                        ...old[index],
-                        title: (newTitle.trim().length > 0 ? newTitle.trim():null),
-                      },
-                      ...old.slice(index + 1),
-                    ])}
-                    setIngredients={(newIngredients: Ingredient[]) => setSubRecipes(old => [
-                      ...old.slice(0, index),
-                      {
-                        ...old[index],
-                        ingredients: [...newIngredients],
-                      },
-                      ...old.slice(index + 1)
-                    ])}
-                    setInstructions={(newInstructions: Instruction[]) => setSubRecipes(old => [
-                      ...old.slice(0, index),
-                      {
-                        ...old[index],
-                        instructions: [...newInstructions],
-                      },
-                      ...old.slice(index + 1)
-                    ])}
+                    setTitle={(newTitle: string) => updateSubRecipe(index, {title: newTitle})}
+                    setIngredients={(newIngredients: Ingredient[]) => updateSubRecipe(index, {ingredients: [...newIngredients]})}
+                    setInstructions={(newInstructions: Instruction[]) => updateSubRecipe(index, {instructions: [...newInstructions]})}
                     onKeyDown={e => onSubRecipeKeydown(index, e)}
                     ref={ref => {subRecipesRef.current[index] = ref;}}/>))
               }

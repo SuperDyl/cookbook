@@ -156,3 +156,4 @@ as you save changes to files, that portion of the project should reload immediat
 * Add WYSIWYG view
 * Allow adding recipes to multiple cookbooks
 * Ensure that ingredient and instruction fields are cleaned before posting recipe
+* Changing focus into a text field should place the cursor in the appropriate location
