@@ -87,77 +87,68 @@ as you save changes to files, that portion of the project should reload immediat
 
 ## Checklist
 
-* Automatically delete empty recipe sub-sections
-* Make focus switch between buttons and sub-recipes
-* Allow editing to travel between sub-recipes
+* Printer first!
+
+* Allow inserting sub-recipe before the first sub-recipe
+* Show default title for recipes without titles within the recipes list
+* Delete recipes in the UI if recipe is entirely blank
+* Fix `Saving...` text in edit recipe view
+* Prevent closing/leaving tab while still saving a recipe
 * Add cookbook fields for title etc.
 * Add toggle for cookbook recipe order vs. editing
 * Allow organizing cookbook recipes with drag/drop
 * Add button to add sections between cookbook recipes
-
 * Make adding multiple recipes in a row easy
-* Add ingredient parsing
-
 * Create a cookbook list
 * Allow printing a cookbook
 * Make recipes avoid splitting between pages
-* Ensure that randomUUID() works on non-localhost
-
-* Printer first!
-* Add recipes
-* Edit recipes
-* See all recipes
-* Print recipes
-
-* OTEL server-side
-* Port should be configurable
-* Database location should be configurable
-* Add a database timeout see https://nodejs.org/api/sqlite.html#new-databasesyncpath-options
-* Make database calls asynchronous https://www.npmjs.com/package/sqlite3
-* Make some way to separate development from production for databases
-* Use react context to reduce server calls and share state
-* Pages move on load
-* Investigate replacing styled components global styles
-* Optimize font loading
-* Ensure Nextjs isn't adding anything odd in data
-* Setup cors site to be loaded with a config
-* Setup config with development vs production config
-* Setup website with config for server api
-* Add limit and offset to facades
-* Make recipe fields like `author` or `url` optional
-* Allow/remove instructions and ingredients automatically
-* Make ingredients/instructions replacements less destructive
-* Deal with multiple tabs editing the same recipe
-* Keep history of recipe changes
+* Add ingredient parsing
+* Configuration
+  * Port
+  * Database name
+  * Database timeout see https://nodejs.org/api/sqlite.html#new-databasesyncpath-options
+  * Separate development and production
+  * CORS
+  * Server API url
 * Add picture support within cookbooks
 
-* Mobile first!
-* Landing page
-* Login
-* Sign up (with email confirmation)
-* Cookies/local storage
-* Recipes, Cookbooks, sharing, groups...
-
-* Make it so buttons don't have a weird fade when tabbed over
-* Correctly ensure that the client uses real UUIDs
-* Make the edit recipe page smoothly enter in
-* Add checks to API to prevent DOS attacks
-* Add nested transactions
-* Make `Saving...` text not awkwardly swap back and forth
-* Prevent closing editor until recipe is saved
-* Trim whitespace from recipe editing fields
-* Deal with other recipe states like failing to save
-* Add default link text when a recipe/cookbook name is blank
 * Make recipes default to being a view mode with an edit button
+* Allow editing recipe styles
+* Add limit and offset to database facade calls
+* Use react context to cache data, reduce server calls, and share state
+* Investigate other recipe states
+* Inform user when recipe fails to save
+* Make it clear to the user which data has and hasn't been saved
+* Correctly ensure that the client uses real UUIDs
+* Make the edit recipe page smoothly enter in instead of flashing
+* Add checks to API to prevent DOS attacks
 * Show list of recipe names in Cookbook view
 * Make recipe names expandable
 * Give option when editing recipes of what Cookbooks it should apply to
 * Show which cookbooks a recipe is attached to in recipe view
-* Allow editing recipe styles
 * Add WYSIWYG view
 * Allow adding recipes to multiple cookbooks
-* Ensure that ingredient and instruction fields are cleaned before posting recipe
 * Changing focus into a text field should place the cursor in the appropriate location
-* Allow inserting sub-recipe before the first sub-recipe
-* Delete sub-recipes in the UI
-* Delete recipes in the UI
+* Ensure that randomUUID() works on non-localhost
+* OTEL server-side
+* Make database calls asynchronous https://www.npmjs.com/package/sqlite3
+* Investigate replacing styled components global styles
+* Optimize font loading
+* Ensure Nextjs isn't adding anything odd in data
+* Investigate further recipe fields
+* Pages move on load
+* Change ingredients/instructions instead of replacing the UUIDs
+* Keep a history/make all changes auditable
+* Display recipe history
+* All multiple tabs to safely edit the same recipe
+* Setup a webhook system for database changes
+* Support mobile
+* Finish login
+* Add MFA and teach the user about good security
+* Add email confirmation for login
+* Use cookies to keep the user logged in
+* Use local storage to allow caching between tabs?
+* Allow users to create API keys
+* Attach permissions to groups to allow collaboration and sharing
+* Allow sharing recipes
+* Add back a fade to buttons on login/register page
