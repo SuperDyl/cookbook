@@ -89,7 +89,6 @@ as you save changes to files, that portion of the project should reload immediat
 
 * Printer first!
 
-* Allow inserting sub-recipe before the first sub-recipe
 * Show default title for recipes without titles within the recipes list
 * Delete recipes in the UI if recipe is entirely blank
 * Fix `Saving...` text in edit recipe view

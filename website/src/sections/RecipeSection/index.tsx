@@ -234,7 +234,6 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
   const authorRef = useRef<HTMLInputElement>(null);
   const urlRef = useRef<HTMLInputElement>(null);
   const subRecipesRef = useRef<(MultiFocusComponent | null)[]>([]);
-  const insertSectionButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const api = useMemo(() => new CookbookApiV1(apiBase), []);
 
@@ -525,6 +524,10 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
                 onChange={handleUrlChange}
                 onKeyDown={onUrlKeydown}
                 ref={urlRef}/>
+              <button
+                onClick={() => insertSubRecipe(0)}>
+                  Insert Recipe Section
+              </button>
               {
                 subRecipes.map((subRecipe, index) => (
                   <React.Fragment key={subRecipe.id}>
@@ -538,7 +541,6 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
                       onKeyDown={e => onSubRecipeKeydown(index, e)}
                       ref={ref => {subRecipesRef.current[index] = ref;}}/>
                     <button
-                      ref={ref => {insertSectionButtonRefs.current[index] = ref;}}
                       onClick={() => insertSubRecipe(index + 1)}>
                         Insert Recipe Section
                     </button>
