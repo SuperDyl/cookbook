@@ -1,9 +1,43 @@
 import { useCallback, useEffect, useRef } from "react";
 
-export function useDebounce<T extends unknown[]>(delayMs: number, callback: (...args: T) => void | Promise<void>): (...args: T) => Promise<void> {
+/**
+ * Describes what debouncer's states for a specific debounced function.
+ *
+ * WAITING -> RUNNING -> LOCKED
+ *
+ * RUNNING -> LOCKED
+ *
+ * LOCKED -> QUEUED_WAITING & WAITING
+ *
+ * QUEUED_WAITING -> QUEUED_RUNNING -> WAITING
+ *
+ * WAITING & LOCKED & QUEUED_WAITING -> CANCELED
+ */
+export enum DebounceStates {
+    WAITING = 'WAITING',
+    RUNNING = 'RUNNING',
+    LOCKED = 'LOCKED',
+    QUEUED_WAITING = 'QUEUED_WAITING',
+    QUEUED_RUNNING = 'QUEUED_RUNNING',
+    CANCELED = 'CANCELED',
+}
+
+/**
+ * Debounces requests, allowing one extra request which be queued while waiting.
+ * If multiple requests are made during cooldown, the final one is queued.
+ * @param delayMs The time after a request where requests will be queued.
+ * @param callback The function which is being debounced.
+ * @param onChange A function called by the debouncer to inform the subscriber to its state.
+ * @returns A wrapper around `callback` which debounces calls.
+ */
+export function useDebounce<T extends unknown[]>(
+    delayMs: number,
+    callback: (...args: T) => void | Promise<void>,
+    onChange: ((newState: DebounceStates) => void) = () => {},
+): (...args: T) => Promise<void> {
 
     const lockedRef = useRef<boolean>(false);
-    const queuedRef = useRef<null | ((...args:T) => (void | Promise<void>))>(null);
+    const queuedRef = useRef<null | ((...args: T) => (void | Promise<void>))>(null);
     const queuedArgsRef = useRef<T | null>(null);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -13,19 +47,22 @@ export function useDebounce<T extends unknown[]>(delayMs: number, callback: (...
                 if (timeoutRef.current !== null) {
                     clearTimeout(timeoutRef.current);
                 }
+                onChange(DebounceStates.CANCELED);
             }
         },
-        []);
+        [onChange]);
 
     return useCallback(
         async (...args: T) => {
             if (lockedRef.current) {
                 queuedRef.current = callback;
                 queuedArgsRef.current = args;
+                onChange(DebounceStates.QUEUED_WAITING);
                 return;
             }
 
             lockedRef.current = true;
+            onChange(DebounceStates.RUNNING);
             const result = callback(...args);
             if (result instanceof Promise) {
                 await result;
@@ -35,6 +72,7 @@ export function useDebounce<T extends unknown[]>(delayMs: number, callback: (...
                 () => {
                     async function callQueued() {
                         if (queuedRef.current !== null && queuedArgsRef.current !== null) {
+                            onChange(DebounceStates.QUEUED_RUNNING);
                             const result = queuedRef.current(...(queuedArgsRef.current));
                             if (result instanceof Promise) {
                                 await result;
@@ -44,11 +82,13 @@ export function useDebounce<T extends unknown[]>(delayMs: number, callback: (...
                         queuedRef.current = null;
                         queuedArgsRef.current = null;
                         lockedRef.current = false;
+                        onChange(DebounceStates.WAITING);
                     }
 
                     callQueued();
                 },
                 delayMs);
+            onChange(DebounceStates.LOCKED);
         },
-        [callback, delayMs]);
+        [callback, delayMs, onChange]);
 }

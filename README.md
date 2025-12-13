@@ -108,6 +108,8 @@ as you save changes to files, that portion of the project should reload immediat
   * CORS
   * Server API url
 * Add picture support within cookbooks
+* Return to the debouncer to ensure all requests are properly debounced
+  * It should put itself back into a locked state after running the queued job.
 
 * Make recipes default to being a view mode with an edit button
 * Allow editing recipe styles

@@ -26,7 +26,7 @@ import {
 import { type UUID } from "crypto";
 import Link from "next/link";
 import { apiBase } from "@/constants";
-import { useDebounce } from "@/hooks/useDebounce";
+import { DebounceStates, useDebounce } from "@/hooks/useDebounce";
 
 type MultiFocusComponent = {
   focusStart: () => void,
@@ -235,6 +235,16 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
   const urlRef = useRef<HTMLInputElement>(null);
   const subRecipesRef = useRef<(MultiFocusComponent | null)[]>([]);
 
+  const handleDebounceChange = useCallback(
+    (newState: DebounceStates) => {
+      if (newState === DebounceStates.WAITING) {
+        setRecipeState(RecipeStates.EDITING);
+      } else if (newState !== DebounceStates.CANCELED) {
+        setRecipeState(RecipeStates.SAVING);
+      }
+    },
+    [setRecipeState]);
+
   const api = useMemo(() => new CookbookApiV1(apiBase), []);
 
   /**
@@ -270,8 +280,6 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
         console.warn("Reached an impossible state of saving a recipe with an invalid recipeId");
         return;
       }
-
-      setRecipeState(RecipeStates.SAVING);
 
       const trimmedTitle = newTitle.trim();
       const trimmedAuthor = newAuthor.trim();
@@ -338,14 +346,14 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
         url: trimmedUrl.length === 0 ? null:trimmedUrl,
         subRecipes: cleanSubRecipes,
       });
-
-      setRecipeState(RecipeStates.EDITING);
     },
     [api, author, subRecipes, recipeId, title, url]);
 
   const debouncedSaveRecipe = useDebounce(
     500,
-    saveRecipe);
+    saveRecipe,
+    handleDebounceChange,
+  );
 
   const handleTitleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
