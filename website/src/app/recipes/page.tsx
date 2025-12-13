@@ -40,7 +40,11 @@ export default function RecipesPage() {
           {recipes?.map(recipe =>
             <li key={recipe.id}>
               <Link href={`/recipe/${recipe.id}`}>
-                {recipe.title}
+                {
+                  recipe.title.trim().length !== 0
+                  ? recipe.title.trim()
+                  : "<Untitled>"
+                }
               </Link>
             </li>
           )}
