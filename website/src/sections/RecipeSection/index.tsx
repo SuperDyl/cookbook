@@ -241,6 +241,23 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
 
   const api = useMemo(() => new CookbookApiV1(apiBase), []);
 
+  /**
+   * Cleans up and posts the cleaned up data. This call should be debounced.
+   *
+   * Data outside of this function is made for the UI
+   * and isn't cleaned up like it would be in the database.
+   * It could be cleaned with certain events (i.e. onBlur of fields or with a button)
+   * but cleaning data while being input into form elements would make many edits painful.
+   *
+   * While the UI must have "dirty" data,
+   * the database doesn't have the same restriction (for the most part).
+   *
+   * I determined some invalid states for data:
+   * 1. All strings should be trimmed
+   * 2. Empty strings are invalid fields and should be made null. Recipe titles are the exception.
+   * 3. A subRecipe with no data is invalid UNLESS it is the only subRecipe
+   * 4. All recipes have at least one subRecipe, even if that subRecipe is blank.
+   */
   const saveRecipe = useCallback(
     async ({
         title: newTitle = title,
@@ -263,25 +280,65 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
       const trimmedAuthor = newAuthor.trim();
       const trimmedUrl = newUrl.trim();
 
+      const cleanSubRecipes = newSubRecipes.map(subRecipe => {
+
+          const trimmedTitle = subRecipe.title?.trim() ?? '';
+
+          const cleanIngredients = subRecipe.ingredients.map(ingredient => {
+              const newIngredient: Ingredient = {
+                id: ingredient.id,
+                version: ingredient.version,
+                sequence: 0, // Don't set the index until after filtering out empty lines
+                raw: ingredient.raw.trim(),
+              };
+              return newIngredient;
+            }).filter(ingredient => ingredient.raw.length > 0);
+          cleanIngredients.forEach((ingredient, index) => ingredient.sequence = index);
+
+          const cleanInstructions = subRecipe.instructions.map(instruction => {
+              const newInstruction: Instruction = {
+                id: instruction.id,
+                version: instruction.version,
+                sequence: 0, // Don't set the index until after filtering out empty lines
+                raw: instruction.raw.trim(),
+              };
+              return newInstruction;
+            }).filter(instruction => instruction.raw.length > 0);
+          cleanIngredients.forEach((instruction, index) => instruction.sequence = index);
+
+          return {
+            id: subRecipe.id,
+            version: subRecipe.version,
+            sequence: 0, // Don't set the index until after filtering out subRecipes
+            title: trimmedTitle.length > 0 ? trimmedTitle:null,
+            ingredients: cleanIngredients,
+            instructions: cleanInstructions,
+          };
+        }).filter(subRecipe => !(
+          subRecipe.title === null
+          && subRecipe.ingredients.length === 0
+          && subRecipe.instructions.length === 0
+        ));
+      cleanSubRecipes.forEach((subRecipe, index) => subRecipe.sequence = index);
+
+      if (cleanSubRecipes.length === 0) {
+        cleanSubRecipes.push({
+          id: crypto.randomUUID() as UUID,
+          version: 0,
+          sequence: 0,
+          title: null,
+          ingredients: [],
+          instructions: []
+        });
+      }
+
       await api.postRecipe({
         id: recipeId,
         version: 0,
         title: newTitle.trim(),
         author: trimmedAuthor.length === 0 ? null:trimmedAuthor,
         url: trimmedUrl.length === 0 ? null:trimmedUrl,
-        subRecipes: newSubRecipes.map(subRecipe => {
-
-          const trimmedTitle = subRecipe.title?.trim() ?? '';
-
-          return {
-            id: subRecipe.id,
-            version: subRecipe.version,
-            sequence: subRecipe.sequence,
-            title: trimmedTitle.length > 0 ? trimmedTitle:null,
-            ingredients: subRecipe.ingredients,
-            instructions: subRecipe.instructions,
-          };
-      }),
+        subRecipes: cleanSubRecipes,
       });
 
       setRecipeState(RecipeStates.EDITING);
@@ -395,8 +452,18 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
         version: 0,
         sequence: 0,
         title: null,
-        ingredients: [],
-        instructions: []
+        ingredients: [{
+          id: crypto.randomUUID() as UUID,
+          version: 0,
+          sequence: 0,
+          raw: ""
+        }],
+        instructions: [{
+          id: crypto.randomUUID() as UUID,
+          version: 0,
+          sequence: 0,
+          raw: ""
+        }],
       };
 
       const newSubRecipes = [
