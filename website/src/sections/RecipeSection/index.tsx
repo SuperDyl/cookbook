@@ -95,10 +95,9 @@ function SubRecipeSection({
   const handleIngredients = useCallback(
     (e: ChangeEvent<HTMLTextAreaElement>) => {
       const newRaws = e.currentTarget.value.split('\n');
-      const newIngredients: Ingredient[] = newRaws.map((raw, index) => {
+      const newIngredients: Ingredient[] = newRaws.map(raw => {
           const ingredient: Ingredient = {
             id: crypto.randomUUID() as UUID,
-            sequence: index,
             raw: raw,
             version: 0,
           };
@@ -112,10 +111,9 @@ function SubRecipeSection({
   const handleInstructions = useCallback(
     (e: ChangeEvent<HTMLTextAreaElement>) => {
       const newRaws = e.currentTarget.value.split('\n');
-      const newInstructions: Instruction[] = newRaws.map((raw, index) => {
+      const newInstructions: Instruction[] = newRaws.map(raw => {
           const instruction: Instruction = {
             id: crypto.randomUUID() as UUID,
-            sequence: index,
             raw: raw,
             version: 0,
           };
@@ -227,7 +225,6 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
   const [subRecipes, setSubRecipes] = useState<SubRecipe[]>([{
     id: crypto.randomUUID() as UUID,
     version: 0,
-    sequence: 0,
     title: null,
     ingredients: [],
     instructions: []
@@ -288,28 +285,23 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
               const newIngredient: Ingredient = {
                 id: ingredient.id,
                 version: ingredient.version,
-                sequence: 0, // Don't set the index until after filtering out empty lines
                 raw: ingredient.raw.trim(),
               };
               return newIngredient;
             }).filter(ingredient => ingredient.raw.length > 0);
-          cleanIngredients.forEach((ingredient, index) => ingredient.sequence = index);
 
           const cleanInstructions = subRecipe.instructions.map(instruction => {
               const newInstruction: Instruction = {
                 id: instruction.id,
                 version: instruction.version,
-                sequence: 0, // Don't set the index until after filtering out empty lines
                 raw: instruction.raw.trim(),
               };
               return newInstruction;
             }).filter(instruction => instruction.raw.length > 0);
-          cleanIngredients.forEach((instruction, index) => instruction.sequence = index);
 
           return {
             id: subRecipe.id,
             version: subRecipe.version,
-            sequence: 0, // Don't set the index until after filtering out subRecipes
             title: trimmedTitle.length > 0 ? trimmedTitle:null,
             ingredients: cleanIngredients,
             instructions: cleanInstructions,
@@ -319,13 +311,11 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
           && subRecipe.ingredients.length === 0
           && subRecipe.instructions.length === 0
         ));
-      cleanSubRecipes.forEach((subRecipe, index) => subRecipe.sequence = index);
 
       if (cleanSubRecipes.length === 0) {
         cleanSubRecipes.push({
           id: crypto.randomUUID() as UUID,
           version: 0,
-          sequence: 0,
           title: null,
           ingredients: [],
           instructions: []
@@ -450,18 +440,15 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
       const newSubRecipe: SubRecipe = {
         id: crypto.randomUUID() as UUID,
         version: 0,
-        sequence: 0,
         title: null,
         ingredients: [{
           id: crypto.randomUUID() as UUID,
           version: 0,
-          sequence: 0,
           raw: ""
         }],
         instructions: [{
           id: crypto.randomUUID() as UUID,
           version: 0,
-          sequence: 0,
           raw: ""
         }],
       };
@@ -471,10 +458,6 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
           newSubRecipe,
           ...subRecipes.slice(index),
         ];
-
-      for(let i = 0; i < newSubRecipes.length; i++) {
-        newSubRecipes[i].sequence = i;
-      }
 
       setSubRecipes(newSubRecipes);
 

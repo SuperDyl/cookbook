@@ -87,8 +87,6 @@ as you save changes to files, that portion of the project should reload immediat
 
 ## Checklist
 
-* Check sequence order the database facade. Duplicated sequences are still errors.
-  * Alternatively: make sequence order just be array order.
 * Automatically delete empty recipe sub-sections
 * Make focus switch between buttons and sub-recipes
 * Allow editing to travel between sub-recipes

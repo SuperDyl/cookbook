@@ -3,21 +3,18 @@ import type { UUID } from "crypto";
 export type Ingredient = {
     id: UUID,
     version: number,
-    sequence: number,
     raw: string,
 };
 
 export type Instruction = {
     id: UUID,
     version: number,
-    sequence: number,
     raw: string,
 };
 
 export type SubRecipe = {
     id: UUID,
     version: number,
-    sequence: number,
     title: string | null,
     ingredients: Ingredient[],
     instructions: Instruction[],

@@ -127,7 +127,6 @@ export default class DatabaseFacade {
                 `.map<SubRecipe>(sqlSubRecipe => ({
                     id: sqlSubRecipe.id,
                     version: sqlSubRecipe.version,
-                    sequence: sqlSubRecipe.sequence,
                     title: sqlSubRecipe.title,
                     ingredients: this.database.all<SqlIngredient>`
                             select *
@@ -137,7 +136,6 @@ export default class DatabaseFacade {
                         `.map<Ingredient>(sqlIngredient => ({
                     id: sqlIngredient.id,
                     version: sqlIngredient.version,
-                    sequence: sqlIngredient.sequence,
                     raw: sqlIngredient.raw,
                 })),
                 instructions: this.database.all<SqlInstruction>`
@@ -148,7 +146,6 @@ export default class DatabaseFacade {
                         `.map<Instruction>(sqlInstruction => ({
                     id: sqlInstruction.id,
                     version: sqlInstruction.version,
-                    sequence: sqlInstruction.sequence,
                     raw: sqlInstruction.raw,
                 })),
             }))
@@ -225,7 +222,7 @@ export default class DatabaseFacade {
                     ${recipe.subRecipes.map(subRecipe => subRecipe.id)},
                     ${recipe.subRecipes.map(() => recipe.id)},
                     ${recipe.subRecipes.map(subRecipe => subRecipe.version)},
-                    ${recipe.subRecipes.map(subRecipe => subRecipe.sequence)},
+                    ${recipe.subRecipes.map((_, index) => index)},
                     ${recipe.subRecipes.map(subRecipe => subRecipe.title)});
             `;
 
@@ -247,7 +244,7 @@ export default class DatabaseFacade {
                         ${subRecipe.ingredients.map(i => i.id)},
                         ${subRecipe.ingredients.map(i => i.version)},
                         ${subRecipe.ingredients.map(() => subRecipe.id)},
-                        ${subRecipe.ingredients.map(i => i.sequence)},
+                        ${subRecipe.ingredients.map((_, index) => index)},
                         ${subRecipe.ingredients.map(i => i.raw)});
                 `;
 
@@ -267,7 +264,7 @@ export default class DatabaseFacade {
                         ${subRecipe.instructions.map(i => i.id)},
                         ${subRecipe.instructions.map(i => i.version)},
                         ${subRecipe.instructions.map(() => subRecipe.id)},
-                        ${subRecipe.instructions.map(i => i.sequence)},
+                        ${subRecipe.instructions.map((_, index) => index)},
                         ${subRecipe.instructions.map(i => i.raw)});
                 `;
             }
