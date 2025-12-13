@@ -89,7 +89,6 @@ as you save changes to files, that portion of the project should reload immediat
 
 * Printer first!
 
-* Delete recipes in the UI if recipe is entirely blank
 * Fix `Saving...` text in edit recipe view
 * Prevent closing/leaving tab while still saving a recipe
 * Add cookbook fields for title etc.

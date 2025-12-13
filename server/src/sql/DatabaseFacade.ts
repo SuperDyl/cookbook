@@ -272,4 +272,17 @@ export default class DatabaseFacade {
             return 'commit';
         })
     }
+
+    public deleteRecipe(recipeId: UUID): Recipe | null {
+        const recipe = this.getRecipe(recipeId);
+
+        // Because the dependent rows use foreign keys with cascade on delete
+        // they should automatically all get cleaned up.
+        this.database.get<SqlRecipe>`
+            delete from recipes
+            where id = ${recipeId};
+        `;
+
+        return recipe;
+    }
 }

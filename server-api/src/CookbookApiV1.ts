@@ -78,6 +78,23 @@ export class CookbookApiV1 {
         return await response.bytes() as R;
     }
 
+    private async delete<R>(path: string): Promise<R> {
+        const response = await fetch(`${this.apiBase}/${path}`, {method: "DELETE"});
+
+        if (!response.ok) {
+            throw new Error(`Response failed. status=${response.status}; statusText=${response.statusText}`);
+        }
+
+        switch (response.headers.get("Content-Type")) {
+            case "application/json":
+                return await response.json() as R;
+            case "application/text":
+                return response.text() as R;
+        }
+
+        return await response.bytes() as R;
+    }
+
     public async getCookbookStubs(): Promise<CookbookStub[]> {
         return await this.get<CookbookStub[]>("cookbook-stubs");
     }
@@ -98,5 +115,11 @@ export class CookbookApiV1 {
         // The field `id` in `recipe` is ignored and `recipe.id` is used instead.
         // For simplicity, I left it in for this API facade to make everything simpler.
         await this.post<Recipe, null>(`recipe/${recipe.id}`, recipe);
+    }
+
+    public async deleteRecipe(recipeId: UUID): Promise<Recipe | null> {
+        // The field `id` in `recipe` is ignored and `recipe.id` is used instead.
+        // For simplicity, I left it in for this API facade to make everything simpler.
+        return await this.delete<Recipe | null>(`recipe/${recipeId}`);
     }
 }

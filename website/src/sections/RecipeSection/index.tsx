@@ -273,6 +273,7 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
 
       setRecipeState(RecipeStates.SAVING);
 
+      const trimmedTitle = newTitle.trim();
       const trimmedAuthor = newAuthor.trim();
       const trimmedUrl = newUrl.trim();
 
@@ -312,19 +313,27 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
         ));
 
       if (cleanSubRecipes.length === 0) {
-        cleanSubRecipes.push({
-          id: crypto.randomUUID() as UUID,
-          version: 0,
-          title: null,
-          ingredients: [],
-          instructions: []
-        });
+        if (trimmedTitle.length === 0
+          && trimmedAuthor.length === 0
+          && trimmedUrl.length === 0) {
+
+            await api.deleteRecipe(recipeId);
+            return;
+        } else {
+          cleanSubRecipes.push({
+            id: crypto.randomUUID() as UUID,
+            version: 0,
+            title: null,
+            ingredients: [],
+            instructions: []
+          });
+        }
       }
 
       await api.postRecipe({
         id: recipeId,
         version: 0,
-        title: newTitle.trim(),
+        title: trimmedTitle,
         author: trimmedAuthor.length === 0 ? null:trimmedAuthor,
         url: trimmedUrl.length === 0 ? null:trimmedUrl,
         subRecipes: cleanSubRecipes,

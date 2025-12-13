@@ -70,6 +70,17 @@ app.post('/recipe/:id', (request, result) => {
     result.sendStatus(201);
 });
 
+app.delete('/recipe/:id', (request, result) => {
+    const recipeId = parseUUID(request.params.id);
+
+    if (recipeId === null) {
+        result.status(400).send(`recipeId must be a UUID. Received '${request.params.id}'.`);
+        return;
+    }
+
+    result.json(db.deleteRecipe(recipeId));
+});
+
 app.listen(port, () => {
     console.log(`Server started! Listening on port ${port}`);
 });
