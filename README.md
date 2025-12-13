@@ -89,8 +89,6 @@ as you save changes to files, that portion of the project should reload immediat
 
 * Printer first!
 
-* Fix `Saving...` text in edit recipe view
-* Prevent closing/leaving tab while still saving a recipe
 * Add cookbook fields for title etc.
 * Add toggle for cookbook recipe order vs. editing
 * Allow organizing cookbook recipes with drag/drop
@@ -151,3 +149,4 @@ as you save changes to files, that portion of the project should reload immediat
 * Attach permissions to groups to allow collaboration and sharing
 * Allow sharing recipes
 * Add back a fade to buttons on login/register page
+* Prevent going back a page or clicking on links while waiting for page to save

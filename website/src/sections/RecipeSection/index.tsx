@@ -508,6 +508,22 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
     },
     [api, recipeId]);
 
+  const preventPageUnload = useCallback(
+    (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = true;
+    },
+    []);
+
+  useEffect(
+    () => {
+      if (recipeState === RecipeStates.SAVING) {
+        window.addEventListener('beforeunload', preventPageUnload);
+        return () => window.removeEventListener('beforeunload', preventPageUnload);
+      }
+    },
+    [preventPageUnload, recipeState]);
+
   return (
     <>
       {recipeState === RecipeStates.NETWORK_FETCH_ERROR &&
