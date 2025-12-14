@@ -36,10 +36,10 @@ type EditRecipesPageProps = {
 };
 
 enum PageStates {
+  COOKBOOK_ID_PARSE_ERROR = 'COOKBOOK_ID_PARSE_ERROR',
+  FETCHING_DATA = 'FETCHING_DATA',
   NETWORK_ERROR = 'NETWORK_ERROR',
-  COOKBOOK_ID_PARSE_ERROR = 'RECIPE_ID_PARSE_ERROR',
   EDITING = 'EDITING',
-  LOADING = 'LOADING',
   SAVING = 'SAVING',
 }
 
@@ -47,7 +47,7 @@ export default function EditCookbookPage({params}: EditRecipesPageProps) {
   const {cookbookId: cookbookIdString} = use(params);
   const cookbookId = parseUUID(cookbookIdString);
 
-  const [pageState, setPageState] = useState<PageStates>(PageStates.LOADING);
+  const [pageState, setPageState] = useState<PageStates>(PageStates.FETCHING_DATA);
 
   const [title, setTitle] = useState<string>("");
   const [author, setAuthor] = useState<string>("");
@@ -187,25 +187,25 @@ export default function EditCookbookPage({params}: EditRecipesPageProps) {
           <Link href='/recipe/new'>Create New Recipe</Link>
         </>
       }
-      {[PageStates.EDITING, PageStates.LOADING, PageStates.SAVING].includes(pageState) &&
+      {[PageStates.EDITING, PageStates.FETCHING_DATA, PageStates.SAVING].includes(pageState) &&
         <>
           <RecipeContainer>
               <CookbookTitleTextInput
                 type="text"
-                placeholder="Cookbook Title"
+                placeholder={pageState === PageStates.FETCHING_DATA ?  "":"Cookbook Title"}
                 value={title}
                 onChange={handleTitleChange}
                 onKeyDown={onTitleKeydown}
                 ref={titleRef}
-                disabled={pageState === PageStates.LOADING}/>
+                disabled={pageState === PageStates.FETCHING_DATA}/>
               <SubtleTextInput
                 type="text"
-                placeholder="Author"
+                placeholder={pageState === PageStates.FETCHING_DATA ?  "":"Author"}
                 value={author}
                 onChange={handleAuthorChange}
                 onKeyDown={onAuthorKeydown}
                 ref={authorRef}
-                disabled={pageState === PageStates.LOADING}/>
+                disabled={pageState === PageStates.FETCHING_DATA}/>
               <SavingText $visible={pageState === PageStates.SAVING}>Saving...</SavingText>
           </RecipeContainer>
         </>

@@ -89,7 +89,6 @@ as you save changes to files, that portion of the project should reload immediat
 
 * Printer first!
 
-* Remove placeholder text during page load
 * Add toggle for cookbook recipe order vs. editing
 * Allow organizing cookbook recipes with drag/drop
 * Add button to add sections between cookbook recipes

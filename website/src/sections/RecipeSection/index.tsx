@@ -538,21 +538,21 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
           <RecipeContainer>
               <DishTitleTextInput
                 type="text"
-                placeholder="Dish"
+                placeholder={recipeState === RecipeStates.FETCHING_DATA ? "":"Dish"}
                 value={title}
                 onChange={handleTitleChange}
                 onKeyDown={onTitleKeydown}
                 ref={titleRef}/>
               <SubtleTextInput
                 type="text"
-                placeholder="Author"
+                placeholder={recipeState === RecipeStates.FETCHING_DATA ? "":"Author"}
                 value={author}
                 onChange={handleAuthorChange}
                 onKeyDown={onAuthorKeydown}
                 ref={authorRef}/>
               <SubtleTextInput
                 type="text"
-                placeholder="Url"
+                placeholder={recipeState === RecipeStates.FETCHING_DATA ? "":"Url"}
                 value={url}
                 onChange={handleUrlChange}
                 onKeyDown={onUrlKeydown}
