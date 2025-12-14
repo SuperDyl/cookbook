@@ -103,6 +103,12 @@ export class CookbookApiV1 {
         return await this.get<Cookbook | null>(`cookbook/${cookbookId}`);
     }
 
+    public async postCookbook(cookbook: Cookbook): Promise<void> {
+        // The field `id` in `cookbook` is ignored and `cookbook.id` is used instead.
+        // For simplicity, I left it in for this API facade to make everything simpler.
+        await this.post<Cookbook, null>(`cookbook/${cookbook.id}`, cookbook);
+    }
+
     public async getRecipeStubs(): Promise<RecipeStub[]> {
         return await this.get<RecipeStub[]>("recipe-stubs");
     }

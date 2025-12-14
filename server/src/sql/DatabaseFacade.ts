@@ -168,11 +168,10 @@ export default class DatabaseFacade {
             version: cookbook.version,
             title: cookbook.title,
             author: cookbook.author,
-            recipes: this.database.all<UUID>`
+            recipeIds: this.database.all<UUID>`
                     select recipeId
                     from cookbookRecipes
-                    where cookbookId = ${cookbook.id};`
-                .map(recipeId => this.getRecipe(recipeId)) as Recipe[],
+                    where cookbookId = ${cookbook.id};`,
             sections: this.database.all<SqlCookbookSection>`
                 select *
                 from cookbookSections
@@ -184,6 +183,64 @@ export default class DatabaseFacade {
                     sectionName: section.sectionName,
                 })),
         };
+    }
+
+    public postCookbook(cookbookId: UUID, cookbook: Cookbook): void {
+        // For simplicity, `recipe.id` is ignored and `recipeId` is used.
+        // Really, I should have a separate recipe type that has all but the id.
+
+        this.database.transaction(() => {
+            this.database.run`
+                replace into cookbooks (
+                    id,
+                    version,
+                    title,
+                    author)
+                values (
+                    ${cookbookId},
+                    ${cookbook.version},
+                    ${cookbook.title},
+                    ${cookbook.author});
+            `;
+
+            this.database.run`
+                delete from cookbookSections
+                where cookbookId = ${cookbookId};
+            `;
+
+            this.database.bulk`
+                insert into cookbookSections (
+                    id,
+                    cookbookId,
+                    version,
+                    sequenceBefore,
+                    sectionName)
+                values (
+                    ${cookbook.sections.map(section => section.id)},
+                    ${cookbook.sections.map(_ => cookbook.id)},
+                    ${cookbook.sections.map(section => section.version)},
+                    ${cookbook.sections.map(section => section.sequenceBefore)},
+                    ${cookbook.sections.map(section => section.sectionName)});
+            `;
+
+            this.database.run`
+                delete from cookbookRecipes
+                where cookbookId = ${cookbook.id};
+            `;
+
+            this.database.bulk`
+                insert into cookbookRecipes (
+                    cookbookId,
+                    recipeId,
+                    sequence)
+                values (
+                    ${cookbook.recipeIds.map(_ => cookbook.id)},
+                    ${cookbook.recipeIds.map(recipeId => recipeId)},
+                    ${cookbook.recipeIds.map((_, index) => index)});
+            `;
+
+            return 'commit';
+        })
     }
 
     public postRecipe(recipeId: UUID, recipe: Recipe): void {

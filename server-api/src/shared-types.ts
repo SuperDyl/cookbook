@@ -47,6 +47,6 @@ export type CookbookStub = {
 };
 
 export type Cookbook = CookbookStub & {
-    recipes: Recipe[],
+    recipeIds: UUID[],
     sections: CookbookSection[],
 };

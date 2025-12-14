@@ -46,7 +46,7 @@ create table cookbookRecipes (
     recipeId text collate nocase not null,
     sequence int not null,
     primary key (cookbookId, recipeId),
-    foreign key (cookbookId) references cookbookId(id)
+    foreign key (cookbookId) references cookbooks(id)
         on update cascade
         on delete cascade,
     foreign key (recipeId) references recipes(id)
@@ -62,7 +62,7 @@ create table cookbookSections (
     sequenceBefore int not null,
     sectionName text not null,
     primary key (id),
-    foreign key (cookbookId) references cookbookId(id)
+    foreign key (cookbookId) references cookbooks(id)
         on update cascade
         on delete cascade,
     unique (cookbookId, sequenceBefore)

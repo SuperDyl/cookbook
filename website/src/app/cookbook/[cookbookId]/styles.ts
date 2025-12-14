@@ -19,17 +19,9 @@ export const SubtleTextInput = styled.input`
     }
 `;
 
-export const DishTitleTextInput = styled(SubtleTextInput)`
+export const CookbookTitleTextInput = styled(SubtleTextInput)`
     &[type="text"] {
         font-size: 1.8rem;
-    }
-`;
-
-export const SubtleTextAreaInput = styled.textarea`
-    ${SubtleInput}
-
-    &:focus-visible {
-        border-radius: 0;
     }
 `;
 

@@ -1,7 +1,7 @@
 import cors from 'cors';
 import express from 'express';
 import DatabaseFacade from './sql/DatabaseFacade.js';
-import { parseUUID, type Recipe } from 'server-api';
+import { type Cookbook, parseUUID, type Recipe } from 'server-api';
 import SqliteConnection from './sql/SqliteConnection.js';
 
 const db = new DatabaseFacade(
@@ -33,6 +33,26 @@ app.get('/cookbook/:id', (request, result) => {
     }
 
     result.json(db.getCookbook(cookbookId));
+});
+
+app.post('/cookbook/:id', (request, result) => {
+    const cookbookId = parseUUID(request.params.id);
+
+    const cookbook: Cookbook = request.body;
+
+    if (cookbookId === null) {
+        result.status(400).send(`cookbookId must be a UUID. Received '${request.params.id}'.`);
+        return;
+    }
+
+    if (cookbook.id !== undefined && cookbook.id !== cookbookId) {
+        result.status(400).send(`When provided, recipe.id must match cookbookId. Received cookbook.id='${cookbook.id}' and recipeId='${cookbookId}'.`);
+        return;
+    }
+
+    db.postCookbook(cookbookId, cookbook);
+
+    result.sendStatus(201);
 });
 
 app.get('/recipe-stubs', (request, result) => {

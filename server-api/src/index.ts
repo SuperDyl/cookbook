@@ -1,5 +1,6 @@
 import type {
     Cookbook,
+    CookbookSection,
     CookbookStub,
     Ingredient,
     Instruction,
@@ -11,6 +12,7 @@ import { CookbookApiV1 } from "./CookbookApiV1.js";
 
 export type {
     Cookbook,
+    CookbookSection,
     CookbookStub,
     Ingredient,
     Instruction,
