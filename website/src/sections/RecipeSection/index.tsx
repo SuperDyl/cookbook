@@ -237,13 +237,14 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
 
   const handleDebounceChange = useCallback(
     (newState: DebounceStates) => {
+      console.log(newState);
       if (newState === DebounceStates.WAITING) {
         setRecipeState(RecipeStates.EDITING);
       } else if (newState !== DebounceStates.CANCELED) {
         setRecipeState(RecipeStates.SAVING);
       }
     },
-    [setRecipeState]);
+    []);
 
   const api = useMemo(() => new CookbookApiV1(apiBase), []);
 
@@ -266,15 +267,15 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
    */
   const saveRecipe = useCallback(
     async ({
-        title: newTitle = title,
-        author: newAuthor = author,
-        url: newUrl = url,
-        subRecipes: newSubRecipes = subRecipes,
+        title: newTitle,
+        author: newAuthor,
+        url: newUrl,
+        subRecipes: newSubRecipes,
     }: {
-      title?: string,
-      author?: string,
-      url?: string,
-      subRecipes?: SubRecipe[],
+      title: string,
+      author: string,
+      url: string,
+      subRecipes: SubRecipe[],
     }) => {
       if (recipeId === null) {
         console.warn("Reached an impossible state of saving a recipe with an invalid recipeId");
@@ -347,7 +348,7 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
         subRecipes: cleanSubRecipes,
       });
     },
-    [api, author, subRecipes, recipeId, title, url]);
+    [api, recipeId]);
 
   const debouncedSaveRecipe = useDebounce(
     500,
@@ -358,21 +359,18 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
   const handleTitleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       setTitle(e.currentTarget.value);
-      debouncedSaveRecipe({title: e.currentTarget.value});
     },
-    [debouncedSaveRecipe]);
+    []);
 
   const handleAuthorChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       setAuthor(e.currentTarget.value);
-      debouncedSaveRecipe({author: e.currentTarget.value});
-    }, [debouncedSaveRecipe]);
+    }, []);
 
   const handleUrlChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       setUrl(e.currentTarget.value);
-      debouncedSaveRecipe({url: e.currentTarget.value});
-    }, [debouncedSaveRecipe]);
+    }, []);
 
   const onTitleKeydown = useCallback(
     (e: KeyboardEvent<HTMLInputElement>) => {
@@ -436,50 +434,50 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
         instructions?: Instruction[],
       },
     ) => {
-      const newSubRecipes = [
-          ...subRecipes.slice(0, index),
+      setSubRecipes(oldSubRecipes => {
+        const newSubRecipes: SubRecipe[] = [
+          ...oldSubRecipes.slice(0, index),
           {
-            ...subRecipes[index],
+            ...oldSubRecipes[index],
             ...subRecipeChange,
           },
-          ...subRecipes.slice(index + 1),
+          ...oldSubRecipes.slice(index + 1),
         ];
 
-      setSubRecipes(newSubRecipes);
-
-      debouncedSaveRecipe({subRecipes: newSubRecipes});
+        return newSubRecipes;
+      });
     },
-    [debouncedSaveRecipe, subRecipes]);
+    []);
 
   const insertSubRecipe = useCallback(
     (index: number) => {
-      const newSubRecipe: SubRecipe = {
-        id: crypto.randomUUID() as UUID,
-        version: 0,
-        title: null,
-        ingredients: [{
+      setSubRecipes(oldSubRecipes => {
+        const newSubRecipe: SubRecipe = {
           id: crypto.randomUUID() as UUID,
           version: 0,
-          raw: ""
-        }],
-        instructions: [{
-          id: crypto.randomUUID() as UUID,
-          version: 0,
-          raw: ""
-        }],
-      };
+          title: null,
+          ingredients: [{
+            id: crypto.randomUUID() as UUID,
+            version: 0,
+            raw: ""
+          }],
+          instructions: [{
+            id: crypto.randomUUID() as UUID,
+            version: 0,
+            raw: ""
+          }],
+        };
 
-      const newSubRecipes = [
-          ...subRecipes.slice(0, index),
-          newSubRecipe,
-          ...subRecipes.slice(index),
-        ];
+        const newSubRecipes: SubRecipe[] = [
+            ...oldSubRecipes.slice(0, index),
+            newSubRecipe,
+            ...oldSubRecipes.slice(index),
+          ];
 
-      setSubRecipes(newSubRecipes);
-
-      debouncedSaveRecipe({subRecipes: newSubRecipes});
+        return newSubRecipes;
+      });
     },
-    [debouncedSaveRecipe, subRecipes],
+    [],
   )
 
   useEffect(
@@ -507,6 +505,18 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
       getRecipe();
     },
     [api, recipeId]);
+
+  useEffect(
+    () => {
+      debouncedSaveRecipe({
+        title,
+        author,
+        url,
+        subRecipes,
+      });
+    },
+    [author, debouncedSaveRecipe, subRecipes, title, url],
+  )
 
   const preventPageUnload = useCallback(
     (event: BeforeUnloadEvent) => {

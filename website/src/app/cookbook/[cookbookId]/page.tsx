@@ -65,21 +65,21 @@ export default function EditCookbookPage({params}: EditRecipesPageProps) {
         setPageState(PageStates.SAVING);
       }
     },
-    [setPageState]);
+    []);
 
   const api = useMemo(() => new CookbookApiV1(apiBase), []);
 
   const saveCookbook = useCallback(
     async ({
-        title: newTitle = title,
-        author: newAuthor = author,
-        recipeIds: newRecipeIds = recipeIds,
-        sections: newSections = sections,
+        title: newTitle,
+        author: newAuthor,
+        recipeIds: newRecipeIds,
+        sections: newSections,
     }: {
-      title?: string,
-      author?: string,
-      recipeIds?: UUID[],
-      sections?: CookbookSection[],
+      title: string,
+      author: string,
+      recipeIds: UUID[],
+      sections: CookbookSection[],
     }) => {
       if (cookbookId === null) {
         console.warn("Reached an impossible state of saving a recipe with an invalid recipeId");
@@ -98,7 +98,7 @@ export default function EditCookbookPage({params}: EditRecipesPageProps) {
         sections: newSections,
       });
     },
-    [title, author, recipeIds, sections, cookbookId, api]);
+    [cookbookId, api]);
 
   const debouncedSaveCookbook = useDebounce(
     500,
@@ -106,18 +106,27 @@ export default function EditCookbookPage({params}: EditRecipesPageProps) {
     handleDebounceChange,
   );
 
+  useEffect(
+    () => {
+      debouncedSaveCookbook({
+        title,
+        author,
+        recipeIds,
+        sections,
+      })
+    },
+    [author, debouncedSaveCookbook, recipeIds, sections, title]);
+
   const handleTitleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       setTitle(e.currentTarget.value);
-      debouncedSaveCookbook({title: e.currentTarget.value});
     },
-    [debouncedSaveCookbook]);
+    []);
 
   const handleAuthorChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       setAuthor(e.currentTarget.value);
-      debouncedSaveCookbook({author: e.currentTarget.value});
-    }, [debouncedSaveCookbook]);
+    }, []);
 
   const onTitleKeydown = useCallback(
     (e: KeyboardEvent<HTMLInputElement>) => {
