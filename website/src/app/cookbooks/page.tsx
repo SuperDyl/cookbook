@@ -41,7 +41,11 @@ export default function CookbooksPage() {
           {cookbooks?.map(cookbook =>
             <li key={cookbook.id}>
               <Link href={`/cookbook/${cookbook.id}`}>
-                {cookbook.title}
+                {
+                  cookbook.title.trim().length === 0
+                  ? "<Untitled>"
+                  : cookbook.title.trim()
+                }
               </Link>
             </li>
           )}

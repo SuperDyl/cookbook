@@ -94,7 +94,6 @@ as you save changes to files, that portion of the project should reload immediat
 * Allow organizing cookbook recipes with drag/drop
 * Add button to add sections between cookbook recipes
 * Make adding multiple recipes in a row easy
-* Create a cookbook list
 * Allow printing a cookbook
 * Make recipes avoid splitting between pages
 * Add ingredient parsing
