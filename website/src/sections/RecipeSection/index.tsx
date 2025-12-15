@@ -198,26 +198,42 @@ function SubRecipeSection({
  *
  * PageLoad -> FETCHING_DATA, NETWORK_FETCH_ERROR
  *
- * FETCHING_DATA -> VIEWING -> EDITING
+ * FETCHING_DATA -> EDITING & EMPTY
  *
- * EDITING -> SAVING & VIEWING
+ * EMPTY -> EDITING
  *
- * SAVING -> EDITING
+ * EDITING -> SAVING_EDITS & SAVING_EMPTY & VIEWING
+ *
+ * SAVING_EDITS -> EDITING
+ *
+ * SAVING_EMPTY -> EMPTY
  */
-enum RecipeStates {
+export enum RecipeStates {
   FETCHING_DATA = 'FETCHING_DATA',
-  VIEWING = 'VIEWING',
+  EMPTY = 'EMPTY',
   EDITING = 'EDITING',
-  SAVING = 'SAVING',
+  SAVING_EDITS = 'SAVING_EDITS',
+  SAVING_EMPTY = 'SAVING_EMPTY',
   NETWORK_FETCH_ERROR = 'NETWORK_FETCH_ERROR',
 }
 
 type RecipeSectionProps = {
     recipeId: UUID,
+    onChange?: (newState: RecipeStates) => void,
 };
 
-export default function RecipeSection({recipeId}: RecipeSectionProps) {
+export default function RecipeSection({
+  recipeId,
+  onChange = () => {}
+}: RecipeSectionProps) {
   const [recipeState, setRecipeState] = useState<RecipeStates>(RecipeStates.FETCHING_DATA);
+
+  useEffect(
+    () => {
+      onChange(recipeState);
+    },
+    [onChange, recipeState],
+  );
 
   const [title, setTitle] = useState<string>("");
   const [author, setAuthor] = useState<string>("");
@@ -236,12 +252,28 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
   const subRecipesRef = useRef<(MultiFocusComponent | null)[]>([]);
 
   const handleDebounceChange = useCallback(
-    (newState: DebounceStates) => {
-      console.log(newState);
-      if (newState === DebounceStates.WAITING) {
-        setRecipeState(RecipeStates.EDITING);
-      } else if (newState !== DebounceStates.CANCELED) {
-        setRecipeState(RecipeStates.SAVING);
+    (newDebounceState: DebounceStates) => {
+
+      if (newDebounceState === DebounceStates.WAITING) {
+        setRecipeState( oldRecipeState => {
+          if (oldRecipeState === RecipeStates.SAVING_EDITS) {
+            return RecipeStates.EDITING;
+          } else if (oldRecipeState === RecipeStates.SAVING_EMPTY) {
+            return RecipeStates.EMPTY;
+          } else {
+            return oldRecipeState;
+          }
+        });
+      } else if (newDebounceState !== DebounceStates.CANCELED) {
+        setRecipeState( oldRecipeState => {
+          if (oldRecipeState === RecipeStates.EDITING) {
+            return RecipeStates.SAVING_EDITS;
+          } else if (oldRecipeState === RecipeStates.EMPTY) {
+            return RecipeStates.SAVING_EMPTY;
+          } else {
+            return oldRecipeState;
+          }
+        });
       }
     },
     []);
@@ -326,6 +358,7 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
           && trimmedAuthor.length === 0
           && trimmedUrl.length === 0) {
 
+            setRecipeState(RecipeStates.SAVING_EMPTY);
             await api.deleteRecipe(recipeId);
             return;
         } else {
@@ -339,6 +372,7 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
         }
       }
 
+      setRecipeState(RecipeStates.SAVING_EDITS);
       await api.postRecipe({
         id: recipeId,
         version: 0,
@@ -492,14 +526,16 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
           return;
         }
 
-        if (recipe !== null) {
+        if (recipe === null) {
+          setRecipeState(RecipeStates.EMPTY);
+        }
+        else {
           setTitle(recipe.title);
           setAuthor(recipe.author ?? '');
           setUrl(recipe.url ?? '');
           setSubRecipes(recipe.subRecipes);
+          setRecipeState(RecipeStates.EDITING);
         }
-
-        setRecipeState(RecipeStates.EDITING);
       }
 
       getRecipe();
@@ -516,7 +552,7 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
       });
     },
     [author, debouncedSaveRecipe, subRecipes, title, url],
-  )
+  );
 
   const preventPageUnload = useCallback(
     (event: BeforeUnloadEvent) => {
@@ -527,7 +563,7 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
 
   useEffect(
     () => {
-      if (recipeState === RecipeStates.SAVING) {
+      if (recipeState === RecipeStates.SAVING_EDITS) {
         window.addEventListener('beforeunload', preventPageUnload);
         return () => window.removeEventListener('beforeunload', preventPageUnload);
       }
@@ -543,7 +579,7 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
         </>
       }
       {recipeState === RecipeStates.FETCHING_DATA && <p>Fetching</p>}
-      {[RecipeStates.EDITING, RecipeStates.SAVING].includes(recipeState) &&
+      {[RecipeStates.EDITING, RecipeStates.SAVING_EDITS, RecipeStates.EMPTY, RecipeStates.SAVING_EMPTY].includes(recipeState) &&
         <>
           <RecipeContainer>
               <DishTitleTextInput
@@ -589,7 +625,7 @@ export default function RecipeSection({recipeId}: RecipeSectionProps) {
                     </button>
                   </React.Fragment>))
               }
-              <SavingText $visible={recipeState === RecipeStates.SAVING}>Saving...</SavingText>
+              <SavingText $visible={[RecipeStates.SAVING_EDITS, RecipeStates.SAVING_EMPTY].includes(recipeState)}>Saving...</SavingText>
           </RecipeContainer>
         </>
       }

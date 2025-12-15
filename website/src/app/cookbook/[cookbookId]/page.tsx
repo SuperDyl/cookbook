@@ -28,6 +28,7 @@ import { type UUID } from "crypto";
 import Link from "next/link";
 import { apiBase } from "@/constants";
 import { DebounceStates, useDebounce } from "@/hooks/useDebounce";
+import RecipeSection, { RecipeStates } from "@/sections/RecipeSection";
 
 type EditRecipesPageProps = {
   params: Promise<{
@@ -43,6 +44,25 @@ enum PageStates {
   SAVING = 'SAVING',
 }
 
+type WrappedRecipeSectionProps<T> = {
+  recipeId: UUID,
+  data: T,
+  onChange: (data: T, newState: RecipeStates) => void,
+};
+
+function WrappedRecipeSection<T>({
+  recipeId,
+  data,
+  onChange,
+}: WrappedRecipeSectionProps<T>) {
+  const wrappedOnChange = useCallback(
+    (newState: RecipeStates) => onChange(data, newState),
+    [data, onChange]
+  );
+
+  return <RecipeSection recipeId={recipeId} onChange={wrappedOnChange}/>
+}
+
 export default function EditCookbookPage({params}: EditRecipesPageProps) {
   const {cookbookId: cookbookIdString} = use(params);
   const cookbookId = parseUUID(cookbookIdString);
@@ -52,7 +72,9 @@ export default function EditCookbookPage({params}: EditRecipesPageProps) {
   const [title, setTitle] = useState<string>("");
   const [author, setAuthor] = useState<string>("");
   const [recipeIds, setRecipeIds] = useState<UUID[]>([]);
-  const [sections, SetSections] = useState<CookbookSection[]>([]);
+  const [sections, setSections] = useState<CookbookSection[]>([]);
+
+  const [emptyRecipes, setEmptyRecipes] = useState<boolean[]>([]);
 
   const titleRef = useRef<HTMLInputElement>(null);
   const authorRef = useRef<HTMLInputElement>(null);
@@ -75,11 +97,13 @@ export default function EditCookbookPage({params}: EditRecipesPageProps) {
         author: newAuthor,
         recipeIds: newRecipeIds,
         sections: newSections,
+        emptyRecipes: newEmptyRecipes,
     }: {
       title: string,
       author: string,
       recipeIds: UUID[],
       sections: CookbookSection[],
+      emptyRecipes: boolean[],
     }) => {
       if (cookbookId === null) {
         console.warn("Reached an impossible state of saving a recipe with an invalid recipeId");
@@ -88,15 +112,18 @@ export default function EditCookbookPage({params}: EditRecipesPageProps) {
 
       const trimmedTitle = newTitle.trim();
       const trimmedAuthor = newAuthor.trim();
+      const filteredRecipeIds = newRecipeIds.filter((_, index) => !newEmptyRecipes[index]);
 
-      await api.postCookbook({
+      const newCookbook: Cookbook = {
         id: cookbookId,
         version: 0,
         title: trimmedTitle,
         author: trimmedAuthor.length === 0 ? null : trimmedAuthor,
-        recipeIds: newRecipeIds,
+        recipeIds: filteredRecipeIds,
         sections: newSections,
-      });
+      };
+
+      await api.postCookbook(newCookbook);
     },
     [cookbookId, api]);
 
@@ -113,9 +140,10 @@ export default function EditCookbookPage({params}: EditRecipesPageProps) {
         author,
         recipeIds,
         sections,
+        emptyRecipes,
       })
     },
-    [author, debouncedSaveCookbook, recipeIds, sections, title]);
+    [author, debouncedSaveCookbook, emptyRecipes, recipeIds, sections, title]);
 
   const handleTitleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -146,6 +174,47 @@ export default function EditCookbookPage({params}: EditRecipesPageProps) {
     },
     []);
 
+  const handleRecipeStateChange = useCallback(
+    (index: number, newState: RecipeStates) => {
+      setEmptyRecipes(oldEmptyRecipes => {
+        const isRecipeEmpty = [RecipeStates.EMPTY, RecipeStates.SAVING_EMPTY].includes(newState);
+
+        const newEmptyRecipes: boolean[] = [
+          ...oldEmptyRecipes.slice(0, index),
+          isRecipeEmpty,
+          ...oldEmptyRecipes.slice(index + 1),
+        ];
+
+        return newEmptyRecipes;
+      });
+    },
+    [],
+  );
+
+  const insertRecipe = useCallback(
+    (index: number) => {
+      setRecipeIds(oldRecipesIds => {
+        const newRecipeIds: UUID[] = [
+          ...oldRecipesIds.slice(0, index),
+          crypto.randomUUID() as UUID,
+          ...oldRecipesIds.slice(index + 1),
+        ];
+
+        return newRecipeIds;
+      })
+
+      setEmptyRecipes(oldEmptyRecipes => {
+        const newEmptyRecipes: boolean[] = [
+          ...oldEmptyRecipes.slice(0, index),
+          true,
+          ...oldEmptyRecipes.slice(index + 1),
+        ];
+
+        return newEmptyRecipes;
+      });
+    },
+    []);
+
   useEffect(
     () => {
       async function getCookbook() {
@@ -167,7 +236,8 @@ export default function EditCookbookPage({params}: EditRecipesPageProps) {
           setTitle(cookbook.title);
           setAuthor(cookbook.author ?? '');
           setRecipeIds(cookbook.recipeIds);
-          SetSections(cookbook.sections);
+          setSections(cookbook.sections);
+          setEmptyRecipes(cookbook.recipeIds.map(() => false));
         }
 
         setPageState(PageStates.EDITING);
@@ -216,6 +286,24 @@ export default function EditCookbookPage({params}: EditRecipesPageProps) {
                 ref={authorRef}
                 disabled={pageState === PageStates.FETCHING_DATA}/>
               <SavingText $visible={pageState === PageStates.SAVING}>Saving...</SavingText>
+              <button
+                onClick={() => insertRecipe(0)}>
+                Insert Recipe
+              </button>
+              {
+                recipeIds.map((recipeId, index) =>
+                  <React.Fragment key={recipeId}>
+                    <WrappedRecipeSection
+                      recipeId={recipeId}
+                      data={index}
+                      onChange={handleRecipeStateChange}/>
+                    <button
+                      onClick={() => insertRecipe(index + 1)}>
+                      Insert Recipe
+                    </button>
+                  </React.Fragment>
+                )
+              }
           </RecipeContainer>
         </>
       }

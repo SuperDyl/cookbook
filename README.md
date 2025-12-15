@@ -89,6 +89,7 @@ as you save changes to files, that portion of the project should reload immediat
 
 * Printer first!
 
+* Show all recipes within the cookbook
 * Add toggle for cookbook recipe order vs. editing
 * Allow organizing cookbook recipes with drag/drop
 * Add button to add sections between cookbook recipes
@@ -148,3 +149,4 @@ as you save changes to files, that portion of the project should reload immediat
 * Allow sharing recipes
 * Add back a fade to buttons on login/register page
 * Prevent going back a page or clicking on links while waiting for page to save
+* Remove extra api calls made when a recipe first loads
