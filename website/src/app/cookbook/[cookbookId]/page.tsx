@@ -118,7 +118,12 @@ export default function EditCookbookPage({params}: EditRecipesPageProps) {
         && trimmedAuthor.length === 0
         && newRecipeIds.length === 0
       ) {
-        await api.deleteCookbook(cookbookId);
+        try {
+          await api.deleteCookbook(cookbookId);
+        }
+        catch (e: unknown) {
+          console.error(`Failed to delete cookbook=${cookbookId}`, e);
+        }
         return;
       }
 
@@ -130,7 +135,12 @@ export default function EditCookbookPage({params}: EditRecipesPageProps) {
         recipeIds: filteredRecipeIds,
         sections: newSections,
       };
-      await api.postCookbook(newCookbook);
+      try {
+        await api.postCookbook(newCookbook);
+      }
+      catch (e: unknown) {
+        console.error(`Failed to post cookbook=${cookbookId}`, e);
+      }
     },
     [cookbookId, api]);
 
@@ -222,7 +232,7 @@ export default function EditCookbookPage({params}: EditRecipesPageProps) {
         try {
           cookbook = await api.getCookbook(cookbookId);
         } catch (e: unknown) {
-          console.error(e);
+          console.error(`Failed to fetch cookbook=${cookbookId}`, e);
           setPageState(PageStates.NETWORK_ERROR);
           return;
         }

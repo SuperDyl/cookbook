@@ -51,7 +51,7 @@ create table cookbookRecipes (
         on delete cascade,
     foreign key (recipeId) references recipes(id)
         on update cascade
-        on delete restrict,
+        on delete cascade,
     unique (cookbookId, sequence)
 )  strict;
 

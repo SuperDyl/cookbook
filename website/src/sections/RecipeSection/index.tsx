@@ -352,7 +352,12 @@ export default function RecipeSection({
           && trimmedUrl.length === 0) {
 
             setRecipeState(RecipeStates.SAVING_EMPTY);
-            await api.deleteRecipe(recipeId);
+            try {
+              await api.deleteRecipe(recipeId);
+            }
+            catch (e: unknown) {
+              console.error(`Failed to delete recipe=${recipeId}`, e);
+            }
             return;
         } else {
           cleanSubRecipes.push({
@@ -366,14 +371,21 @@ export default function RecipeSection({
       }
 
       setRecipeState(RecipeStates.SAVING_EDITS);
-      await api.postRecipe({
-        id: recipeId,
-        version: 0,
-        title: trimmedTitle,
-        author: trimmedAuthor.length === 0 ? null:trimmedAuthor,
-        url: trimmedUrl.length === 0 ? null:trimmedUrl,
-        subRecipes: cleanSubRecipes,
-      });
+      const newRecipe: Recipe = {
+          id: recipeId,
+          version: 0,
+          title: trimmedTitle,
+          author: trimmedAuthor.length === 0 ? null:trimmedAuthor,
+          url: trimmedUrl.length === 0 ? null:trimmedUrl,
+          subRecipes: cleanSubRecipes,
+        };
+      try {
+        await api.postRecipe(newRecipe);
+      }
+      catch (e: unknown) {
+        console.error(`Failed to post recipe=${recipeId}`, e, newRecipe);
+      }
+
     },
     [api, recipeId]);
 
@@ -514,7 +526,7 @@ export default function RecipeSection({
         try {
           recipe = await api.getRecipe(recipeId);
         } catch (e: unknown) {
-          console.error(e);
+          console.error(`Failed to fetch recipe=${recipeId}`, e);
           setRecipeState(RecipeStates.NETWORK_FETCH_ERROR);
           return;
         }

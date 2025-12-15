@@ -103,26 +103,22 @@ export default class DatabaseFacade {
     }
 
     public getRecipe(recipeId: UUID): Recipe | null {
-        const recipe = this.database.get<SqlRecipe>`
+        const sqlRecipe = this.database.get<SqlRecipe>`
                 select *
                 from recipes
                 where id = ${recipeId};
             `;
 
-        if (recipe === undefined) {
+        if (sqlRecipe === undefined) {
             return null;
         }
 
         return {
-            id: recipe.id,
-            version: recipe.version,
-            title: recipe.title,
-            author: recipe.author,
-            url: recipe.url,
+            ...sqlRecipe,
             subRecipes: this.database.all<SqlSubRecipe>`
                     select *
                     from subRecipes
-                    where recipeId = ${recipe.id}
+                    where recipeId = ${recipeId}
                     order by sequence;
                 `.map<SubRecipe>(sqlSubRecipe => ({
                     id: sqlSubRecipe.id,
@@ -153,29 +149,27 @@ export default class DatabaseFacade {
     }
 
     public getCookbook(cookbookId: UUID): Cookbook | null {
-        const cookbook = this.database.get<SqlCookbook>`
+        const sqlCookbook = this.database.get<SqlCookbook>`
                 select *
                 from cookbooks
                 where id = ${cookbookId};
-            `;
+        `;
 
-        if (cookbook === undefined) {
+        if (sqlCookbook === undefined) {
             return null;
         }
 
-        return {
-            id: cookbook.id,
-            version: cookbook.version,
-            title: cookbook.title,
-            author: cookbook.author,
-            recipeIds: this.database.all<UUID>`
+        const result: Cookbook = {
+            ...sqlCookbook,
+            recipeIds: this.database.all< { recipeId: UUID } >`
                     select recipeId
                     from cookbookRecipes
-                    where cookbookId = ${cookbook.id};`,
+                    where cookbookId = ${sqlCookbook.id};`
+                .map(sqlObject => sqlObject.recipeId),
             sections: this.database.all<SqlCookbookSection>`
-                select *
-                from cookbookSections
-                where cookbookId = ${cookbook.id};`
+                    select *
+                    from cookbookSections
+                    where cookbookId = ${sqlCookbook.id};`
                 .map(section => ({
                     id: section.id,
                     version: section.version,
@@ -183,6 +177,8 @@ export default class DatabaseFacade {
                     sectionName: section.sectionName,
                 })),
         };
+
+        return result;
     }
 
     public postCookbook(cookbookId: UUID, cookbook: Cookbook): void {
@@ -191,7 +187,7 @@ export default class DatabaseFacade {
 
         this.database.transaction(() => {
             this.database.run`
-                replace into cookbooks (
+                insert into cookbooks (
                     id,
                     version,
                     title,
@@ -200,7 +196,12 @@ export default class DatabaseFacade {
                     ${cookbookId},
                     ${cookbook.version},
                     ${cookbook.title},
-                    ${cookbook.author});
+                    ${cookbook.author})
+                on conflict (id)
+                    do update set
+                        version = ${cookbook.version},
+                        title = ${cookbook.title},
+                        author = ${cookbook.author};
             `;
 
             this.database.run`
@@ -234,8 +235,8 @@ export default class DatabaseFacade {
                     recipeId,
                     sequence)
                 values (
-                    ${cookbook.recipeIds.map(_ => cookbook.id)},
-                    ${cookbook.recipeIds.map(recipeId => recipeId)},
+                    ${cookbook.recipeIds.map(() => cookbook.id)},
+                    ${cookbook.recipeIds},
                     ${cookbook.recipeIds.map((_, index) => index)});
             `;
 
@@ -262,7 +263,7 @@ export default class DatabaseFacade {
 
         this.database.transaction(() => {
             this.database.run`
-                replace into recipes (
+                insert into recipes (
                     id,
                     version,
                     title,
@@ -273,7 +274,13 @@ export default class DatabaseFacade {
                     ${recipe.version},
                     ${recipe.title},
                     ${recipe.author},
-                    ${recipe.url});
+                    ${recipe.url})
+                on conflict (id)
+                    do update set
+                        version = ${recipe.version},
+                        title = ${recipe.title},
+                        author = ${recipe.author},
+                        url = ${recipe.url};
             `;
 
             this.database.run`
