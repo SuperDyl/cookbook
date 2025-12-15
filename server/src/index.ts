@@ -55,6 +55,17 @@ app.post('/cookbook/:id', (request, result) => {
     result.sendStatus(201);
 });
 
+app.delete('/cookbook/:id', (request, result) => {
+    const cookbookId = parseUUID(request.params.id);
+
+    if (cookbookId === null) {
+        result.status(400).send(`cookbookId must be a UUID. Received '${request.params.id}'.`);
+        return;
+    }
+
+    result.json(db.deleteCookbook(cookbookId));
+});
+
 app.get('/recipe-stubs', (request, result) => {
     result.json(db.getRecipeStubs());
 });

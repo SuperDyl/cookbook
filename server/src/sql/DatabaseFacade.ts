@@ -243,6 +243,19 @@ export default class DatabaseFacade {
         })
     }
 
+    public deleteCookbook(cookbookId: UUID): Cookbook | null {
+        const cookbook = this.getCookbook(cookbookId);
+
+        // Because the dependent rows use foreign keys with cascade on delete
+        // they should automatically all get cleaned up.
+        this.database.run`
+            delete from cookbooks
+            where id = ${cookbookId};
+        `;
+
+        return cookbook;
+    }
+
     public postRecipe(recipeId: UUID, recipe: Recipe): void {
         // For simplicity, `recipe.id` is ignored and `recipeId` is used.
         // Really, I should have a separate recipe type that has all but the id.
@@ -335,7 +348,7 @@ export default class DatabaseFacade {
 
         // Because the dependent rows use foreign keys with cascade on delete
         // they should automatically all get cleaned up.
-        this.database.get<SqlRecipe>`
+        this.database.run`
             delete from recipes
             where id = ${recipeId};
         `;

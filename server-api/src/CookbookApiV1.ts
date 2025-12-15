@@ -109,6 +109,12 @@ export class CookbookApiV1 {
         await this.post<Cookbook, null>(`cookbook/${cookbook.id}`, cookbook);
     }
 
+    public async deleteCookbook(cookbookId: UUID): Promise<Cookbook | null> {
+        // The field `id` in `recipe` is ignored and `recipe.id` is used instead.
+        // For simplicity, I left it in for this API facade to make everything simpler.
+        return await this.delete<Cookbook | null>(`cookbook/${cookbookId}`);
+    }
+
     public async getRecipeStubs(): Promise<RecipeStub[]> {
         return await this.get<RecipeStub[]>("recipe-stubs");
     }

@@ -114,6 +114,14 @@ export default function EditCookbookPage({params}: EditRecipesPageProps) {
       const trimmedAuthor = newAuthor.trim();
       const filteredRecipeIds = newRecipeIds.filter((_, index) => !newEmptyRecipes[index]);
 
+      if (trimmedTitle.length === 0
+        && trimmedAuthor.length === 0
+        && newRecipeIds.length === 0
+      ) {
+        await api.deleteCookbook(cookbookId);
+        return;
+      }
+
       const newCookbook: Cookbook = {
         id: cookbookId,
         version: 0,
@@ -122,7 +130,6 @@ export default function EditCookbookPage({params}: EditRecipesPageProps) {
         recipeIds: filteredRecipeIds,
         sections: newSections,
       };
-
       await api.postCookbook(newCookbook);
     },
     [cookbookId, api]);
