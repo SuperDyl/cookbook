@@ -228,13 +228,6 @@ export default function RecipeSection({
 }: RecipeSectionProps) {
   const [recipeState, setRecipeState] = useState<RecipeStates>(RecipeStates.FETCHING_DATA);
 
-  useEffect(
-    () => {
-      onChange(recipeState);
-    },
-    [onChange, recipeState],
-  );
-
   const [title, setTitle] = useState<string>("");
   const [author, setAuthor] = useState<string>("");
   const [url, setUrl] = useState<string>("");
@@ -569,6 +562,13 @@ export default function RecipeSection({
       }
     },
     [preventPageUnload, recipeState]);
+
+  useEffect(
+    () => {
+      onChange(recipeState);
+    },
+    [onChange, recipeState],
+  );
 
   return (
     <>

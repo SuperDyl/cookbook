@@ -133,18 +133,6 @@ export default function EditCookbookPage({params}: EditRecipesPageProps) {
     handleDebounceChange,
   );
 
-  useEffect(
-    () => {
-      debouncedSaveCookbook({
-        title,
-        author,
-        recipeIds,
-        sections,
-        emptyRecipes,
-      })
-    },
-    [author, debouncedSaveCookbook, emptyRecipes, recipeIds, sections, title]);
-
   const handleTitleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       setTitle(e.currentTarget.value);
@@ -246,6 +234,18 @@ export default function EditCookbookPage({params}: EditRecipesPageProps) {
       getCookbook();
     },
     [api, cookbookId]);
+
+  useEffect(
+    () => {
+      debouncedSaveCookbook({
+        title,
+        author,
+        recipeIds,
+        sections,
+        emptyRecipes,
+      })
+    },
+    [author, debouncedSaveCookbook, emptyRecipes, recipeIds, sections, title]);
 
   return (
     <>
