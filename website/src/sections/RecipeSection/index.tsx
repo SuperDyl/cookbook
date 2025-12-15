@@ -244,6 +244,9 @@ export default function RecipeSection({
   const urlRef = useRef<HTMLInputElement>(null);
   const subRecipesRef = useRef<(MultiFocusComponent | null)[]>([]);
 
+  // This prevents sending a post/delete immediately when the recipe loads
+  const completedInitialLoad = useRef<boolean>(false);
+
   const handleDebounceChange = useCallback(
     (newDebounceState: DebounceStates) => {
 
@@ -547,16 +550,28 @@ export default function RecipeSection({
     },
     [api, recipeId]);
 
+  const isValidStateForSaving = ![
+      RecipeStates.FETCHING_DATA,
+      RecipeStates.NETWORK_FETCH_ERROR]
+    .includes(recipeState);
+
   useEffect(
     () => {
-      debouncedSaveRecipe({
-        title,
-        author,
-        url,
-        subRecipes,
-      });
+      if (isValidStateForSaving) {
+        if (!completedInitialLoad.current) {
+          completedInitialLoad.current = true;
+          return;
+        }
+
+        debouncedSaveRecipe({
+          title,
+          author,
+          url,
+          subRecipes,
+        });
+      }
     },
-    [author, debouncedSaveRecipe, subRecipes, title, url],
+    [author, debouncedSaveRecipe, subRecipes, title, url, isValidStateForSaving],
   );
 
   const preventPageUnload = useCallback(

@@ -76,6 +76,9 @@ export default function EditCookbookPage({params}: EditRecipesPageProps) {
 
   const [emptyRecipes, setEmptyRecipes] = useState<boolean[]>([]);
 
+  // This prevents sending a post/delete immediately when the recipe loads
+  const completedInitialLoad = useRef<boolean>(false);
+
   const titleRef = useRef<HTMLInputElement>(null);
   const authorRef = useRef<HTMLInputElement>(null);
 
@@ -252,17 +255,30 @@ export default function EditCookbookPage({params}: EditRecipesPageProps) {
     },
     [api, cookbookId]);
 
+  const isValidStateForSaving = ![
+      PageStates.FETCHING_DATA,
+      PageStates.COOKBOOK_ID_PARSE_ERROR,
+      PageStates.NETWORK_ERROR]
+    .includes(pageState);
+
   useEffect(
     () => {
-      debouncedSaveCookbook({
-        title,
-        author,
-        recipeIds,
-        sections,
-        emptyRecipes,
-      })
+      if (isValidStateForSaving) {
+        if (!completedInitialLoad.current) {
+          completedInitialLoad.current = true;
+          return;
+        }
+
+        debouncedSaveCookbook({
+          title,
+          author,
+          recipeIds,
+          sections,
+          emptyRecipes,
+        });
+      }
     },
-    [author, debouncedSaveCookbook, emptyRecipes, recipeIds, sections, title]);
+    [author, debouncedSaveCookbook, emptyRecipes, recipeIds, sections, title, isValidStateForSaving]);
 
   return (
     <>
