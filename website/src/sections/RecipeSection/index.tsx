@@ -27,6 +27,7 @@ import { type UUID } from "crypto";
 import Link from "next/link";
 import { apiBase } from "@/constants";
 import { DebounceStates, useDebounce } from "@/hooks/useDebounce";
+import useStopPageClose from "@/hooks/useStopPageClose";
 
 type MultiFocusComponent = {
   focusStart: () => void,
@@ -574,21 +575,10 @@ export default function RecipeSection({
     [author, debouncedSaveRecipe, subRecipes, title, url, isValidStateForSaving],
   );
 
-  const preventPageUnload = useCallback(
-    (event: BeforeUnloadEvent) => {
-      event.preventDefault();
-      event.returnValue = true;
-    },
-    []);
-
-  useEffect(
-    () => {
-      if (recipeState === RecipeStates.SAVING_EDITS) {
-        window.addEventListener('beforeunload', preventPageUnload);
-        return () => window.removeEventListener('beforeunload', preventPageUnload);
-      }
-    },
-    [preventPageUnload, recipeState]);
+  useStopPageClose([
+      RecipeStates.SAVING_EDITS,
+      RecipeStates.SAVING_EMPTY]
+    .includes(recipeState));
 
   useEffect(
     () => {

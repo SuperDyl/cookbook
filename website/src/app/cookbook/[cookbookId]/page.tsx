@@ -29,6 +29,7 @@ import Link from "next/link";
 import { apiBase } from "@/constants";
 import { DebounceStates, useDebounce } from "@/hooks/useDebounce";
 import RecipeSection, { RecipeStates } from "@/sections/RecipeSection";
+import useStopPageClose from "@/hooks/useStopPageClose";
 
 type EditRecipesPageProps = {
   params: Promise<{
@@ -279,6 +280,8 @@ export default function EditCookbookPage({params}: EditRecipesPageProps) {
       }
     },
     [author, debouncedSaveCookbook, emptyRecipes, recipeIds, sections, title, isValidStateForSaving]);
+
+  useStopPageClose(pageState === PageStates.SAVING);
 
   return (
     <>
